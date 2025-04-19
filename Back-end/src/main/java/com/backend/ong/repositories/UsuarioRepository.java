@@ -6,5 +6,8 @@ import com.backend.ong.entity.Usuario;
 
 @Repository
 public interface UsuarioRepository extends JpaRepository <Usuario, Long>{
+	
+	// Esse método foi criado para que ele possa ser usado como uma forma de verificar se um uuário ja existe por meio de um email cadastrado
+	Usuario findByEmail(String email);
 
 }

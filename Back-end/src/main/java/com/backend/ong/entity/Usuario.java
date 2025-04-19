@@ -1,7 +1,6 @@
 package com.backend.ong.entity;
 
-import com.backend.ong.dto.UsuarioDTO;
-
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -16,6 +15,7 @@ public class Usuario {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private String nome;
+	@Column(unique= true)
 	private String email;
 	private String senha;
 	
@@ -23,12 +23,13 @@ public class Usuario {
 		
 	}
 	
-	public Usuario(UsuarioDTO dto) {
-		this.nome = dto.nome();
-		this.email = dto.email();
-		this.senha = dto.senha();
+	public Usuario(Long id, String nome, String email, String senha) {
+		this.id = id;
+		this.nome = nome;
+		this.email = email;
+		this.senha = senha;
 	}
-	
+
 	public Long getId() {
 		return id;
 	}

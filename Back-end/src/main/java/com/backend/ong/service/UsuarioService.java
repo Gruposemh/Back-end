@@ -1,10 +1,12 @@
 package com.backend.ong.service;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.backend.ong.dto.UsuarioDTO;
@@ -17,10 +19,30 @@ public class UsuarioService {
 	@Autowired
 	UsuarioRepository usuarioRepository;
 	
-	public ResponseEntity<Usuario> cadastrarUsuario(UsuarioDTO dto) {
-		Usuario usuario = new Usuario(dto);
+	@Autowired
+	PasswordEncoder config;
+
+	public UsuarioDTO salvarUsuario(UsuarioDTO dto) {
+		Usuario usuario = new Usuario();
+
+		usuario.setEmail(dto.getEmail());
+		usuario.setSenha(config.encode(dto.getSenha()));
+		usuario.setNome(dto.getNome());
+		usuario.setDataCadastro(Instant.now());
+		
 		usuario = usuarioRepository.save(usuario);
-		return ResponseEntity.ok(usuario);
+
+		return new UsuarioDTO(usuario);
+	}
+	
+	public boolean login(UsuarioDTO dto) {
+		Usuario usuario = usuarioRepository.findByEmail(dto.getEmail());
+		
+		if (usuario == null) {
+			return false;
+		}
+
+		return config.matches(dto.getSenha(), usuario.getSenha());
 	}
 	
 	public List<Usuario> listar(){

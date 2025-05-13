@@ -1,7 +1,6 @@
 package com.backend.ong.entity;
 
-import com.backend.ong.dto.UsuarioDTO;
-
+import java.time.Instant;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -18,17 +17,20 @@ public class Usuario {
 	private String nome;
 	private String email;
 	private String senha;
-	
+	private Instant dataCadastro;
+
 	public Usuario() {
 		
 	}
 	
-	public Usuario(UsuarioDTO dto) {
-		this.nome = dto.nome();
-		this.email = dto.email();
-		this.senha = dto.senha();
+	public Usuario(Long id, String nome, String email, String senha, Instant dataCadastro) {
+		this.id = id;
+		this.nome = nome;
+		this.email = email;
+		this.senha = senha;
+		this.dataCadastro = dataCadastro;
 	}
-	
+
 	public Long getId() {
 		return id;
 	}
@@ -53,4 +55,11 @@ public class Usuario {
 	public void setSenha(String senha) {
 		this.senha = senha;
 	}	
+	public Instant getDataCadastro() {
+		return dataCadastro;
+	}
+	
+	public void setDataCadastro(Instant dataCadastro) {
+		this.dataCadastro = dataCadastro;
+	}
 }

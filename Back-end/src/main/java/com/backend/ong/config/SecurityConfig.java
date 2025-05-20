@@ -15,6 +15,7 @@ public class SecurityConfig {
 		return new BCryptPasswordEncoder();
 	}
 	
+	// Para teste
 	@Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
         http.csrf(csrf -> csrf.disable());

@@ -1,7 +1,5 @@
 package com.backend.ong.entity;
 
-import com.backend.ong.dto.BlogDTO;
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -31,14 +29,6 @@ public class Blog {
 		this.urlNoticia = urlNoticia;
 		this.bairro = bairro;
 		this.anonima = anonima;
-	}
-	
-	public Blog(BlogDTO dto) {
-		this.tituloMateria = dto.tituloMateria();
-		this.noticia = dto.noticia();
-		this.urlNoticia = dto.urlNoticia();
-		this.bairro = dto.bairro();
-		this.anonima = dto.anonima();
 	}
 
 	public Long getId() {

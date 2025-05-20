@@ -11,52 +11,45 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name = "tb_comentario")
 public class Comentario {
-
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long comentario;
-	private Long idUsuario;
-	private Long idBlog;
+	private Long id;
+	private Usuario idUsuario;
+	private Blog idBlog;
 	private Date dataComentario;
 	
 	public Comentario() {
 	}
-
-	public Comentario(Long comentario, Long idUsuario, Long idBlog, Date dataComentario) {
-		this.comentario = comentario;
+	
+	public Comentario(Long id, Usuario idUsuario, Blog idBlog, Date dataComentario) {
+		this.id = id;
 		this.idUsuario = idUsuario;
 		this.idBlog = idBlog;
 		this.dataComentario = dataComentario;
 	}
-
-	public Long getComentario() {
-		return comentario;
+	
+	public Long getId() {
+		return id;
 	}
-
-	public void setComentario(Long comentario) {
-		this.comentario = comentario;
+	public void setId(Long id) {
+		this.id = id;
 	}
-
-	public Long getIdUsuario() {
+	public Usuario getIdUsuario() {
 		return idUsuario;
 	}
-
-	public void setIdUsuario(Long idUsuario) {
+	public void setIdUsuario(Usuario idUsuario) {
 		this.idUsuario = idUsuario;
 	}
-
-	public Long getIdBlog() {
+	public Blog getIdBlog() {
 		return idBlog;
 	}
-
-	public void setIdBlog(Long idBlog) {
+	public void setIdBlog(Blog idBlog) {
 		this.idBlog = idBlog;
 	}
-
 	public Date getDataComentario() {
 		return dataComentario;
 	}
-
 	public void setDataComentario(Date dataComentario) {
 		this.dataComentario = dataComentario;
 	}

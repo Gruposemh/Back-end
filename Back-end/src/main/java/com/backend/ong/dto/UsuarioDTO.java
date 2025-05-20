@@ -1,7 +1,5 @@
 package com.backend.ong.dto;
 
-import java.time.Instant;
-
 import com.backend.ong.entity.Usuario;
 
 public class UsuarioDTO {
@@ -9,17 +7,15 @@ public class UsuarioDTO {
 	private String nome;
 	private String email;
 	private String senha;
-	private Instant dataCadastro;
 	
 	public UsuarioDTO() {
 	}
 
-	public UsuarioDTO(Long id, String nome, String email, String senha, Instant dataCadastro) {
+	public UsuarioDTO(Long id, String nome, String email, String senha) {
 		this.id = id;
 		this.nome = nome;
 		this.email = email;
 		this.senha = senha;
-		this.dataCadastro = dataCadastro;
 	}
 	
 	public UsuarioDTO(Usuario entity) {
@@ -27,9 +23,8 @@ public class UsuarioDTO {
 		this.nome = entity.getNome();
 		this.email = entity.getEmail();
 		this.senha = entity.getSenha();
-		this.dataCadastro = entity.getDataCadastro();
 	}
-	
+
 	public Long getId() {
 		return id;
 	}
@@ -53,11 +48,5 @@ public class UsuarioDTO {
 	}
 	public void setSenha(String senha) {
 		this.senha = senha;
-	}
-	public Instant getDataCadastro() {
-		return dataCadastro;
-	}
-	public void setDataCadastro(Instant dataCadastro) {
-		this.dataCadastro = dataCadastro;
 	}
 }

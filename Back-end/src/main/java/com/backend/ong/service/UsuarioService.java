@@ -1,10 +1,10 @@
 package com.backend.ong.service;
 
-import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -21,29 +21,32 @@ public class UsuarioService {
 	
 	@Autowired
 	PasswordEncoder config;
-
-	public UsuarioDTO salvarUsuario(UsuarioDTO dto) {
+	
+	public UsuarioDTO cadastrarUsuario(UsuarioDTO dto) {
 		Usuario usuario = new Usuario();
 
+		usuario.setNome(dto.getNome());
 		usuario.setEmail(dto.getEmail());
 		usuario.setSenha(config.encode(dto.getSenha()));
-		usuario.setNome(dto.getNome());
-		usuario.setDataCadastro(Instant.now());
-		
+
 		usuario = usuarioRepository.save(usuario);
 
 		return new UsuarioDTO(usuario);
 	}
 	
-	public boolean login(UsuarioDTO dto) {
-		Usuario usuario = usuarioRepository.findByEmail(dto.getEmail());
-		
-		if (usuario == null) {
-			return false;
-		}
+	public ResponseEntity<?> login(UsuarioDTO dto) {
+	    Usuario usuario = usuarioRepository.findByEmail(dto.getEmail());
 
-		return config.matches(dto.getSenha(), usuario.getSenha());
-	}
+	    if (usuario == null) {
+	        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuário não encontrado");
+	    }
+
+	    else if (!config.matches(dto.getSenha(), usuario.getSenha())) {
+	        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Senha ou Email incorretos");
+	    }
+
+	    return ResponseEntity.ok("Sucesso! Bem-vindo " + usuario.getNome());
+	}	
 	
 	public List<Usuario> listar(){
 		return usuarioRepository.findAll();

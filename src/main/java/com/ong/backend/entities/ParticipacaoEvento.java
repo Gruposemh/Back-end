@@ -4,6 +4,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -11,11 +13,18 @@ import jakarta.persistence.Table;
 public class ParticipacaoEvento {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
-	private Usuario idUsuario;
-	private Evento idEvento;
-	private String tipoParticipacao;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    
+    @ManyToOne
+    @JoinColumn(name = "id_usuario")
+    private Usuario idUsuario;
+    
+    @ManyToOne
+    @JoinColumn(name = "id_evento")
+    private Evento idEvento;
+    
+    private String tipoParticipacao;
 	
 	public ParticipacaoEvento() {
 	}

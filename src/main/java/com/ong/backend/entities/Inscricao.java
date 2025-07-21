@@ -3,9 +3,13 @@ package com.ong.backend.entities;
 import java.sql.Date;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -13,12 +17,21 @@ import jakarta.persistence.Table;
 public class Inscricao {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
-	private Usuario idUsuario;
-	private Curso idCurso;
-	private StatusPagamento statusPagamento;
-	private Date dataInscricao;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    
+    @ManyToOne
+    @JoinColumn(name = "id_usuario")
+    private Usuario idUsuario;
+
+    @ManyToOne
+    @JoinColumn(name = "id_curso")
+    private Curso idCurso;
+    
+    @Enumerated(EnumType.STRING)
+    private StatusPagamento statusPagamento;
+    
+    private Date dataInscricao;
 	
 	public Inscricao() {
 	}

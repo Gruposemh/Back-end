@@ -1,9 +1,13 @@
 package com.ong.backend.entities;
 
+import java.time.LocalDateTime;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -14,21 +18,28 @@ public class Blog {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private String tituloMateria;
-	private String noticia;
+	private String informacao;
 	private String urlNoticia;
 	private String bairro;
 	private boolean anonima;
+	private LocalDateTime dataPostagem;
+	
+	@ManyToOne
+    @JoinColumn(name = "id_usuario")
+	private Usuario idUsuario;
 	
 	public Blog() {
 	}
 
-	public Blog(Long id, String tituloMateria, String noticia, String urlNoticia, String bairro, boolean anonima) {
+	public Blog(Long id, String tituloMateria, String informacao, String urlNoticia, String bairro, boolean anonima, LocalDateTime dataPostagem, Usuario idUsuario) {
 		this.id = id;
 		this.tituloMateria = tituloMateria;
-		this.noticia = noticia;
+		this.informacao = informacao;
 		this.urlNoticia = urlNoticia;
 		this.bairro = bairro;
 		this.anonima = anonima;
+		this.dataPostagem = dataPostagem;
+		this.idUsuario = idUsuario;
 	}
 
 	public Long getId() {
@@ -47,12 +58,12 @@ public class Blog {
 		this.tituloMateria = tituloMateria;
 	}
 
-	public String getNoticia() {
-		return noticia;
+	public String getInformacao() {
+		return informacao;
 	}
 
-	public void setNoticia(String noticia) {
-		this.noticia = noticia;
+	public void setInformacao(String noticia) {
+		this.informacao = noticia;
 	}
 
 	public String getUrlNoticia() {
@@ -77,5 +88,21 @@ public class Blog {
 
 	public void setAnonima(boolean anonima) {
 		this.anonima = anonima;
+	}
+
+	public LocalDateTime getDataPostagem() {
+		return dataPostagem;
+	}
+
+	public void setDataPostagem(LocalDateTime dataPostagem) {
+		this.dataPostagem = dataPostagem;
+	}
+
+	public Usuario getIdUsuario() {
+		return idUsuario;
+	}
+
+	public void setIdUsuario(Usuario idUsuario) {
+		this.idUsuario = idUsuario;
 	}
 }

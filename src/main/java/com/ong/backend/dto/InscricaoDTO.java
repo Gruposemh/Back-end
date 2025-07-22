@@ -1,6 +1,6 @@
 package com.ong.backend.dto;
 
-import java.sql.Date;
+import java.time.LocalDateTime;
 
 import com.ong.backend.entities.Inscricao;
 import com.ong.backend.entities.StatusPagamento;
@@ -11,12 +11,12 @@ public class InscricaoDTO {
 	private Long idUsuario;
 	private Long idCurso;
 	private StatusPagamento statusPagamento;
-	private Date dataInscricao;
+	private LocalDateTime dataInscricao;
 	
 	public InscricaoDTO() {
 	}
 	
-	public InscricaoDTO(Long id, Long idUsuario, Long idCurso, StatusPagamento statusPagamento, Date dataInscricao) {
+	public InscricaoDTO(Long id, Long idUsuario, Long idCurso, StatusPagamento statusPagamento, LocalDateTime dataInscricao) {
 		this.id = id;
 		this.idUsuario = idUsuario;
 		this.idCurso = idCurso;
@@ -56,10 +56,10 @@ public class InscricaoDTO {
 	public void setStatusPagamento(StatusPagamento statusPagamento) {
 		this.statusPagamento = statusPagamento;
 	}
-	public Date getDataInscricao() {
+	public LocalDateTime getDataInscricao() {
 		return dataInscricao;
 	}
-	public void setDataInscricao(Date dataInscricao) {
+	public void setDataInscricao(LocalDateTime dataInscricao) {
 		this.dataInscricao = dataInscricao;
 	}
 }

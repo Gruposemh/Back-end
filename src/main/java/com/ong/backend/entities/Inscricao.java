@@ -1,6 +1,6 @@
 package com.ong.backend.entities;
 
-import java.sql.Date;
+import java.time.LocalDateTime;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -20,23 +20,23 @@ public class Inscricao {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
-    @ManyToOne
-    @JoinColumn(name = "id_usuario")
-    private Usuario idUsuario;
+	@ManyToOne
+	@JoinColumn(name = "id_usuario")
+	private Usuario idUsuario;
 
-    @ManyToOne
-    @JoinColumn(name = "id_curso")
-    private Curso idCurso;
+	@ManyToOne
+	@JoinColumn(name = "id_curso")
+	private Curso idCurso;
     
     @Enumerated(EnumType.STRING)
     private StatusPagamento statusPagamento;
     
-    private Date dataInscricao;
+    private LocalDateTime dataInscricao;
 	
 	public Inscricao() {
 	}
 
-	public Inscricao(Long id, Usuario idUsuario, Curso idCurso, StatusPagamento statusPagamento, Date dataInscricao) {
+	public Inscricao(Long id, Usuario idUsuario, Curso idCurso, StatusPagamento statusPagamento, LocalDateTime dataInscricao) {
 		this.id = id;
 		this.idUsuario = idUsuario;
 		this.idCurso = idCurso;
@@ -68,10 +68,11 @@ public class Inscricao {
 	public void setStatusPagamento(StatusPagamento statusPagamento) {
 		this.statusPagamento = statusPagamento;
 	}
-	public Date getDataInscricao() {
+	public LocalDateTime getDataInscricao() {
 		return dataInscricao;
 	}
-	public void setDataInscricao(Date dataInscricao) {
+	public void setDataInscricao(LocalDateTime dataInscricao) {
 		this.dataInscricao = dataInscricao;
 	}
+	
 }

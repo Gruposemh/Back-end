@@ -1,31 +1,34 @@
 package com.ong.backend.dto;
 
-import java.sql.Date;
+import java.time.LocalDateTime;
 
 import com.ong.backend.entities.Comentario;
 
 public class ComentarioDTO {
 	
 	private Long id;
-	private Long idUsuario;
-	private Long idBlog;
-	private Date dataComentario;
+	private String nomeUsuario;
+	private String tituloBlog;
+	private LocalDateTime dataComentario;
+	private String comentario;
 	
 	public ComentarioDTO() {
 	}
 
-	public ComentarioDTO(Long id, Long idUsuario, Long idBlog, Date dataComentario) {
+	public ComentarioDTO(Long id, String nomeUsuario, String tituloBlog, LocalDateTime dataComentario, String comentario) {
 		this.id = id;
-		this.idUsuario = idUsuario;
-		this.idBlog = idBlog;
+		this.nomeUsuario = nomeUsuario;
+		this.tituloBlog = tituloBlog;
 		this.dataComentario = dataComentario;
+		this.comentario = comentario;
 	}
 	
 	public ComentarioDTO(Comentario entity) {
 		this.id = entity.getId();
-		this.idUsuario = entity.getIdUsuario().getId();
-		this.idBlog = entity.getIdBlog().getId();
+		this.nomeUsuario = entity.getIdUsuario().getNome();
+		this.tituloBlog = entity.getIdBlog().getTituloMateria();
 		this.dataComentario = entity.getDataComentario();
+		this.comentario = entity.getComentario();
 	}
 
 	public Long getId() {
@@ -36,27 +39,35 @@ public class ComentarioDTO {
 		this.id = id;
 	}
 
-	public Long getIdUsuario() {
-		return idUsuario;
+	public String getNomeUsuario() {
+		return nomeUsuario;
 	}
 
-	public void setIdUsuario(Long idUsuario) {
-		this.idUsuario = idUsuario;
+	public void setNomeUsuario(String nomeUsuario) {
+		this.nomeUsuario = nomeUsuario;
 	}
 
-	public Long getIdBlog() {
-		return idBlog;
+	public String getTituloBlog() {
+		return tituloBlog;
 	}
 
-	public void setIdBlog(Long idBlog) {
-		this.idBlog = idBlog;
+	public void setTituloBlog(String tituloBlog) {
+		this.tituloBlog = tituloBlog;
 	}
 
-	public Date getDataComentario() {
+	public LocalDateTime getDataComentario() {
 		return dataComentario;
 	}
 
-	public void setDataComentario(Date dataComentario) {
+	public void setDataComentario(LocalDateTime dataComentario) {
 		this.dataComentario = dataComentario;
+	}
+
+	public String getComentario() {
+		return comentario;
+	}
+
+	public void setComentario(String comentario) {
+		this.comentario = comentario;
 	}
 }

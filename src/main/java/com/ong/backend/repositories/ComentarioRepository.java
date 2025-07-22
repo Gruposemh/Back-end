@@ -7,5 +7,5 @@ import com.ong.backend.entities.Comentario;
 
 @Repository
 public interface ComentarioRepository extends JpaRepository <Comentario, Long>{
-
+	
 }

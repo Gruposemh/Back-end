@@ -1,6 +1,6 @@
 package com.ong.backend.entities;
 
-import java.sql.Date;
+import java.time.LocalDateTime;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -17,6 +17,7 @@ public class Comentario {
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+	private String comentario;
     
     @ManyToOne
     @JoinColumn(name = "id_usuario")
@@ -26,16 +27,17 @@ public class Comentario {
     @JoinColumn(name = "id_blog")
     private Blog idBlog;
     
-    private Date dataComentario;
+    private LocalDateTime dataComentario;
 	
 	public Comentario() {
 	}
 	
-	public Comentario(Long id, Usuario idUsuario, Blog idBlog, Date dataComentario) {
+	public Comentario(Long id, Usuario idUsuario, Blog idBlog, LocalDateTime dataComentario, String comentario) {
 		this.id = id;
 		this.idUsuario = idUsuario;
 		this.idBlog = idBlog;
 		this.dataComentario = dataComentario;
+		this.comentario = comentario;
 	}
 	
 	public Long getId() {
@@ -56,10 +58,16 @@ public class Comentario {
 	public void setIdBlog(Blog idBlog) {
 		this.idBlog = idBlog;
 	}
-	public Date getDataComentario() {
+	public LocalDateTime getDataComentario() {
 		return dataComentario;
 	}
-	public void setDataComentario(Date dataComentario) {
+	public void setDataComentario(LocalDateTime dataComentario) {
 		this.dataComentario = dataComentario;
+	}
+	public String getComentario() {
+		return comentario;
+	}
+	public void setComentario(String comentario) {
+		this.comentario = comentario;
 	}
 }

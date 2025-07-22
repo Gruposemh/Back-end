@@ -4,10 +4,12 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.ong.backend.dto.MensagemResponse;
 import com.ong.backend.dto.UsuarioDTO;
 import com.ong.backend.entities.Usuario;
 import com.ong.backend.repositories.UsuarioRepository;
@@ -21,7 +23,7 @@ public class UsuarioService{
 	@Autowired
 	PasswordEncoder config;
 	
-	public UsuarioDTO cadastrarUsuario(UsuarioDTO dto) {
+	public ResponseEntity<MensagemResponse> cadastrarUsuario(UsuarioDTO dto) {
 		Usuario usuario = new Usuario();
 
 		usuario.setNome(dto.getNome());
@@ -30,7 +32,8 @@ public class UsuarioService{
 
 		usuario = usuarioRepository.save(usuario);
 
-		return new UsuarioDTO(usuario);
+		return ResponseEntity.status(HttpStatus.CREATED)
+	            .body(new MensagemResponse("Usuário cadastrado!"));
 	}
 	
 	public List<Usuario> listar(){
@@ -42,16 +45,17 @@ public class UsuarioService{
 		return usuario.map(ResponseEntity::ok).orElseGet(()->ResponseEntity.notFound().build());
 	}
 	
-	public String deleteUsuario(Long id) {
+	public ResponseEntity<MensagemResponse> deleteUsuario(Long id) {
 		usuarioRepository.deleteById(id);
-		return "Usuário deletado!";
+		return ResponseEntity.status(HttpStatus.OK)
+	            .body(new MensagemResponse("Usuário excluido!"));
 	}
 	
-	public Usuario atualizarUsuario(Long id, Usuario atualizado) {
+	public ResponseEntity<MensagemResponse> atualizarUsuario(Long id, UsuarioDTO atualizado) {
 		Usuario usuario = usuarioRepository.findById(id).get();   
 		usuario.setNome(atualizado.getNome());
 		usuario.setEmail(atualizado.getEmail());
 		usuario.setSenha(atualizado.getSenha());
-		return usuarioRepository.save(usuario);
-	}
+		return ResponseEntity.status(HttpStatus.OK)
+	            .body(new MensagemResponse("Usuário atualizado!"));	}
 }

@@ -11,6 +11,4 @@ import com.ong.backend.entities.Blog;
 public interface BlogRepository extends JpaRepository <Blog, Long>{
 
 	Optional<Blog> findByTituloMateria(String tituloMateria);
-	void deleteByTituloMateria(String tituloMateria);
-	
 }

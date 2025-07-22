@@ -3,25 +3,24 @@ package com.ong.backend.dto;
 import com.ong.backend.entities.Curso;
 
 public class CursoDTO {
-
 	private Long id;
-	private String titulo;
+	private String tituloCurso;
 	private String descricao;
 	private float valor;
 	
 	public CursoDTO() {
 	}
 	
-	public CursoDTO(Long id, String titulo, String descricao, float valor) {
+	public CursoDTO(Long id, String tituloCurso, String descricao, float valor) {
 		this.id = id;
-		this.titulo = titulo;
+		this.tituloCurso = tituloCurso;
 		this.descricao = descricao;
 		this.valor = valor;
 	}
 	
 	public CursoDTO(Curso entity) {
 		this.id = entity.getId();
-		this.titulo = entity.getTitulo();
+		this.tituloCurso = entity.getTitulo();
 		this.descricao = entity.getDescricao();
 		this.valor = entity.getValor();
 	}
@@ -33,10 +32,10 @@ public class CursoDTO {
 		this.id = id;
 	}
 	public String getTitulo() {
-		return titulo;
+		return tituloCurso;
 	}
-	public void setTitulo(String titulo) {
-		this.titulo = titulo;
+	public void setTitulo(String tituloCurso) {
+		this.tituloCurso = tituloCurso;
 	}
 	public String getDescricao() {
 		return descricao;

@@ -13,21 +13,21 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ong.backend.dto.MensagemResponse;
 import com.ong.backend.dto.UsuarioDTO;
 import com.ong.backend.entities.Usuario;
 import com.ong.backend.services.UsuarioService;
 
 @RestController
-@RequestMapping(value = "/usuarios")
+@RequestMapping(value = "/usuario")
 public class UsuarioController {
 
     @Autowired
     private UsuarioService usuarioService;
 
     @PostMapping(value = "/criar")
-    public ResponseEntity<UsuarioDTO> cadastrar(@RequestBody UsuarioDTO dto) {
-        UsuarioDTO usuario = usuarioService.cadastrarUsuario(dto);
-        return ResponseEntity.ok(usuario);
+    public ResponseEntity<MensagemResponse> cadastrar(@RequestBody UsuarioDTO dto) {
+       return usuarioService.cadastrarUsuario(dto);
     }
 
     @GetMapping(value = "/todos")
@@ -42,14 +42,12 @@ public class UsuarioController {
     }
 
     @DeleteMapping(value = "/deletar/{id}")
-    public ResponseEntity<String> deletar(@PathVariable Long id) {
-        String mensagem = usuarioService.deleteUsuario(id);
-        return ResponseEntity.ok(mensagem);
+    public ResponseEntity<MensagemResponse> deletar(@PathVariable Long id) {
+        return usuarioService.deleteUsuario(id);
     }
 
     @PutMapping("/atualizar/{id}")
-    public ResponseEntity<Usuario> atualizar(@PathVariable Long id, @RequestBody Usuario usuario) {
-        Usuario usuarioAtualizado = usuarioService.atualizarUsuario(id, usuario);
-        return ResponseEntity.ok(usuarioAtualizado);
+    public ResponseEntity<MensagemResponse> atualizar(@PathVariable Long id, @RequestBody UsuarioDTO usuario) {
+        return usuarioService.atualizarUsuario(id, usuario);
     }
 }

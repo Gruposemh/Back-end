@@ -30,5 +30,4 @@ public class PagamentoController {
 	public List<Pagamento> pagar(){
 		return pagamentoService.listar();
 	}
-	
 }

@@ -1,5 +1,6 @@
 package com.ong.backend.dto;
 
+import com.ong.backend.entities.StatusRole;
 import com.ong.backend.entities.Usuario;
 
 public class UsuarioDTO {
@@ -7,15 +8,17 @@ public class UsuarioDTO {
 	private String nome;
 	private String email;
 	private String senha;
+	private StatusRole role;
 	
 	public UsuarioDTO() {
 	}
 
-	public UsuarioDTO(Long id, String nome, String email, String senha) {
+	public UsuarioDTO(Long id, String nome, String email, String senha, StatusRole role) {
 		this.id = id;
 		this.nome = nome;
 		this.email = email;
 		this.senha = senha;
+		this.role = role;
 	}
 	
 	public UsuarioDTO(Usuario entity) {
@@ -23,6 +26,7 @@ public class UsuarioDTO {
 		this.nome = entity.getNome();
 		this.email = entity.getEmail();
 		this.senha = entity.getSenha();
+		this.role = entity.getRole();
 	}
 
 	public Long getId() {
@@ -48,5 +52,11 @@ public class UsuarioDTO {
 	}
 	public void setSenha(String senha) {
 		this.senha = senha;
+	}
+	public StatusRole getRole() {
+		return role;
+	}
+	public void setRole(StatusRole role) {
+		this.role = role;
 	}
 }

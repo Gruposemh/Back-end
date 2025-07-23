@@ -1,11 +1,18 @@
 package com.ong.backend.entities;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -14,7 +21,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "tb_usuarios")
-public class Usuario {
+public class Usuario implements UserDetails{
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,6 +30,8 @@ public class Usuario {
 	@Column(unique= true)
 	private String email;
 	private String senha;
+	@Enumerated(EnumType.STRING)
+    private StatusRole role;
 	
 	@OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Doacao> doacoes;
@@ -40,13 +49,21 @@ public class Usuario {
 		
 	}
 	
-	public Usuario(Long id, String nome, String email, String senha) {
+	public Usuario(Long id, String nome, String email, String senha, StatusRole role) {
 		this.id = id;
 		this.nome = nome;
 		this.email = email;
 		this.senha = senha;
+		this.role = role;
 	}
 
+	public Usuario(String nome, String email, String senha, StatusRole role) {
+		this.nome = nome;
+		this.email = email;
+		this.senha = senha;
+		this.role = role;
+	}
+	
 	public Long getId() {
 		return id;
 	}
@@ -70,5 +87,26 @@ public class Usuario {
 	}
 	public void setSenha(String senha) {
 		this.senha = senha;
+	}
+	public StatusRole getRole() {
+		return role;
+	}
+	public void setRole(StatusRole role) {
+		this.role = role;
+	}
+
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		return List.of(new SimpleGrantedAuthority("ROLE_" + role.name()));
+	}
+
+	@Override
+	public String getPassword() {
+		return senha;
+	}
+
+	@Override
+	public String getUsername() {
+		return email;
 	}	
 }

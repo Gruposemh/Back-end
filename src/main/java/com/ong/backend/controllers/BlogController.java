@@ -1,9 +1,9 @@
 package com.ong.backend.controllers;
 
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,38 +16,46 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ong.backend.dto.BlogDTO;
 import com.ong.backend.dto.MensagemResponse;
 import com.ong.backend.entities.Blog;
+import com.ong.backend.entities.Usuario;
 import com.ong.backend.services.BlogService;
+import org.springframework.security.core.Authentication;
 
 @RestController
-@RequestMapping(value = "blog")
+@RequestMapping("blog")
 public class BlogController {
-	
-	@Autowired
+    
+    @Autowired
     BlogService service;
 
-    @PostMapping(value = "/criar")
+    @PostMapping("/criar")
     public ResponseEntity<Blog> registrarBlog(@RequestBody BlogDTO dto) {
         return service.cadastrarBlog(dto);
     }
     
-    @GetMapping(value = "/listar")
+    @GetMapping("/listar")
     public ResponseEntity<List<Blog>> listarTodos() {
         return ResponseEntity.ok(service.listar());
     }
     
-    @GetMapping(value = "/buscar")
+    @GetMapping("/buscar")
     public ResponseEntity<Blog> buscarPorTitulo(@RequestParam String titulo) {
         return service.buscarPorTitulo(titulo);
     }
     
     @DeleteMapping("/deletar/{id}")
-    public ResponseEntity<MensagemResponse> deletarBlogPorTitulo(@PathVariable Long id) {
-        return service.deletarBlog(id);
+    public ResponseEntity<MensagemResponse> deletarBlogPorId(@PathVariable Long id) {
+        Usuario usuarioLogado = getUsuarioLogado();
+        return service.deletarBlog(id, usuarioLogado);
     }
 
-    @PutMapping(value = "/atualizar/{id}")
-    public ResponseEntity<Blog> atualizarBlogPorTitulo(@PathVariable Long id, @RequestBody BlogDTO dto) {
-        return service.atualizarBlog(id, dto);
+    @PutMapping("/atualizar/{id}")
+    public ResponseEntity<Blog> atualizarBlogPorId(@PathVariable Long id, @RequestBody BlogDTO dto) {
+        Usuario usuarioLogado = getUsuarioLogado();
+        return service.atualizarBlog(id, dto, usuarioLogado);
     }
 
+    private Usuario getUsuarioLogado() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        return (Usuario) auth.getPrincipal();
+    }
 }

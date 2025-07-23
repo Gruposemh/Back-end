@@ -21,31 +21,34 @@ import com.ong.backend.services.ParticipacaoEventoService;
 @RequestMapping(value = "/participar")
 public class ParticipacaoEventoController {
 
-	@Autowired
-	ParticipacaoEventoService participacaoEventoService;
-	
-	@PostMapping
-	public ResponseEntity<ParticipacaoEvento> participar(@RequestBody ParticipacaoEventoDTO dto){
-		return participacaoEventoService.participar(dto);
-	}
-	
-	@GetMapping(value = "/listar")
-	public List<ParticipacaoEvento> participacoes(){
-		return participacaoEventoService.participacoes();
-	}
-	
-	@GetMapping(value = "/{id}")
-	public ParticipacaoEvento participacao(@PathVariable Long id) {
-		return participacaoEventoService.buscarPartipacao(id);		
-	}
-	
-	@GetMapping(value = "/usuario/{id}")
-	public List<ParticipacaoEventoDTO> listarPorUsuario(@PathVariable Long id){
-		return participacaoEventoService.listarPorUsuario(id);
-	}
-	
-	@DeleteMapping(value = "deletar/{id}")
-	public ResponseEntity<MensagemResponse> cancelarParticipacao(@PathVariable Long id){
-		return participacaoEventoService.excluirParticipacao(id);
-	}
+    @Autowired
+    ParticipacaoEventoService participacaoEventoService;
+    
+    @PostMapping
+    public ResponseEntity<ParticipacaoEvento> participar(@RequestBody ParticipacaoEventoDTO dto){
+        return participacaoEventoService.participar(dto);
+    }
+    
+    @GetMapping(value = "/listar")
+    public ResponseEntity<List<ParticipacaoEvento>> participacoes(){
+        List<ParticipacaoEvento> list = participacaoEventoService.participacoes();
+        return ResponseEntity.ok(list);
+    }
+    
+    @GetMapping(value = "/{id}")
+    public ResponseEntity<ParticipacaoEvento> participacao(@PathVariable Long id) {
+        ParticipacaoEvento pe = participacaoEventoService.buscarPartipacao(id);
+        return ResponseEntity.ok(pe);        
+    }
+    
+    @GetMapping(value = "/usuario/{id}")
+    public ResponseEntity<List<ParticipacaoEventoDTO>> listarPorUsuario(@PathVariable Long id){
+        List<ParticipacaoEventoDTO> dtos = participacaoEventoService.listarPorUsuario(id);
+        return ResponseEntity.ok(dtos);
+    }
+    
+    @DeleteMapping(value = "/deletar/{id}")
+    public ResponseEntity<MensagemResponse> cancelarParticipacao(@PathVariable Long id){
+        return participacaoEventoService.excluirParticipacao(id);
+    }
 }

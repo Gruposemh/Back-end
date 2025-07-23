@@ -26,7 +26,7 @@ public class UsuarioController {
     private UsuarioService usuarioService;
 
     @PostMapping(value = "/criar")
-    public ResponseEntity<MensagemResponse> cadastrar(@RequestBody UsuarioDTO dto) {
+    public ResponseEntity<Usuario> cadastrar(@RequestBody UsuarioDTO dto) {
        return usuarioService.cadastrarUsuario(dto);
     }
 
@@ -47,7 +47,7 @@ public class UsuarioController {
     }
 
     @PutMapping("/atualizar/{id}")
-    public ResponseEntity<MensagemResponse> atualizar(@PathVariable Long id, @RequestBody UsuarioDTO usuario) {
+    public ResponseEntity<Usuario> atualizar(@PathVariable Long id, @RequestBody UsuarioDTO usuario) {
         return usuarioService.atualizarUsuario(id, usuario);
     }
 }

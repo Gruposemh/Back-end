@@ -1,6 +1,6 @@
 package com.ong.backend.dto;
 
-import java.sql.Date;
+import java.time.LocalDateTime;
 
 import com.ong.backend.entities.Pagamento;
 
@@ -8,12 +8,12 @@ public class PagamentoDTO {
 	private Long id;
 	private Long idInscricao;
 	private float valorPago;
-	private Date dataPagamento;
+	private LocalDateTime dataPagamento;
 	
 	public PagamentoDTO() {
 	}
 	
-	public PagamentoDTO(Long id, Long idInscricao, float valorPago, Date dataPagamento) {
+	public PagamentoDTO(Long id, Long idInscricao, float valorPago, LocalDateTime dataPagamento) {
 		this.id = id;
 		this.idInscricao = idInscricao;
 		this.valorPago = valorPago;
@@ -22,7 +22,7 @@ public class PagamentoDTO {
 	
 	public PagamentoDTO(Pagamento entity) {
 		this.id = entity.getId();
-		this.idInscricao = entity.getIdInscricao().getId();
+		this.idInscricao = entity.getInscricao().getId();
 		this.valorPago = entity.getValorPago();
 		this.dataPagamento = entity.getDataPagamento();
 	}
@@ -45,10 +45,10 @@ public class PagamentoDTO {
 	public void setValorPago(float valorPago) {
 		this.valorPago = valorPago;
 	}
-	public Date getDataPagamento() {
+	public LocalDateTime getDataPagamento() {
 		return dataPagamento;
 	}
-	public void setDataPagamento(Date dataPagamento) {
+	public void setDataPagamento(LocalDateTime dataPagamento) {
 		this.dataPagamento = dataPagamento;
 	}
 }	

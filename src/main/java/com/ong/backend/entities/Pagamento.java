@@ -1,6 +1,6 @@
 package com.ong.backend.entities;
 
-import java.sql.Date;
+import java.time.LocalDateTime;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -20,17 +20,17 @@ public class Pagamento {
     
     @ManyToOne
     @JoinColumn(name = "id_inscricao")
-    private Inscricao idInscricao;
+    private Inscricao inscricao;
     
     private float valorPago;
-    private Date dataPagamento;
+    private LocalDateTime dataPagamento;
 	
 	public Pagamento() {
 	}
 
-	public Pagamento(Long id, Inscricao idInscricao, float valorPago, Date dataPagamento) {
+	public Pagamento(Long id, Inscricao inscricao, float valorPago, LocalDateTime dataPagamento) {
 		this.id = id;
-		this.idInscricao = idInscricao;
+		this.inscricao = inscricao;
 		this.valorPago = valorPago;
 		this.dataPagamento = dataPagamento;
 	}
@@ -41,11 +41,11 @@ public class Pagamento {
 	public void setId(Long id) {
 		this.id = id;
 	}
-	public Inscricao getIdInscricao() {
-		return idInscricao;
+	public Inscricao getInscricao() {
+		return inscricao;
 	}
-	public void setIdInscricao(Inscricao idInscricao) {
-		this.idInscricao = idInscricao;
+	public void setInscricao(Inscricao inscricao) {
+		this.inscricao = inscricao;
 	}
 	public float getValorPago() {
 		return valorPago;
@@ -53,10 +53,10 @@ public class Pagamento {
 	public void setValorPago(float valorPago) {
 		this.valorPago = valorPago;
 	}
-	public Date getDataPagamento() {
+	public LocalDateTime getDataPagamento() {
 		return dataPagamento;
 	}
-	public void setDataPagamento(Date dataPagamento) {
+	public void setDataPagamento(LocalDateTime dataPagamento) {
 		this.dataPagamento = dataPagamento;
 	}
 }

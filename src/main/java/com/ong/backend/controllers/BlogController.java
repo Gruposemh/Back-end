@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.ong.backend.dto.BlogDTO;
 import com.ong.backend.dto.MensagemResponse;
 import com.ong.backend.entities.Blog;
@@ -47,7 +46,7 @@ public class BlogController {
     }
 
     @PutMapping(value = "/atualizar/{id}")
-    public ResponseEntity<MensagemResponse> atualizarBlogPorTitulo(@PathVariable Long id, @RequestBody BlogDTO dto) {
+    public ResponseEntity<Blog> atualizarBlogPorTitulo(@PathVariable Long id, @RequestBody BlogDTO dto) {
         return service.atualizarBlog(id, dto);
     }
 

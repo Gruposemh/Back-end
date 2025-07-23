@@ -7,26 +7,26 @@ import com.ong.backend.entities.Comentario;
 public class ComentarioDTO {
 	
 	private Long id;
-	private String nomeUsuario;
-	private String tituloBlog;
+	private Long idUsuario;
+	private Long idBlog;
 	private LocalDateTime dataComentario;
 	private String comentario;
 	
 	public ComentarioDTO() {
 	}
 
-	public ComentarioDTO(Long id, String nomeUsuario, String tituloBlog, LocalDateTime dataComentario, String comentario) {
+	public ComentarioDTO(Long id, Long idUsuario, Long idBlog, LocalDateTime dataComentario, String comentario) {
 		this.id = id;
-		this.nomeUsuario = nomeUsuario;
-		this.tituloBlog = tituloBlog;
+		this.idUsuario = idUsuario;
+		this.idBlog = idBlog;
 		this.dataComentario = dataComentario;
 		this.comentario = comentario;
 	}
 	
 	public ComentarioDTO(Comentario entity) {
 		this.id = entity.getId();
-		this.nomeUsuario = entity.getIdUsuario().getNome();
-		this.tituloBlog = entity.getIdBlog().getTituloMateria();
+		this.idUsuario = entity.getIdUsuario().getId();
+		this.idBlog = entity.getIdBlog().getId();
 		this.dataComentario = entity.getDataComentario();
 		this.comentario = entity.getComentario();
 	}
@@ -39,20 +39,20 @@ public class ComentarioDTO {
 		this.id = id;
 	}
 
-	public String getNomeUsuario() {
-		return nomeUsuario;
+	public Long getIdUsuario() {
+		return idUsuario;
 	}
 
-	public void setNomeUsuario(String nomeUsuario) {
-		this.nomeUsuario = nomeUsuario;
+	public void setNomeUsuario(Long idUsuario) {
+		this.idUsuario = idUsuario;
 	}
 
-	public String getTituloBlog() {
-		return tituloBlog;
+	public Long getIdBlog() {
+		return idBlog;
 	}
 
-	public void setTituloBlog(String tituloBlog) {
-		this.tituloBlog = tituloBlog;
+	public void setIdBlog(Long idBlog) {
+		this.idBlog = idBlog;
 	}
 
 	public LocalDateTime getDataComentario() {

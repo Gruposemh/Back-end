@@ -8,14 +8,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-
 import com.ong.backend.dto.ComentarioDTO;
 import com.ong.backend.dto.MensagemResponse;
 import com.ong.backend.entities.Blog;
 import com.ong.backend.entities.Comentario;
 import com.ong.backend.entities.Usuario;
 import com.ong.backend.exceptions.NaoEncontradoException;
-import com.ong.backend.exceptions.UsuarioNaoEncontradoException;
 import com.ong.backend.repositories.BlogRepository;
 import com.ong.backend.repositories.ComentarioRepository;
 import com.ong.backend.repositories.UsuarioRepository;
@@ -32,12 +30,12 @@ public class ComentarioService {
 	@Autowired
 	UsuarioRepository usuarioRepository;
 	
-	public ResponseEntity<MensagemResponse> comentar(ComentarioDTO dto) {
-	    Blog blog = blogRepository.findByTituloMateria(dto.getTituloBlog())
+	public ResponseEntity<Comentario> comentar(ComentarioDTO dto) {
+	    Blog blog = blogRepository.findById(dto.getIdBlog())
 	        .orElseThrow(() -> new NaoEncontradoException("Blog não encontrado"));
 	    
-	    Usuario usuario = usuarioRepository.findByNome(dto.getNomeUsuario())
-	        .orElseThrow(() -> new UsuarioNaoEncontradoException("Usuário não encontrado"));
+	    Usuario usuario = usuarioRepository.findById(dto.getIdUsuario())
+	        .orElseThrow(() -> new NaoEncontradoException("Usuário não encontrado"));
 
 	    Comentario comentario = new Comentario();
 	    comentario.setIdUsuario(usuario);
@@ -47,8 +45,7 @@ public class ComentarioService {
 
 	    comentarioRepository.save(comentario);
 
-	    return ResponseEntity.status(HttpStatus.CREATED)
-	            .body(new MensagemResponse("Comentário enviado"));
+	    return ResponseEntity.ok(comentario);
 	}
 	
 	public ResponseEntity<MensagemResponse> excluirComentario(Long id) {
@@ -65,10 +62,10 @@ public class ComentarioService {
 		return comentarioRepository.findAll();
 	}
 	
-	public ResponseEntity<MensagemResponse> editarComentario(Long id, Comentario atualizado) {
+	public ResponseEntity<Comentario> editarComentario(Long id, Comentario atualizado) {
 		Comentario comentario = comentarioRepository.findById(id).get(); 
 		comentario.setComentario(atualizado.getComentario());
-		return ResponseEntity.status(HttpStatus.OK)
-	            .body(new MensagemResponse("Comentário atualizado!"));
+		comentario = comentarioRepository.save(comentario);
+		return ResponseEntity.ok(comentario);
 	}
 }

@@ -23,7 +23,7 @@ public class UsuarioService{
 	@Autowired
 	PasswordEncoder config;
 	
-	public ResponseEntity<MensagemResponse> cadastrarUsuario(UsuarioDTO dto) {
+	public ResponseEntity<Usuario> cadastrarUsuario(UsuarioDTO dto) {
 		Usuario usuario = new Usuario();
 
 		usuario.setNome(dto.getNome());
@@ -32,8 +32,7 @@ public class UsuarioService{
 
 		usuario = usuarioRepository.save(usuario);
 
-		return ResponseEntity.status(HttpStatus.CREATED)
-	            .body(new MensagemResponse("Usuário cadastrado!"));
+		return ResponseEntity.ok(usuario);
 	}
 	
 	public List<Usuario> listar(){
@@ -51,11 +50,13 @@ public class UsuarioService{
 	            .body(new MensagemResponse("Usuário excluido!"));
 	}
 	
-	public ResponseEntity<MensagemResponse> atualizarUsuario(Long id, UsuarioDTO atualizado) {
+	public ResponseEntity<Usuario> atualizarUsuario(Long id, UsuarioDTO atualizado) {
 		Usuario usuario = usuarioRepository.findById(id).get();   
 		usuario.setNome(atualizado.getNome());
 		usuario.setEmail(atualizado.getEmail());
 		usuario.setSenha(atualizado.getSenha());
-		return ResponseEntity.status(HttpStatus.OK)
-	            .body(new MensagemResponse("Usuário atualizado!"));	}
+		
+		usuario = usuarioRepository.save(usuario);
+		return ResponseEntity.ok(usuario);
+	}
 }

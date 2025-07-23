@@ -2,15 +2,12 @@ package com.ong.backend.services;
 
 import java.util.List;
 import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-
 import com.ong.backend.dto.CursoDTO;
 import com.ong.backend.dto.MensagemResponse;
-import com.ong.backend.entities.Blog;
 import com.ong.backend.entities.Curso;
 import com.ong.backend.exceptions.NaoEncontradoException;
 import com.ong.backend.repositories.CursoRepository;
@@ -21,7 +18,7 @@ public class CursoService {
 	@Autowired
 	CursoRepository cursoRepository;
 	
-	public ResponseEntity<MensagemResponse> cadastrarCurso(CursoDTO dto){
+	public ResponseEntity<Curso> cadastrarCurso(CursoDTO dto){
 		Curso curso = new Curso();
 		
 		curso.setDescricao(dto.getDescricao());
@@ -30,8 +27,7 @@ public class CursoService {
 		
 		curso = cursoRepository.save(curso);
 		
-		return ResponseEntity.status(HttpStatus.CREATED)
-	            .body(new MensagemResponse("Curso cadastrado com sucesso!"));
+		return ResponseEntity.ok(curso);
 	}
 	
 	public ResponseEntity<List<Curso>> buscarPorTitulo(String tituloCurso) {
@@ -52,7 +48,7 @@ public class CursoService {
 	            .body(new MensagemResponse("Curso excluído!"));
 	}
 	
-	public ResponseEntity<MensagemResponse> atualizarCurso(Long id, CursoDTO atualizado){
+	public ResponseEntity<Curso> atualizarCurso(Long id, CursoDTO atualizado){
 		Optional<Curso> cursos = cursoRepository.findById(id);
         if (cursos.isEmpty()) {
             throw new NaoEncontradoException("Nenhum curso encontrado com o ID: " + id);
@@ -62,7 +58,6 @@ public class CursoService {
         curso.setValor(atualizado.getValor());
         curso = cursoRepository.save(curso);
         
-        return ResponseEntity.status(HttpStatus.OK)
-	            .body(new MensagemResponse("Curso atualizado com sucesso!"));
+        return ResponseEntity.ok(curso);
 	}
 }

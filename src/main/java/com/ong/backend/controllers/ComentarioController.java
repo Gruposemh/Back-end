@@ -1,7 +1,6 @@
 package com.ong.backend.controllers;
 
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -12,7 +11,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.ong.backend.dto.ComentarioDTO;
 import com.ong.backend.dto.MensagemResponse;
 import com.ong.backend.entities.Comentario;
@@ -26,7 +24,7 @@ public class ComentarioController {
 	ComentarioService comentarioService;
 	
 	@PostMapping(value = "/postar")
-    public ResponseEntity<MensagemResponse> comentar(@RequestBody ComentarioDTO dto) {
+    public ResponseEntity<Comentario> comentar(@RequestBody ComentarioDTO dto) {
         return comentarioService.comentar(dto);
     }
 	
@@ -41,7 +39,7 @@ public class ComentarioController {
     }
 	
 	@PutMapping(value = "/atualizar/{id}")
-    public ResponseEntity <MensagemResponse> editar(@PathVariable Long id, @RequestBody Comentario comentario) {
+    public ResponseEntity <Comentario> editar(@PathVariable Long id, @RequestBody Comentario comentario) {
         return comentarioService.editarComentario(id, comentario);
     }
 }

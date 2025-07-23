@@ -37,7 +37,7 @@ public class BlogDTO {
 		this.anonima = entity.isAnonima();
 		this.dataPostagem = entity.getDataPostagem();
 	}
-
+	
 	public Long getId() {
 		return id;
 	}

@@ -21,8 +21,8 @@ public class ParticipacaoEventoDTO {
 
 	public ParticipacaoEventoDTO(ParticipacaoEvento entity) {
 		this.id = entity.getId();
-		this.idUsuario = entity.getIdUsuario().getId();
-		this.idEvento = entity.getIdEvento().getId();
+		this.idUsuario = entity.getUsuario().getId();
+		this.idEvento = entity.getEvento().getId();
 		this.tipoParticipacao = entity.getTipoParticipacao();
 	}
 

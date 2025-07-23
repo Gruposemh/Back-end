@@ -15,24 +15,24 @@ public class ParticipacaoEvento {
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
+
     @ManyToOne
     @JoinColumn(name = "id_usuario")
-    private Usuario idUsuario;
-    
+    private Usuario usuario;
+
     @ManyToOne
     @JoinColumn(name = "id_evento")
-    private Evento idEvento;
-    
+    private Evento evento;
+
     private String tipoParticipacao;
 	
 	public ParticipacaoEvento() {
 	}
 
-	public ParticipacaoEvento(Long id, Usuario idUsuario, Evento idEvento, String tipoParticipacao) {
+	public ParticipacaoEvento(Long id, Usuario usuario, Evento evento, String tipoParticipacao) {
 		this.id = id;
-		this.idUsuario = idUsuario;
-		this.idEvento = idEvento;
+		this.usuario = usuario;
+		this.evento = evento;
 		this.tipoParticipacao = tipoParticipacao;
 	}
 	
@@ -42,17 +42,17 @@ public class ParticipacaoEvento {
 	public void setId(Long id) {
 		this.id = id;
 	}
-	public Usuario getIdUsuario() {
-		return idUsuario;
+	public Usuario getUsuario() {
+		return usuario;
 	}
-	public void setIdUsuario(Usuario idUsuario) {
-		this.idUsuario = idUsuario;
+	public void setUsuario(Usuario usuario) {
+		this.usuario = usuario;
 	}
-	public Evento getIdEvento() {
-		return idEvento;
+	public Evento getEvento() {
+		return evento;
 	}
-	public void setIdEvento(Evento idEvento) {
-		this.idEvento = idEvento;
+	public void setEvento(Evento evento) {
+		this.evento = evento;
 	}
 	public String getTipoParticipacao() {
 		return tipoParticipacao;

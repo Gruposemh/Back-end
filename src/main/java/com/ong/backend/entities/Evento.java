@@ -1,11 +1,15 @@
 package com.ong.backend.entities;
 
-import java.sql.Date;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -17,13 +21,16 @@ public class Evento {
 	private Long id;
 	private String nome;
 	private String descricao;
-	private Date data;
+	private LocalDate data;
 	private String local;
+	
+	@OneToMany(mappedBy = "evento", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ParticipacaoEvento> participacoes = new ArrayList<>();
 	
 	public Evento() {
 	}
 
-	public Evento(Long id, String nome, String descricao, Date data, String local) {
+	public Evento(Long id, String nome, String descricao, LocalDate data, String local) {
 		this.id = id;
 		this.nome = nome;
 		this.descricao = descricao;
@@ -49,10 +56,10 @@ public class Evento {
 	public void setDescricao(String descricao) {
 		this.descricao = descricao;
 	}
-	public Date getData() {
+	public LocalDate getData() {
 		return data;
 	}
-	public void setData(Date data) {
+	public void setData(LocalDate data) {
 		this.data = data;
 	}
 	public String getLocal() {

@@ -11,7 +11,7 @@ import com.ong.backend.dto.BlogDTO;
 import com.ong.backend.dto.MensagemResponse;
 import com.ong.backend.entities.Blog;
 import com.ong.backend.entities.Usuario;
-import com.ong.backend.exceptions.BlogDuplicadoException;
+import com.ong.backend.exceptions.DuplicadoException;
 import com.ong.backend.exceptions.NaoEncontradoException;
 import com.ong.backend.repositories.BlogRepository;
 import com.ong.backend.repositories.UsuarioRepository;
@@ -27,7 +27,7 @@ public class BlogService {
 
 	public ResponseEntity<Blog> cadastrarBlog(BlogDTO dto) {
 	    if (blogRepository.findByTituloMateria(dto.getTituloMateria()).isPresent()) {
-	        throw new BlogDuplicadoException("Já existe um blog com esse título.");
+	        throw new DuplicadoException("Já existe um blog com esse título.");
 	    }
 
 	    Usuario usuario = usuarioRepository.findById(dto.getIdUsuario())

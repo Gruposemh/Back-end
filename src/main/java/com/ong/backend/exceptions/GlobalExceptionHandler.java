@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 public class GlobalExceptionHandler extends RuntimeException  {
 	// Retorna mensagens de erro "personalizadas"
 	
-	@ExceptionHandler(BlogDuplicadoException.class)
-    public ResponseEntity<String> handleBlogDuplicado(BlogDuplicadoException ex) {
+	@ExceptionHandler(DuplicadoException.class)
+    public ResponseEntity<String> handleBlogDuplicado(DuplicadoException ex) {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
     }
 

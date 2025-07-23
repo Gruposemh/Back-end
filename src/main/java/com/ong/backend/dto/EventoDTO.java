@@ -1,7 +1,6 @@
 package com.ong.backend.dto;
 
-import java.sql.Date;
-
+import java.time.LocalDate;
 import com.ong.backend.entities.Evento;
 
 public class EventoDTO {
@@ -9,13 +8,13 @@ public class EventoDTO {
 	private Long id;
 	private String nome;
 	private String descricao;
-	private Date data;
+	private LocalDate data;
 	private String local;
 	
 	public EventoDTO() {
 	}
 
-	public EventoDTO(Long id, String nome, String descricao, Date data, String local) {
+	public EventoDTO(Long id, String nome, String descricao, LocalDate data, String local) {
 		this.id = id;
 		this.nome = nome;
 		this.descricao = descricao;
@@ -55,11 +54,11 @@ public class EventoDTO {
 		this.descricao = descricao;
 	}
 
-	public Date getData() {
+	public LocalDate getData() {
 		return data;
 	}
 
-	public void setData(Date data) {
+	public void setData(LocalDate data) {
 		this.data = data;
 	}
 

@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
 import com.ong.backend.dto.ComentarioDTO;
 import com.ong.backend.dto.MensagemResponse;
 import com.ong.backend.entities.Blog;
@@ -62,6 +63,16 @@ public class ComentarioService {
 		return comentarioRepository.findAll();
 	}
 	
+	public ResponseEntity<List<ComentarioDTO>> listarPorBlog(Long id) {
+	    Blog blog = blogRepository.findById(id)
+	        .orElseThrow(() -> new NaoEncontradoException("Blog não encontrado"));
+
+	    List<Comentario> comentarios = comentarioRepository.findByIdBlogId(id);
+	    List<ComentarioDTO> dto = comentarios.stream().map(ComentarioDTO::new).toList();
+
+	    return ResponseEntity.ok(dto);
+	}
+
 	public ResponseEntity<Comentario> editarComentario(Long id, Comentario atualizado) {
 		Comentario comentario = comentarioRepository.findById(id).get(); 
 		comentario.setComentario(atualizado.getComentario());

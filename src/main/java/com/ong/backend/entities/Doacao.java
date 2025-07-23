@@ -1,5 +1,7 @@
 package com.ong.backend.entities;
 
+import java.time.LocalDateTime;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -18,19 +20,21 @@ public class Doacao {
     
     @ManyToOne
     @JoinColumn(name = "id_usuario")
-    private Usuario idUsuario;
+    private Usuario usuario;
     
     private String tipoDoacao;
     private float valor;
+    private LocalDateTime dataDoacao;
 	
 	public Doacao() {
 	}
 	
-	public Doacao(Long id, Usuario idUsuario, String tipoDoacao, float valor) {
+	public Doacao(Long id, Usuario usuario, String tipoDoacao, float valor, LocalDateTime dataDoacao) {
 		this.id = id;
-		this.idUsuario = idUsuario;
+		this.usuario = usuario;
 		this.tipoDoacao = tipoDoacao;
 		this.valor = valor;
+		this.dataDoacao = dataDoacao;
 	}
 	
 	public Long getId() {
@@ -39,11 +43,11 @@ public class Doacao {
 	public void setId(Long id) {
 		this.id = id;
 	}
-	public Usuario getIdUsuario() {
-		return idUsuario;
+	public Usuario getUsuario() {
+		return usuario;
 	}
-	public void setIdUsuario(Usuario idUsuario) {
-		this.idUsuario = idUsuario;
+	public void setUsuario(Usuario usuario) {
+		this.usuario = usuario;
 	}
 	public String getTipoDoacao() {
 		return tipoDoacao;
@@ -56,5 +60,11 @@ public class Doacao {
 	}
 	public void setValor(float valor) {
 		this.valor = valor;
+	}
+	public LocalDateTime getDataDoacao() {
+		return dataDoacao;
+	}
+	public void setDataDoacao(LocalDateTime dataDoacao) {
+		this.dataDoacao = dataDoacao;
 	}
 }

@@ -46,7 +46,11 @@ public class VoluntarioService {
 	    Voluntario voluntario = new Voluntario();
 	    voluntario.setCpf(dto.getCpf());
 	    voluntario.setDataVoluntario(LocalDateTime.now());
+<<<<<<< HEAD
 	    voluntario.setIdUsuario(usuario);
+=======
+	    voluntario.setUsuario(usuario);
+>>>>>>> 82557ff52ad45f527bf6d73463fe64dc6bfdf6fe
 	    voluntario.setDataNascimento(dto.getDataNascimento());
 	    voluntario.setTelefone(dto.getTelefone());
 	    voluntario.setDescricao(dto.getDescricao());

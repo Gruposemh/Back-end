@@ -1,6 +1,14 @@
 package com.ong.backend.dto;
 
+<<<<<<< HEAD
 import java.time.LocalDateTime;
+=======
+<<<<<<< HEAD
+import java.sql.Date;
+=======
+import java.time.LocalDateTime;
+>>>>>>> f6080b2 (feat: Adicionando relacionamento entre Usuario e Voluntario)
+>>>>>>> 82557ff52ad45f527bf6d73463fe64dc6bfdf6fe
 
 import com.ong.backend.entities.Voluntario;
 
@@ -8,6 +16,29 @@ public class VoluntarioDTO {
 
 	private Long id;
 	private Long idUsuario;
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+	private String tipoAjuda;
+	private Date dataVoluntario;
+	
+	public VoluntarioDTO() {
+	}
+	
+	public VoluntarioDTO(Long id, Long idUsuario, String tipoAjuda, Date dataVoluntario) {
+		this.id = id;
+		this.idUsuario = idUsuario;
+		this.tipoAjuda = tipoAjuda;
+		this.dataVoluntario = dataVoluntario;
+	}
+	
+	public VoluntarioDTO(Voluntario entity) {
+		this.id = entity.getId();
+		this.idUsuario = entity.getIdUsuario().getId();
+		this.tipoAjuda = entity.getTipoAjuda();
+		this.dataVoluntario = entity.getDataVoluntario();
+=======
+>>>>>>> 82557ff52ad45f527bf6d73463fe64dc6bfdf6fe
     private int cpf;
     private String telefone;
     private String dataNascimento;
@@ -33,12 +64,20 @@ public class VoluntarioDTO {
 	public VoluntarioDTO(Voluntario entity) {
 		this.id = entity.getId();
 		this.cpf = entity.getCpf();
+<<<<<<< HEAD
 		this.idUsuario = entity.getIdUsuario().getId();
+=======
+		this.idUsuario = entity.getUsuario().getId();
+>>>>>>> 82557ff52ad45f527bf6d73463fe64dc6bfdf6fe
 		this.telefone = entity.getTelefone();
 		this.dataNascimento = entity.getDataNascimento();
 		this.endereco = entity.getEndereco();
 		this.dataVoluntario = entity.getDataVoluntario();
 		this.descricao = entity.getDescricao();
+<<<<<<< HEAD
+=======
+>>>>>>> f6080b2 (feat: Adicionando relacionamento entre Usuario e Voluntario)
+>>>>>>> 82557ff52ad45f527bf6d73463fe64dc6bfdf6fe
 	}
 
 	public Long getId() {
@@ -53,6 +92,23 @@ public class VoluntarioDTO {
 	public void setIdUsuario(Long idUsuario) {
 		this.idUsuario = idUsuario;
 	}
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+	public String getTipoAjuda() {
+		return tipoAjuda;
+	}
+	public void setTipoAjuda(String tipoAjuda) {
+		this.tipoAjuda = tipoAjuda;
+	}
+	public Date getDataVoluntario() {
+		return dataVoluntario;
+	}
+	public void setDataVoluntario(Date dataVoluntario) {
+		this.dataVoluntario = dataVoluntario;
+	}
+=======
+>>>>>>> 82557ff52ad45f527bf6d73463fe64dc6bfdf6fe
 	public int getCpf() {
 		return cpf;
 	}
@@ -89,4 +145,8 @@ public class VoluntarioDTO {
 	public void setDescricao(String descricao) {
 		this.descricao = descricao;
 	}
+<<<<<<< HEAD
+=======
+>>>>>>> f6080b2 (feat: Adicionando relacionamento entre Usuario e Voluntario)
+>>>>>>> 82557ff52ad45f527bf6d73463fe64dc6bfdf6fe
 }

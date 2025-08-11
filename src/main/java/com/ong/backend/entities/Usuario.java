@@ -17,7 +17,14 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+<<<<<<< HEAD
 import jakarta.persistence.OneToOne;
+=======
+<<<<<<< HEAD
+=======
+import jakarta.persistence.OneToOne;
+>>>>>>> f6080b2 (feat: Adicionando relacionamento entre Usuario e Voluntario)
+>>>>>>> 82557ff52ad45f527bf6d73463fe64dc6bfdf6fe
 import jakarta.persistence.Table;
 
 @Entity
@@ -46,9 +53,18 @@ public class Usuario implements UserDetails{
 	@OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ParticipacaoEvento> participacoes = new ArrayList<>();
 	
+<<<<<<< HEAD
 	@OneToOne(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
 	private Voluntario voluntario;
 	
+=======
+<<<<<<< HEAD
+=======
+	@OneToOne(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
+	private Voluntario voluntario;
+	
+>>>>>>> f6080b2 (feat: Adicionando relacionamento entre Usuario e Voluntario)
+>>>>>>> 82557ff52ad45f527bf6d73463fe64dc6bfdf6fe
 	public Usuario() {
 		
 	}

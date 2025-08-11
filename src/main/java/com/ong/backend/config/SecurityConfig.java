@@ -96,6 +96,14 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.GET, "/participar/listar").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.GET, "/participar/{id}").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.GET, "/participar/usuario/**").hasRole("ADMIN")
+<<<<<<< HEAD
+=======
+                
+                //Voluntario 
+                .requestMatchers(HttpMethod.POST, "/voluntario/tornar").hasAnyRole("ADMIN", "USUARIO")
+                .requestMatchers(HttpMethod.GET, "/voluntario/listar").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.DELETE, "/voluntario/cancelar/**").hasAnyRole("ADMIN", "USUARIO")
+>>>>>>> f6080b2 (feat: Adicionando relacionamento entre Usuario e Voluntario)
 
             )
             .userDetailsService(autenticacaoService)

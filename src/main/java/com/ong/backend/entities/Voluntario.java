@@ -18,9 +18,9 @@ public class Voluntario {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
-	@OneToOne
-	@JoinColumn(name = "id_usuario")
-	private Usuario idUsuario;
+    @OneToOne
+    @JoinColumn(name = "id_usuario")
+    private Usuario idUsuario;
     private int cpf;
     private String telefone;
     private String dataNascimento;

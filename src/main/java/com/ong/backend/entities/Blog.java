@@ -117,7 +117,6 @@ public class Blog {
 	public void setIdUsuario(Usuario idUsuario) {
 		this.idUsuario = idUsuario;
 	}
-
 	public StatusPublicacao getStatus() {
 		return status;
 	}

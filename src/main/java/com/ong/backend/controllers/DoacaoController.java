@@ -25,7 +25,7 @@ public class DoacaoController {
 	DoacaoService doacaoService;
 	
 	@PostMapping(value = "/doar")
-	public ResponseEntity<Doacao> doar(@RequestBody DoacaoDTO dto){
+	public ResponseEntity<?> doar(@RequestBody DoacaoDTO dto){
 		return doacaoService.doar(dto);
 	}
 	

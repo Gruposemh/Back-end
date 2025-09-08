@@ -1,7 +1,6 @@
 package com.ong.backend.dto;
 
 import java.time.LocalDateTime;
-
 import com.ong.backend.entities.Doacao;
 
 public class DoacaoDTO {

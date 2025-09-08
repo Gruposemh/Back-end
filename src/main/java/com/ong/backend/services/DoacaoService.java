@@ -26,20 +26,27 @@ public class DoacaoService {
 	@Autowired
 	UsuarioRepository usuarioRepository;
 	
-	public ResponseEntity<Doacao> doar(DoacaoDTO dto){
-		Usuario usuario = usuarioRepository.findById(dto.getIdUsuario())
-				.orElseThrow(() -> new NaoEncontradoException("Usuário não encontrado"));
-		
-		Doacao doacao = new Doacao();
-		doacao.setTipoDoacao(dto.getTipoDoacao());
-		doacao.setValor(dto.getValor());
-		doacao.setUsuario(usuario);
-		doacao.setDataDoacao(LocalDateTime.now());
-		doacao = doacaoRepository.save(doacao);
-		
-		return ResponseEntity.ok(doacao);
+	public ResponseEntity<?> doar(DoacaoDTO dto) {
+	    Usuario usuario = usuarioRepository.findById(dto.getIdUsuario())
+	            .orElseThrow(() -> new NaoEncontradoException("Usuário não encontrado"));
+
+	    if (dto.getValor() <= 0) {
+	        return ResponseEntity.badRequest()
+	            .body(new MensagemResponse("O valor da doação deve ser maior que zero"));
+	    }
+
+	    Doacao doacao = new Doacao();
+	    doacao.setTipoDoacao(dto.getTipoDoacao());
+	    doacao.setValor(dto.getValor());
+	    doacao.setUsuario(usuario);
+	    doacao.setDataDoacao(LocalDateTime.now());
+
+	    doacao = doacaoRepository.save(doacao);
+
+	    return ResponseEntity.status(201).body(doacao);
 	}
-	
+
+ 	
 	public List<Doacao> listarDoacoes(){
 		return doacaoRepository.findAll();
 	}

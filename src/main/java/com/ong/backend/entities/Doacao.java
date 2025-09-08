@@ -25,6 +25,7 @@ public class Doacao {
     private String tipoDoacao;
     private float valor;
     private LocalDateTime dataDoacao;
+    
 	
 	public Doacao() {
 	}

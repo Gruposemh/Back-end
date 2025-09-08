@@ -114,7 +114,8 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.GET, "notificarUsuario/listar/usuario/**").hasAnyRole("ADMIN", "USUARIO")
                 
                 // Relatório
-                .requestMatchers(HttpMethod.GET, "/relatorios").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.GET, "/relatorio/usuarios").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.GET, "/relatorio/doacoes").hasRole("ADMIN")
 
             )
             .userDetailsService(autenticacaoService)

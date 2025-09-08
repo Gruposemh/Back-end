@@ -12,15 +12,21 @@ import com.ong.backend.services.RelatorioService;
 import net.sf.jasperreports.engine.JRException;
 
 @RestController
-@RequestMapping("/relatorios")
+@RequestMapping("/relatorio")
 public class RelatorioController {
 
     @Autowired
     RelatorioService relatorio;
 
-    @GetMapping
-    public ResponseEntity<String> gerarRelatorio(@RequestParam String caminho) throws JRException {
-        relatorio.gerarRelatorioPDF(caminho);
+    @GetMapping(value = "/usuarios")
+    public ResponseEntity<String> relatorioUsuarios(@RequestParam String caminho) throws JRException {
+        relatorio.gerarRelatorioUsuariosPDF(caminho);
         return ResponseEntity.ok("Relatorio gerado com sucesso " + caminho);
+    }
+    
+    @GetMapping(value = "/doacoes")
+    public ResponseEntity<String> relatorioDoacoes(@RequestParam String caminho) throws JRException {
+    	relatorio.gerarRelatorioDoacaoPDF(caminho);
+    	return ResponseEntity.ok("Relatorio gerado com sucesso " + caminho);
     }
 }

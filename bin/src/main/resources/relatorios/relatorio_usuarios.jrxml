@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports
+              http://jasperreports.sourceforge.net/xsd/jasperreport.xsd"
+              name="UsuarioReport" pageWidth="595" pageHeight="842" columnWidth="555"
+              leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="123e4567-e89b-12d3-a456-426614174000">
+
+    <!-- Estilos -->
+    <style name="ColumnHeader" forecolor="#000000" mode="Transparent" fontName="Arial" fontSize="12" isBold="true"/>
+    <style name="DetailText" fontName="Arial" fontSize="11">
+        <box>
+            <pen lineWidth="1.0" lineColor="#D9D9D9"/>
+        </box>
+    </style>
+
+    <!-- Campos (Fields) -->
+    <field name="id" class="java.lang.Long"/>
+    <field name="nome" class="java.lang.String"/>
+    <field name="email" class="java.lang.String"/>
+    <field name="role" class="java.lang.String"/>
+
+    <!-- Título -->
+    <title>
+        <band height="50">
+            <staticText>
+                <reportElement x="0" y="10" width="555" height="30"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                    <font size="18" isBold="true" fontName="Arial"/>
+                </textElement>
+                <text><![CDATA[Relatório de Usuários]]></text>
+            </staticText>
+        </band>
+    </title>
+
+    <!-- Cabeçalho da Coluna -->
+    <columnHeader>
+        <band height="35">
+            <!-- Retângulo para ID - Borda superior, direita e esquerda -->
+            <rectangle>
+                <reportElement x="0" y="5" width="50" height="25" backcolor="#D9D9D9" mode="Opaque"/>
+                <graphicElement>
+                    <pen lineWidth="1.0" lineColor="#D9D9D9"/>
+                </graphicElement>
+            </rectangle>
+            <!-- Linhas para criar bordas específicas -->
+            <line>
+                <reportElement x="0" y="5" width="50" height="1"/> <!-- Borda superior -->
+                <graphicElement>
+                    <pen lineWidth="1.0" lineColor="#D9D9D9"/>
+                </graphicElement>
+            </line>
+            <line>
+                <reportElement x="0" y="5" width="1" height="25"/> <!-- Borda esquerda -->
+                <graphicElement>
+                    <pen lineWidth="1.0" lineColor="#D9D9D9"/>
+                </graphicElement>
+            </line>
+            <line>
+                <reportElement x="49" y="5" width="1" height="25"/> <!-- Borda direita -->
+                <graphicElement>
+                    <pen lineWidth="1.0" lineColor="#D9D9D9"/>
+                </graphicElement>
+            </line>
+            <staticText>
+                <reportElement x="0" y="5" width="50" height="25" style="ColumnHeader" />
+                <textElement textAlignment="Center" verticalAlignment="Middle"/>
+                <text><![CDATA[ID]]></text>
+            </staticText>
+
+            <!-- Retângulo para Nome - Borda superior, direita e esquerda -->
+            <rectangle>
+                <reportElement x="50" y="5" width="150" height="25" backcolor="#D9D9D9" mode="Opaque"/>
+                <graphicElement>
+                    <pen lineWidth="1.0" lineColor="#D9D9D9"/>
+                </graphicElement>
+            </rectangle>
+            <line>
+                <reportElement x="50" y="5" width="150" height="1"/> <!-- Borda superior -->
+                <graphicElement>
+                    <pen lineWidth="1.0" lineColor="#D9D9D9"/>
+                </graphicElement>
+            </line>
+            <line>
+                <reportElement x="50" y="5" width="1" height="25"/> <!-- Borda esquerda -->
+                <graphicElement>
+                    <pen lineWidth="1.0" lineColor="#D9D9D9"/>
+                </graphicElement>
+            </line>
+            <line>
+                <reportElement x="199" y="5" width="1" height="25"/> <!-- Borda direita -->
+                <graphicElement>
+                    <pen lineWidth="1.0" lineColor="#D9D9D9"/>
+                </graphicElement>
+            </line>
+            <staticText>
+                <reportElement x="50" y="5" width="150" height="25" style="ColumnHeader" />
+                <textElement textAlignment="Center" verticalAlignment="Middle"/>
+                <text><![CDATA[Nome]]></text>
+            </staticText>
+
+            <!-- Retângulo para Email - Borda superior, direita e esquerda -->
+            <rectangle>
+                <reportElement x="200" y="5" width="150" height="25" backcolor="#D9D9D9" mode="Opaque"/>
+                <graphicElement>
+                    <pen lineWidth="1.0" lineColor="#D9D9D9"/>
+                </graphicElement>
+            </rectangle>
+            <line>
+                <reportElement x="200" y="5" width="150" height="1"/> <!-- Borda superior -->
+                <graphicElement>
+                    <pen lineWidth="1.0" lineColor="#D9D9D9"/>
+                </graphicElement>
+            </line>
+            <line>
+                <reportElement x="200" y="5" width="1" height="25"/> <!-- Borda esquerda -->
+                <graphicElement>
+                    <pen lineWidth="1.0" lineColor="#D9D9D9"/>
+                </graphicElement>
+            </line>
+            <line>
+                <reportElement x="349" y="5" width="1" height="25"/> <!-- Borda direita -->
+                <graphicElement>
+                    <pen lineWidth="1.0" lineColor="#D9D9D9"/>
+                </graphicElement>
+            </line>
+            <staticText>
+                <reportElement x="200" y="5" width="150" height="25" style="ColumnHeader" />
+                <textElement textAlignment="Center" verticalAlignment="Middle"/>
+                <text><![CDATA[Email]]></text>
+            </staticText>
+
+            <!-- Retângulo para Role - Borda superior, direita e esquerda -->
+            <rectangle>
+                <reportElement x="350" y="5" width="205" height="25" backcolor="#D9D9D9" mode="Opaque"/>
+                <graphicElement>
+                    <pen lineWidth="1.0" lineColor="#D9D9D9"/>
+                </graphicElement>
+            </rectangle>
+            <staticText>
+                <reportElement x="350" y="5" width="205" height="25" style="ColumnHeader" />
+                <textElement textAlignment="Center" verticalAlignment="Middle"/>
+                <text><![CDATA[Role]]></text>
+            </staticText>
+        </band>
+    </columnHeader>
+
+    <!-- Detalhes -->
+    <detail>
+        <band height="25">
+            <textField>
+                <reportElement x="0" y="0" width="50" height="25" style="DetailText"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle"/>
+                <textFieldExpression><![CDATA[$F{id}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="50" y="0" width="150" height="25" style="DetailText"/>
+                <textElement verticalAlignment="Middle"/>
+                <textFieldExpression><![CDATA[$F{nome}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="200" y="0" width="150" height="25" style="DetailText"/>
+                <textElement verticalAlignment="Middle"/>
+                <textFieldExpression><![CDATA[$F{email}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="350" y="0" width="205" height="25" style="DetailText"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle"/>
+                <textFieldExpression><![CDATA[$F{role}]]></textFieldExpression>
+            </textField>
+        </band>
+    </detail>
+
+</jasperReport>

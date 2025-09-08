@@ -93,10 +93,6 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.DELETE, "/inscricao/deletar/**").authenticated()
                 .requestMatchers(HttpMethod.GET, "/inscricao/listar").hasRole("ADMIN")
                 
-                // Pagamento
-                .requestMatchers(HttpMethod.POST, "/pagamento/efetuar").authenticated()
-                .requestMatchers(HttpMethod.GET, "/pagamento/listar").hasRole("ADMIN")
-                
                 // Participações
                 .requestMatchers(HttpMethod.POST, "/participar").hasAnyRole("ADMIN", "USUARIO")
                 .requestMatchers(HttpMethod.DELETE, "/participar/deletar/**").hasAnyRole("ADMIN", "USUARIO")

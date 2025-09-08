@@ -11,7 +11,6 @@ import com.ong.backend.dto.InscricaoDTO;
 import com.ong.backend.dto.MensagemResponse;
 import com.ong.backend.entities.Curso;
 import com.ong.backend.entities.Inscricao;
-import com.ong.backend.entities.StatusPagamento;
 import com.ong.backend.entities.Usuario;
 import com.ong.backend.exceptions.NaoEncontradoException;
 import com.ong.backend.repositories.CursoRepository;
@@ -46,7 +45,6 @@ public class InscricaoService {
 		inscricao.setDataInscricao(LocalDateTime.now());
 		inscricao.setIdCurso(curso);
 		inscricao.setIdUsuario(usuario);
-		inscricao.setStatusPagamento(StatusPagamento.PENDENTE);
 		inscricao = inscricaoRepository.save(inscricao);
 		
 		return ResponseEntity.ok(inscricao);

@@ -1,3 +1,4 @@
+
 package com.ong.backend.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -107,6 +108,17 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.POST, "/voluntario/tornar").hasAnyRole("ADMIN", "USUARIO")
                 .requestMatchers(HttpMethod.GET, "/voluntario/listar").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.DELETE, "/voluntario/cancelar/**").hasAnyRole("ADMIN", "USUARIO")
+                .requestMatchers(HttpMethod.GET, "/voluntario/listar/aprovados").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.PUT, "voluntario/aprovar/**").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.DELETE, "voluntario/negar/**").hasRole("ADMIN")
+                
+                // Notificações
+                .requestMatchers(HttpMethod.POST, "notificacao/criar").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.POST, "notificarUsuario/notificar").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.GET, "notificarUsuario/listar/usuario/**").hasAnyRole("ADMIN", "USUARIO")
+                
+                // Relatório
+                .requestMatchers(HttpMethod.GET, "/relatorios").hasRole("ADMIN")
 
             )
             .userDetailsService(autenticacaoService)

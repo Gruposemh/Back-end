@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -34,8 +35,24 @@ public class VoluntarioController {
 		return voluntarioService.listar();
 	}
 
+	@GetMapping(value = "/listar/pendentes")
+	public List<Voluntario> listarPendentes() {
+		return voluntarioService.listarPendentes();
+	}
+
+	@GetMapping(value = "/listar/aprovados")
+	public List<Voluntario> listarAprovados() {
+		return voluntarioService.listarAprovados();
+	}
+
+	@PutMapping(value = "/aprovar/{id}")
+	public ResponseEntity<MensagemResponse> aprovar(@PathVariable Long id) {
+		return voluntarioService.aprovar(id);
+	}
+
 	@DeleteMapping(value = "cancelar/{id}")
 	public ResponseEntity<MensagemResponse> cancelar (@PathVariable Long id){
 		return voluntarioService.cancelar(id);
 	}
 }
+

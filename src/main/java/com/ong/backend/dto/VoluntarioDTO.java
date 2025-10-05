@@ -2,6 +2,7 @@ package com.ong.backend.dto;
 
 import java.time.LocalDateTime;
 
+import com.ong.backend.entities.StatusVoluntario;
 import com.ong.backend.entities.Voluntario;
 
 public class VoluntarioDTO {
@@ -14,6 +15,7 @@ public class VoluntarioDTO {
     private String endereco;
     private LocalDateTime dataVoluntario;
     private String descricao;
+    private StatusVoluntario status;
 	
 	public VoluntarioDTO() {
 	}
@@ -28,6 +30,7 @@ public class VoluntarioDTO {
 		this.endereco = endereco;
 		this.dataVoluntario = dataVoluntario;
 		this.descricao = descricao;
+		this.status = status;
 	}
 
 	public VoluntarioDTO(Voluntario entity) {
@@ -39,6 +42,7 @@ public class VoluntarioDTO {
 		this.endereco = entity.getEndereco();
 		this.dataVoluntario = entity.getDataVoluntario();
 		this.descricao = entity.getDescricao();
+		this.status = entity.getStatus();
 	}
 
 	public Long getId() {
@@ -88,5 +92,11 @@ public class VoluntarioDTO {
 	}
 	public void setDescricao(String descricao) {
 		this.descricao = descricao;
+	}
+	public StatusVoluntario getStatus() {
+		return status;
+	}
+	public void setStatus(StatusVoluntario status) {
+		this.status = status;
 	}
 }

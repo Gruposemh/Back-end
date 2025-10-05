@@ -26,13 +26,14 @@ public class Voluntario {
     private String dataNascimento;
     private String endereco;
     private LocalDateTime dataVoluntario;
+    private StatusVoluntario status;
     private String descricao;
 	
 	public Voluntario() {
 	}
 
 	public Voluntario(Long id, Usuario idUsuario, int cpf, String telefone, String dataNascimento, String endereco,
-			LocalDateTime dataVoluntario, String descricao) {
+			LocalDateTime dataVoluntario, String descricao, StatusVoluntario status) {
 		this.id = id;
 		this.idUsuario = idUsuario;
 		this.cpf = cpf;
@@ -41,6 +42,7 @@ public class Voluntario {
 		this.endereco = endereco;
 		this.dataVoluntario = dataVoluntario;
 		this.descricao = descricao;
+		this.status = status;
 	}
 
 	public Long getId() {
@@ -91,4 +93,13 @@ public class Voluntario {
 	public void setDescricao(String descricao) {
 		this.descricao = descricao;
 	}
+
+	public StatusVoluntario getStatus() {
+		return status;
+	}
+
+	public void setStatus(StatusVoluntario status) {
+		this.status = status;
+	}
+	
 }

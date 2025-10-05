@@ -23,7 +23,7 @@ public class CursoService {
 		
 		curso.setDescricao(dto.getDescricao());
 		curso.setTitulo(dto.getTitulo());
-		curso.setValor(dto.getValor());
+		curso.setDia(dto.getDia());
 		
 		curso = cursoRepository.save(curso);
 		
@@ -55,7 +55,6 @@ public class CursoService {
         }
         
         Curso curso = cursoRepository.findById(id).get();
-        curso.setValor(atualizado.getValor());
         curso = cursoRepository.save(curso);
         
         return ResponseEntity.ok(curso);

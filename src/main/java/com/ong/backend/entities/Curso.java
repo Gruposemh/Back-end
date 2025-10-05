@@ -1,5 +1,6 @@
 package com.ong.backend.entities;
 
+import java.sql.Date;
 import java.util.List;
 
 import jakarta.persistence.CascadeType;
@@ -19,7 +20,7 @@ public class Curso {
 	private Long id;
 	private String titulo;
 	private String descricao;
-	private float valor;
+	private Date dia;
 	
 	@OneToMany(mappedBy = "idCurso", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Inscricao> inscricoes;
@@ -27,11 +28,11 @@ public class Curso {
 	public Curso() {
 	}
 	
-	public Curso(Long id, String titulo, String descricao, float valor) {
+	public Curso(Long id, String titulo, String descricao, Date dia) {
 		this.id = id;
 		this.titulo = titulo;
 		this.descricao = descricao;
-		this.valor = valor;
+		this.dia = dia;
 	}
 	
 	public Long getId() {
@@ -52,10 +53,10 @@ public class Curso {
 	public void setDescricao(String descricao) {
 		this.descricao = descricao;
 	}
-	public float getValor() {
-		return valor;
+	public Date getDia() {
+		return dia;
 	}
-	public void setValor(float valor) {
-		this.valor = valor;
+	public void setDia(Date dia) {
+		this.dia = dia;
 	}
 }

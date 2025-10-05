@@ -105,8 +105,9 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.GET, "/voluntario/listar").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.DELETE, "/voluntario/cancelar/**").hasAnyRole("ADMIN", "USUARIO")
                 .requestMatchers(HttpMethod.GET, "/voluntario/listar/aprovados").hasRole("ADMIN")
-                .requestMatchers(HttpMethod.PUT, "voluntario/aprovar/**").hasRole("ADMIN")
-                .requestMatchers(HttpMethod.DELETE, "voluntario/negar/**").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.GET, "/voluntario/listar/pendentes").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.PUT, "/voluntario/aprovar/**").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.DELETE, "/voluntario/negar/**").hasRole("ADMIN")
                 
                 // Notificações
                 .requestMatchers(HttpMethod.POST, "notificacao/criar").hasRole("ADMIN")

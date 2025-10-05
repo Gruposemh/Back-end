@@ -1,28 +1,30 @@
 package com.ong.backend.dto;
 
+import java.sql.Date;
+
 import com.ong.backend.entities.Curso;
 
 public class CursoDTO {
 	private Long id;
 	private String tituloCurso;
 	private String descricao;
-	private float valor;
+	private Date dia;
 	
 	public CursoDTO() {
 	}
 	
-	public CursoDTO(Long id, String tituloCurso, String descricao, float valor) {
+	public CursoDTO(Long id, String tituloCurso, String descricao, Date dia) {
 		this.id = id;
 		this.tituloCurso = tituloCurso;
 		this.descricao = descricao;
-		this.valor = valor;
+		this.dia = dia;
 	}
 	
 	public CursoDTO(Curso entity) {
 		this.id = entity.getId();
 		this.tituloCurso = entity.getTitulo();
 		this.descricao = entity.getDescricao();
-		this.valor = entity.getValor();
+		this.dia = entity.getDia();
 	}
 	
 	public Long getId() {
@@ -43,10 +45,10 @@ public class CursoDTO {
 	public void setDescricao(String descricao) {
 		this.descricao = descricao;
 	}
-	public float getValor() {
-		return valor;
+	public Date getDia() {
+		return dia;
 	}
-	public void setValor(float valor) {
-		this.valor = valor;
+	public void setDia(Date dia) {
+		this.dia = dia;
 	}
 }

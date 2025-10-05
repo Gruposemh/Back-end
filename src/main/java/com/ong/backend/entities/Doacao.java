@@ -21,11 +21,9 @@ public class Doacao {
     @ManyToOne
     @JoinColumn(name = "id_usuario")
     private Usuario usuario;
-    
     private String tipoDoacao;
     private float valor;
     private LocalDateTime dataDoacao;
-    
 	
 	public Doacao() {
 	}

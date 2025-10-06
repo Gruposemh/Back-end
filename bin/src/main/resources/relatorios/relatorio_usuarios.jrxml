@@ -147,28 +147,29 @@
 
     <!-- Detalhes -->
     <detail>
-        <band height="25">
-            <textField>
-                <reportElement x="0" y="0" width="50" height="25" style="DetailText"/>
-                <textElement textAlignment="Center" verticalAlignment="Middle"/>
-                <textFieldExpression><![CDATA[$F{id}]]></textFieldExpression>
-            </textField>
-            <textField>
-                <reportElement x="50" y="0" width="150" height="25" style="DetailText"/>
-                <textElement verticalAlignment="Middle"/>
-                <textFieldExpression><![CDATA[$F{nome}]]></textFieldExpression>
-            </textField>
-            <textField>
-                <reportElement x="200" y="0" width="150" height="25" style="DetailText"/>
-                <textElement verticalAlignment="Middle"/>
-                <textFieldExpression><![CDATA[$F{email}]]></textFieldExpression>
-            </textField>
-            <textField>
-                <reportElement x="350" y="0" width="205" height="25" style="DetailText"/>
-                <textElement textAlignment="Center" verticalAlignment="Middle"/>
-                <textFieldExpression><![CDATA[$F{role}]]></textFieldExpression>
-            </textField>
-        </band>
-    </detail>
+    <band height="25">
+        <textField>
+            <reportElement x="0" y="0" width="50" height="25" style="DetailText"/>
+            <textElement textAlignment="Center" verticalAlignment="Middle"/>
+            <textFieldExpression><![CDATA[$F{id}]]></textFieldExpression>
+        </textField>
+        <textField>
+            <reportElement x="50" y="0" width="150" height="25" style="DetailText"/>
+            <textElement textAlignment="Center" verticalAlignment="Middle"/>
+            <textFieldExpression><![CDATA[$F{nome}]]></textFieldExpression>
+        </textField>
+        <textField>
+            <reportElement x="200" y="0" width="150" height="25" style="DetailText"/>
+            <textElement textAlignment="Center" verticalAlignment="Middle"/>
+            <textFieldExpression><![CDATA[$F{email}]]></textFieldExpression>
+        </textField>
+        <textField>
+            <reportElement x="350" y="0" width="205" height="25" style="DetailText"/>
+            <textElement textAlignment="Center" verticalAlignment="Middle"/>
+            <textFieldExpression><![CDATA[$F{role}]]></textFieldExpression>
+        </textField>
+    </band>
+</detail>
+
 
 </jasperReport>

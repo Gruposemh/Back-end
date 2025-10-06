@@ -43,8 +43,8 @@ public class SecurityConfig {
 
                 // Usuário
                 .requestMatchers(HttpMethod.GET, "/usuario/todos").hasRole("ADMIN")
-                .requestMatchers("/usuario/deletar/**").hasAnyRole("USUARIO", "ADMIN")
-                .requestMatchers("/usuario/atualizar/**").hasAnyRole("USUARIO", "ADMIN")
+                .requestMatchers(HttpMethod.DELETE, "/usuario/deletar/**").hasAnyRole("USUARIO", "ADMIN")
+                .requestMatchers(HttpMethod.PUT, "/usuario/atualizar/**").hasAnyRole("USUARIO", "ADMIN")
 
              // Blog
                 .requestMatchers(HttpMethod.POST, "/blog/criar").authenticated()
@@ -117,6 +117,13 @@ public class SecurityConfig {
                 // Relatório
                 .requestMatchers(HttpMethod.GET, "/relatorio/usuarios").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.GET, "/relatorio/doacoes").hasRole("ADMIN")
+                
+                // Tarefas
+                .requestMatchers(HttpMethod.POST, "/tarefas/criar").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.GET, "/tarefas/todas").hasAnyRole("ADMIN", "USUARIO")
+                .requestMatchers(HttpMethod.GET, "/tarefas/usuario/**").hasAnyRole("ADMIN", "USUARIO")
+                .requestMatchers(HttpMethod.DELETE, "/tarefas/deletar/**").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.PUT, "/tarefas/atualizar/**").hasRole("ADMIN")
 
             )
             .userDetailsService(autenticacaoService)

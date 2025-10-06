@@ -29,6 +29,7 @@ public class UsuarioService{
 		usuario.setNome(dto.getNome());
 		usuario.setEmail(dto.getEmail());
 		usuario.setSenha(config.encode(dto.getSenha()));
+		usuario.setRole(dto.getRole()); 
 
 		usuario = usuarioRepository.save(usuario);
 
@@ -51,12 +52,17 @@ public class UsuarioService{
 	}
 	
 	public ResponseEntity<Usuario> atualizarUsuario(Long id, UsuarioDTO atualizado) {
-		Usuario usuario = usuarioRepository.findById(id).get();   
-		usuario.setNome(atualizado.getNome());
-		usuario.setEmail(atualizado.getEmail());
-		usuario.setSenha(atualizado.getSenha());
-		
-		usuario = usuarioRepository.save(usuario);
-		return ResponseEntity.ok(usuario);
+	    Usuario usuario = usuarioRepository.findById(id).orElseThrow();
+
+	    usuario.setNome(atualizado.getNome());
+	    usuario.setEmail(atualizado.getEmail());
+
+	    if (atualizado.getSenha() != null && !atualizado.getSenha().isBlank()) {
+	        usuario.setSenha(config.encode(atualizado.getSenha()));
+	    }
+
+	    usuario = usuarioRepository.save(usuario);
+	    return ResponseEntity.ok(usuario);
 	}
+
 }

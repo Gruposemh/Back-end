@@ -41,7 +41,7 @@ import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping(value = "/auth")
-@CrossOrigin(origins = {"http://localhost:3000", "http://127.0.0.1:3000", "http://localhost:5500", "http://127.0.0.1:5500", "http://localhost:8080", "http://127.0.0.1:8080"})
+@CrossOrigin(origins = {"http://localhost:5173", "http://127.0.0.1:3000", "http://localhost:5500", "http://127.0.0.1:5500", "http://localhost:8080", "http://127.0.0.1:8080"})
 public class AuthController {
 
     @Autowired
@@ -643,5 +643,25 @@ public class AuthController {
         }
 
         public String getError() { return error; }
+    }
+    
+    // ⚠️ ENDPOINT TEMPORÁRIO PARA DESENVOLVIMENTO - REMOVER EM PRODUÇÃO
+    @PostMapping("/dev/clear-rate-limit")
+    public ResponseEntity<?> clearRateLimit(@RequestBody Map<String, String> request) {
+        try {
+            String email = request.get("email");
+            if (email == null || email.trim().isEmpty()) {
+                return ResponseEntity.badRequest()
+                    .body(new ErrorResponse("Email é obrigatório"));
+            }
+            
+            rateLimitService.clearOTPAttempts(email);
+            rateLimitService.clearLoginAttempts(email);
+            
+            return ResponseEntity.ok(new SuccessResponse("Rate limit limpo para: " + email));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(new ErrorResponse("Erro ao limpar rate limit"));
+        }
     }
 }

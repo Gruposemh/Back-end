@@ -9,7 +9,6 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ong.backend.entities.StatusRole;
 import com.ong.backend.entities.TipoAutenticacao;
 import com.ong.backend.entities.Usuario;
@@ -20,9 +19,6 @@ import com.ong.backend.services.TokenService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-
-import java.util.HashMap;
-import java.util.Map;
 
 @Component
 public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
@@ -35,9 +31,6 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 
     @Autowired
     private RefreshTokenService refreshTokenService;
-
-    @Autowired
-    private ObjectMapper objectMapper;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
@@ -81,19 +74,17 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         String ipAddress = request.getRemoteAddr();
         var refreshToken = refreshTokenService.createRefreshToken(usuario, deviceInfo, ipAddress);
         
-        // Preparar resposta JSON
-        Map<String, Object> responseData = new HashMap<>();
-        responseData.put("success", true);
-        responseData.put("message", "Login com Google realizado com sucesso");
-        responseData.put("token", jwtToken);
-        responseData.put("refreshToken", refreshToken.getToken());
-        responseData.put("email", usuario.getEmail());
-        responseData.put("role", usuario.getRole().name());
-        responseData.put("nome", usuario.getNome());
+        // Redirecionar para o frontend com os tokens
+        String nomeEncoded = (nome != null) ? nome.replace(" ", "%20") : "";
+        String redirectUrl = String.format(
+            "http://localhost:5173/oauth2/callback?token=%s&refreshToken=%s&email=%s&role=%s&nome=%s",
+            jwtToken,
+            refreshToken.getToken(),
+            email,
+            usuario.getRole().name(),
+            nomeEncoded
+        );
         
-        // Enviar resposta JSON
-        response.setContentType("application/json;charset=UTF-8");
-        response.setStatus(HttpServletResponse.SC_OK);
-        response.getWriter().write(objectMapper.writeValueAsString(responseData));
+        response.sendRedirect(redirectUrl);
     }
 }

@@ -19,6 +19,7 @@ import com.ong.backend.services.TokenService;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
@@ -85,11 +86,27 @@ public class SecurityFilter extends OncePerRequestFilter {
     }
 
     private String recuperarToken(HttpServletRequest request) {
+        // Primeiro, tentar ler do header Authorization
         String authHeader = request.getHeader("Authorization");
         
         if (StringUtils.hasText(authHeader) && authHeader.startsWith("Bearer ")) {
             String token = authHeader.substring(7).trim();
-            return StringUtils.hasText(token) ? token : null;
+            if (StringUtils.hasText(token)) {
+                return token;
+            }
+        }
+        
+        // Se não houver no header, tentar ler do cookie
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if ("jwt".equals(cookie.getName())) {
+                    String token = cookie.getValue();
+                    if (StringUtils.hasText(token)) {
+                        return token;
+                    }
+                }
+            }
         }
         
         return null;

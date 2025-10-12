@@ -17,6 +17,7 @@ import com.ong.backend.services.RefreshTokenService;
 import com.ong.backend.services.TokenService;
 
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
@@ -74,16 +75,16 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         String ipAddress = request.getRemoteAddr();
         var refreshToken = refreshTokenService.createRefreshToken(usuario, deviceInfo, ipAddress);
         
-        // Redirecionar para o frontend com os tokens
-        String nomeEncoded = (nome != null) ? nome.replace(" ", "%20") : "";
-        String redirectUrl = String.format(
-            "http://localhost:5173/oauth2/callback?token=%s&refreshToken=%s&email=%s&role=%s&nome=%s",
-            jwtToken,
-            refreshToken.getToken(),
-            email,
-            usuario.getRole().name(),
-            nomeEncoded
-        );
+        // Criar cookie HTTP-only com o JWT token
+        Cookie cookie = new Cookie("jwt", jwtToken);
+        cookie.setHttpOnly(true);
+        cookie.setSecure(false); // Mudar para true em produção com HTTPS
+        cookie.setPath("/");
+        cookie.setMaxAge(60 * 60 * 24); // 1 dia
+        response.addCookie(cookie);
+        
+        // Redirecionar para o frontend (sem tokens na URL)
+        String redirectUrl = "http://localhost:5173/";
         
         response.sendRedirect(redirectUrl);
     }

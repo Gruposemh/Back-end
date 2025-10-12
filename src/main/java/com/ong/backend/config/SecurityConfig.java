@@ -82,7 +82,8 @@ public class SecurityConfig {
                             "/auth/verify-email-legacy", "/auth/set-password",
                             "/auth/login", "/auth/request-otp", "/auth/login-otp",
                             "/auth/resend-verification", "/auth/request-password-reset",
-                            "/auth/reset-password", "/auth/refresh-token").permitAll()
+                            "/auth/reset-password", "/auth/refresh-token", "/auth/check",
+                            "/auth/logout").permitAll()
 
                     // OAuth2 endpoints
                     .requestMatchers("/oauth2/**", "/login/oauth2/**").permitAll()
@@ -91,7 +92,7 @@ public class SecurityConfig {
                     .requestMatchers("/google-auth/**").permitAll()
 
                     // Endpoints protegidos de autenticação
-                    .requestMatchers("/auth/logout", "/auth/logout-all-devices", 
+                    .requestMatchers("/auth/logout-all-devices", 
                             "/auth/token-status", "/auth/login-history").authenticated()
 
                     // Endpoints de teste (remover em produção)

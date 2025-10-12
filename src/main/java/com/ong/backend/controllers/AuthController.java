@@ -36,12 +36,15 @@ import com.ong.backend.services.RefreshTokenService;
 import com.ong.backend.services.TokenService;
 import com.ong.backend.services.VerificationTokenService;
 
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
+import org.springframework.web.bind.annotation.CookieValue;
 
 @RestController
 @RequestMapping(value = "/auth")
-@CrossOrigin(origins = {"http://localhost:5173", "http://127.0.0.1:3000", "http://localhost:5500", "http://127.0.0.1:5500", "http://localhost:8080", "http://127.0.0.1:8080"})
+@CrossOrigin(origins = {"http://localhost:5173", "http://127.0.0.1:3000", "http://localhost:5500", "http://127.0.0.1:5500", "http://localhost:8080", "http://127.0.0.1:8080"}, allowCredentials = "true")
 public class AuthController {
 
     @Autowired
@@ -193,7 +196,7 @@ public class AuthController {
     // Endpoint removido - senha agora é definida no cadastro
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody UsuarioDTO dto, HttpServletRequest request) {
+    public ResponseEntity<?> login(@RequestBody UsuarioDTO dto, HttpServletRequest request, HttpServletResponse response) {
         try {
             // Verificar rate limiting
             if (rateLimitService.isLoginRateLimited(dto.getEmail())) {
@@ -236,6 +239,14 @@ public class AuthController {
             String deviceInfo = request.getHeader("User-Agent");
             String ipAddress = request.getRemoteAddr();
             var refreshToken = refreshTokenService.createRefreshToken(usuario, deviceInfo, ipAddress);
+
+            // Criar cookie HTTP-only com o JWT token
+            Cookie cookie = new Cookie("jwt", jwtToken);
+            cookie.setHttpOnly(true);
+            cookie.setSecure(false); // Mudar para true em produção com HTTPS
+            cookie.setPath("/");
+            cookie.setMaxAge(60 * 60 * 24); // 1 dia
+            response.addCookie(cookie);
 
             return ResponseEntity.ok(new LoginResponse(jwtToken, refreshToken.getToken(), usuario.getEmail(), usuario.getRole().name()));
 
@@ -303,7 +314,7 @@ public class AuthController {
     }
 
     @PostMapping("/login-otp")
-    public ResponseEntity<?> loginOTP(@RequestBody OTPLoginDTO dto, HttpServletRequest request) {
+    public ResponseEntity<?> loginOTP(@RequestBody OTPLoginDTO dto, HttpServletRequest request, HttpServletResponse response) {
         try {
             // Verificar OTP
             if (!otpService.validarOTP(dto.getEmail(), dto.getToken())) {
@@ -331,6 +342,14 @@ public class AuthController {
             String deviceInfo = request.getHeader("User-Agent");
             String ipAddress = request.getRemoteAddr();
             var refreshToken = refreshTokenService.createRefreshToken(usuario, deviceInfo, ipAddress);
+
+            // Criar cookie HTTP-only com o JWT token
+            Cookie cookie = new Cookie("jwt", jwtToken);
+            cookie.setHttpOnly(true);
+            cookie.setSecure(false); // Mudar para true em produção com HTTPS
+            cookie.setPath("/");
+            cookie.setMaxAge(60 * 60 * 24); // 1 dia
+            response.addCookie(cookie);
 
             return ResponseEntity.ok(new LoginResponse(jwtToken, refreshToken.getToken(), usuario.getEmail(), usuario.getRole().name()));
 
@@ -404,8 +423,10 @@ public class AuthController {
             return ResponseEntity.ok(new SuccessResponse("Email de reset de senha enviado"));
 
         } catch (Exception e) {
+            System.err.println("❌ Erro em requestPasswordReset: " + e.getMessage());
+            e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(new ErrorResponse("Erro interno do servidor"));
+                .body(new ErrorResponse("Erro interno do servidor: " + e.getMessage()));
         }
     }
 
@@ -421,8 +442,10 @@ public class AuthController {
                     .body(new ErrorResponse("Token inválido ou expirado"));
             }
         } catch (Exception e) {
+            System.err.println("❌ Erro em resetPassword: " + e.getMessage());
+            e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(new ErrorResponse("Erro interno do servidor"));
+                .body(new ErrorResponse("Erro interno do servidor: " + e.getMessage()));
         }
     }
 
@@ -471,20 +494,45 @@ public class AuthController {
         }
     }
 
-    @PostMapping("/logout")
-    public ResponseEntity<?> logout(HttpServletRequest request) {
+    @GetMapping("/check")
+    public ResponseEntity<?> check(@CookieValue(value = "jwt", required = false) String token) {
         try {
-            String authHeader = request.getHeader("Authorization");
-            if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-                return ResponseEntity.badRequest()
-                    .body(new ErrorResponse("Token de autorização não encontrado"));
+            if (token == null || !tokenService.isTokenValid(token)) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
             }
             
-            String token = authHeader.substring(7);
+            String email = tokenService.getEmailFromToken(token);
+            var usuarioOpt = usuarioRepository.findByEmail(email);
             
-            // Aqui você pode implementar blacklist de tokens se necessário
-            // String email = tokenService.getEmailFromToken(token);
-            // tokenBlacklistService.blacklistToken(token, email);
+            if (usuarioOpt.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            }
+            
+            Usuario usuario = usuarioOpt.get();
+            
+            Map<String, Object> userInfo = Map.of(
+                "email", usuario.getEmail(),
+                "role", usuario.getRole().name(),
+                "nome", usuario.getNome()
+            );
+            
+            return ResponseEntity.ok(userInfo);
+            
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<?> logout(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            // Limpar o cookie JWT
+            Cookie cookie = new Cookie("jwt", null);
+            cookie.setHttpOnly(true);
+            cookie.setSecure(false); // Mudar para true em produção com HTTPS
+            cookie.setPath("/");
+            cookie.setMaxAge(0); // Expira imediatamente
+            response.addCookie(cookie);
             
             return ResponseEntity.ok(new SuccessResponse("Logout realizado com sucesso"));
             
@@ -576,7 +624,7 @@ public class AuthController {
     }
 
     @PostMapping("/logout-all-devices")
-    public ResponseEntity<?> logoutAllDevices(HttpServletRequest request) {
+    public ResponseEntity<?> logoutAllDevices(HttpServletRequest request, HttpServletResponse response) {
         try {
             String authHeader = request.getHeader("Authorization");
             if (authHeader == null || !authHeader.startsWith("Bearer ")) {
@@ -593,6 +641,14 @@ public class AuthController {
                 // Por enquanto, apenas log - implementar revokeAllTokensForUser se necessário
                 // refreshTokenService.revokeAllTokensForUser(usuarioOpt.get());
             }
+            
+            // Limpar o cookie JWT
+            Cookie cookie = new Cookie("jwt", null);
+            cookie.setHttpOnly(true);
+            cookie.setSecure(false);
+            cookie.setPath("/");
+            cookie.setMaxAge(0);
+            response.addCookie(cookie);
             
             // Aqui você pode implementar blacklist de todos os tokens se necessário
             // tokenBlacklistService.logoutAllDevices(email);

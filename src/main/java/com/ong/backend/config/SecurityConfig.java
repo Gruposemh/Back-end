@@ -1,4 +1,3 @@
-
 package com.ong.backend.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,7 +38,8 @@ public class SecurityConfig {
             .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> auth
                 // Rotas públicas da AuthController
-                .requestMatchers("/auth/register", "/auth/login").permitAll()
+                .requestMatchers("/auth/register", "/auth/login", "/auth/check", "/auth/logout").permitAll()
+                .requestMatchers("/oauth2/**").permitAll()
 
                 // Usuário
                 .requestMatchers(HttpMethod.GET, "/usuario/todos").hasRole("ADMIN")
@@ -49,10 +49,10 @@ public class SecurityConfig {
              // Blog
                 .requestMatchers(HttpMethod.POST, "/blog/criar").authenticated()
                 .requestMatchers(HttpMethod.GET, "/blog/listar").hasRole("ADMIN")
-                .requestMatchers(HttpMethod.GET, "/blog/buscar").permitAll()
-                .requestMatchers(HttpMethod.GET, "/blog/blogs").permitAll()
+                .requestMatchers(HttpMethod.GET, "/blog/buscar").authenticated()
+                .requestMatchers(HttpMethod.GET, "/blog/blogs").authenticated()
                 .requestMatchers(HttpMethod.PUT, "/blog/atualizar/**").authenticated()
-                .requestMatchers(HttpMethod.DELETE, "/blog/deletar/**").authenticated()
+                .requestMatchers(HttpMethod.DELETE, "/blog/deletar/**").hasRole("ADMIN")
 
                 // Aprovação e negação — apenas ADMIN
                 .requestMatchers(HttpMethod.PUT, "/blog/aprovar/**").hasRole("ADMIN")

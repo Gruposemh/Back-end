@@ -16,15 +16,13 @@ public class Blog {
     private String tituloMateria;
     private String informacao;
     private String urlNoticia;
-    private String bairro;
-    private boolean anonima;
     private LocalDateTime dataPostagem;
 
     @Enumerated(EnumType.STRING)
     private StatusPublicacao status = StatusPublicacao.PENDENTE;
 
     @OneToMany(mappedBy = "idBlog", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference // 👈 ADICIONE ESTA LINHA
+    @JsonManagedReference
     private List<Comentario> comentarios;
 
     @ManyToOne
@@ -33,13 +31,11 @@ public class Blog {
 
     public Blog() {}
 
-    public Blog(Long id, String tituloMateria, String informacao, String urlNoticia, String bairro, boolean anonima, LocalDateTime dataPostagem, Usuario idUsuario) {
+    public Blog(Long id, String tituloMateria, String informacao, String urlNoticia, LocalDateTime dataPostagem, Usuario idUsuario) {
         this.id = id;
         this.tituloMateria = tituloMateria;
         this.informacao = informacao;
         this.urlNoticia = urlNoticia;
-        this.bairro = bairro;
-        this.anonima = anonima;
         this.dataPostagem = dataPostagem;
         this.idUsuario = idUsuario;
     }
@@ -74,22 +70,6 @@ public class Blog {
 
 	public void setUrlNoticia(String urlNoticia) {
 		this.urlNoticia = urlNoticia;
-	}
-
-	public String getBairro() {
-		return bairro;
-	}
-
-	public void setBairro(String bairro) {
-		this.bairro = bairro;
-	}
-
-	public boolean isAnonima() {
-		return anonima;
-	}
-
-	public void setAnonima(boolean anonima) {
-		this.anonima = anonima;
 	}
 
 	public LocalDateTime getDataPostagem() {

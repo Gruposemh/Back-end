@@ -38,10 +38,8 @@ public class BlogService {
 
 		Blog blog = new Blog();
 		blog.setTituloMateria(dto.getTituloMateria());
-		blog.setBairro(dto.getBairro());
 		blog.setInformacao(dto.getInformacao());
 		blog.setUrlNoticia(dto.getUrlNoticia());
-		blog.setAnonima(dto.isAnonima());
 		blog.setDataPostagem(LocalDateTime.now());
 		blog.setIdUsuario(usuario);
 		blog.setStatus(StatusPublicacao.PENDENTE);
@@ -82,8 +80,6 @@ public class BlogService {
 		blog.setTituloMateria(dto.getTituloMateria());
 		blog.setInformacao(dto.getInformacao());
 		blog.setUrlNoticia(dto.getUrlNoticia());
-		blog.setBairro(dto.getBairro());
-		blog.setAnonima(dto.isAnonima());
 		blog.setDataPostagem(LocalDateTime.now());
 
 		blogRepository.save(blog);

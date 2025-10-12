@@ -9,21 +9,17 @@ public class BlogDTO {
 	private String tituloMateria;
 	private String informacao;
 	private String urlNoticia;
-	private String bairro;
-	private boolean anonima;
 	private LocalDateTime dataPostagem;
 	
 	public BlogDTO() {
 	}
 	
-	public BlogDTO(Long id, Long idUsuario, String tituloMateria, String informacao, String urlNoticia, String bairro, boolean anonima, LocalDateTime dataPostagem) {
+	public BlogDTO(Long id, Long idUsuario, String tituloMateria, String informacao, String urlNoticia, LocalDateTime dataPostagem) {
 		this.id = id;
 		this.idUsuario = idUsuario;
 		this.tituloMateria = tituloMateria;
 		this.informacao = informacao;
 		this.urlNoticia = urlNoticia;
-		this.bairro = bairro;
-		this.anonima = anonima;
 		this.dataPostagem = dataPostagem;
 	}
 
@@ -33,8 +29,6 @@ public class BlogDTO {
 		this.tituloMateria = entity.getTituloMateria();
 		this.informacao = entity.getInformacao();
 		this.urlNoticia = entity.getUrlNoticia();
-		this.bairro = entity.getBairro();
-		this.anonima = entity.isAnonima();
 		this.dataPostagem = entity.getDataPostagem();
 	}
 	
@@ -62,19 +56,6 @@ public class BlogDTO {
 	public void setUrlNoticia(String urlNoticia) {
 		this.urlNoticia = urlNoticia;
 	}
-	public String getBairro() {
-		return bairro;
-	}
-	public void setBairro(String bairro) {
-		this.bairro = bairro;
-	}
-	public boolean isAnonima() {
-		return anonima;
-	}
-	public void setAnonima(boolean anonima) {
-		this.anonima = anonima;
-	}
-
 	public LocalDateTime getDataPostagem() {
 		return dataPostagem;
 	}

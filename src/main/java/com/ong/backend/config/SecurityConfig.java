@@ -16,6 +16,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.AuthenticationEntryPoint;
+import org.springframework.security.web.access.AccessDeniedHandler;
+import org.springframework.http.MediaType;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -65,9 +68,12 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
             .cors(cors -> cors.configurationSource(corsConfigurationSource()))
-            .csrf(csrf -> csrf
-                    .csrfTokenRepository(org.springframework.security.web.csrf.CookieCsrfTokenRepository.withHttpOnlyFalse())
-                    .ignoringRequestMatchers("/auth/**", "/test/**", "/google-auth/**") // Apenas para APIs REST
+            // API stateless: desabilitar CSRF para evitar 403 em clients (Postman/SPA) sem token CSRF
+            .csrf(csrf -> csrf.disable())
+            // Retornar JSON em vez de redirecionar para páginas HTML quando não autenticado/sem permissão
+            .exceptionHandling(ex -> ex
+                .authenticationEntryPoint(jsonAuthEntryPoint())
+                .accessDeniedHandler(jsonAccessDeniedHandler())
             )
             .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> auth
@@ -181,6 +187,22 @@ public class SecurityConfig {
             .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
+    }
+
+    private AuthenticationEntryPoint jsonAuthEntryPoint() {
+        return (request, response, authException) -> {
+            response.setStatus(401);
+            response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+            response.getWriter().write("{\"status\":401,\"error\":\"Unauthorized\",\"message\":\"Autenticação necessária\"}");
+        };
+    }
+
+    private AccessDeniedHandler jsonAccessDeniedHandler() {
+        return (request, response, accessDeniedException) -> {
+            response.setStatus(403);
+            response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+            response.getWriter().write("{\"status\":403,\"error\":\"Forbidden\",\"message\":\"Acesso negado\"}");
+        };
     }
 
     @Bean

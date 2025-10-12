@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import com.ong.backend.dto.MensagemResponse;
 import com.ong.backend.dto.VoluntarioDTO;
+import com.ong.backend.entities.StatusVoluntario;
 import com.ong.backend.entities.Usuario;
 import com.ong.backend.entities.Voluntario;
 import com.ong.backend.exceptions.NaoEncontradoException;
@@ -51,6 +52,7 @@ public class VoluntarioService {
 	    voluntario.setTelefone(dto.getTelefone());
 	    voluntario.setDescricao(dto.getDescricao());
 	    voluntario.setEndereco(dto.getEndereco());
+	    voluntario.setStatus(StatusVoluntario.PENDENTE);
 	    
 	    voluntario = voluntarioRepository.save(voluntario);
 
@@ -68,4 +70,23 @@ public class VoluntarioService {
 		return ResponseEntity.status(HttpStatus.OK)
 	            .body(new MensagemResponse("Solicitação cancelada!"));
 	}
+	
+	public List<Voluntario> listarPendentes() {
+        return voluntarioRepository.findByStatus(StatusVoluntario.PENDENTE);
+    }
+
+    public List<Voluntario> listarAprovados() {
+        return voluntarioRepository.findByStatus(StatusVoluntario.APROVADO);
+    }
+
+    public ResponseEntity<MensagemResponse> aprovar(Long id) {
+        Voluntario voluntario = voluntarioRepository.findById(id)
+            .orElseThrow(() -> new NaoEncontradoException("Voluntário não encontrado"));
+
+        voluntario.setStatus(StatusVoluntario.APROVADO);
+        voluntarioRepository.save(voluntario);
+
+        return ResponseEntity.status(HttpStatus.OK)
+            .body(new MensagemResponse("Voluntário aprovado com sucesso!"));
+    }
 }

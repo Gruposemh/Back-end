@@ -65,6 +65,9 @@ public class Usuario implements UserDetails{
 	@OneToOne(mappedBy = "idUsuario", cascade = CascadeType.ALL, orphanRemoval = true)
 	private Voluntario voluntario;
 	
+	@OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<Tarefas> tarefas = new ArrayList<>();
+	
 	public Usuario() {
 		
 	}

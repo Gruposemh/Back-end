@@ -68,7 +68,7 @@ public class AuthController {
     @Autowired
     private RateLimitService rateLimitService;
 
-    // Método helper para criar cookies com configurações corretas
+    @GetMapping("/check")
     private void createAuthCookie(HttpServletResponse response, String token, int maxAge) {
         Cookie cookie = new Cookie("jwt", token);
         cookie.setHttpOnly(true);

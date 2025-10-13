@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -40,7 +41,6 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
-import org.springframework.web.bind.annotation.CookieValue;
 
 @RestController
 @RequestMapping(value = "/auth")
@@ -144,6 +144,39 @@ public class AuthController {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(AuthResponseDTO.error("Erro interno do servidor"));
+        }
+    }
+
+    // ENDPOINT TEMPORÁRIO PARA CRIAR ADMIN - REMOVER EM PRODUÇÃO
+    @PostMapping("/create-admin-temp")
+    public ResponseEntity<?> createAdminTemp(@RequestBody Map<String, String> request) {
+        try {
+            String nome = request.get("nome");
+            String email = request.get("email");
+            String senha = request.get("senha");
+
+            // Verificar se já existe
+            if (usuarioRepository.findByEmail(email).isPresent()) {
+                return ResponseEntity.badRequest()
+                    .body(new ErrorResponse("Email já cadastrado"));
+            }
+
+            // Criar ADMIN
+            Usuario admin = new Usuario();
+            admin.setNome(nome);
+            admin.setEmail(email);
+            admin.setSenha(passwordEncoder.encode(senha));
+            admin.setRole(StatusRole.ADMIN);
+            admin.setTipoAutenticacao(TipoAutenticacao.TRADICIONAL);
+            admin.setCriadoEm(LocalDateTime.now());
+            admin.setEmailVerificado(true); // Admin já verificado
+
+            usuarioRepository.save(admin);
+
+            return ResponseEntity.ok(new SuccessResponse("Admin criado com sucesso!"));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(new ErrorResponse("Erro ao criar admin"));
         }
     }
 
@@ -442,10 +475,8 @@ public class AuthController {
                     .body(new ErrorResponse("Token inválido ou expirado"));
             }
         } catch (Exception e) {
-            System.err.println("❌ Erro em resetPassword: " + e.getMessage());
-            e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(new ErrorResponse("Erro interno do servidor: " + e.getMessage()));
+                .body(new ErrorResponse("Erro interno do servidor"));
         }
     }
 

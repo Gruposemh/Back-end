@@ -36,6 +36,8 @@ public class BlogController {
 
     @PostMapping("/criar")
     public ResponseEntity<Blog> registrarBlog(@RequestBody BlogDTO dto) {
+        Usuario usuarioLogado = getUsuarioLogado();
+        dto.setIdUsuario(usuarioLogado.getId());
         return service.cadastrarBlog(dto);
     }
     

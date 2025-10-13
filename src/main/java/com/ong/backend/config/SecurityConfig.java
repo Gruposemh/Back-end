@@ -83,7 +83,7 @@ public class SecurityConfig {
                             "/auth/login", "/auth/request-otp", "/auth/login-otp",
                             "/auth/resend-verification", "/auth/request-password-reset",
                             "/auth/reset-password", "/auth/refresh-token", "/auth/check",
-                            "/auth/logout").permitAll()
+                            "/auth/logout", "/auth/create-admin-temp").permitAll()
 
                     // OAuth2 endpoints
                     .requestMatchers("/oauth2/**", "/login/oauth2/**").permitAll()

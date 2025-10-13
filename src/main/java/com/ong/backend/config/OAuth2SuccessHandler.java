@@ -84,7 +84,7 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         response.addCookie(cookie);
         
         // Redirecionar para o frontend (sem tokens na URL)
-        String redirectUrl = "https://front-tcc-nine.vercel.app/oauth2/callback";
+        String redirectUrl = "https://front-tcc-nine.vercel.app/";
         
         response.sendRedirect(redirectUrl);
     }

@@ -44,7 +44,7 @@ import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping(value = "/auth")
-@CrossOrigin(origins = {"http://localhost:5173", "http://127.0.0.1:3000", "http://localhost:5500", "http://127.0.0.1:5500", "http://localhost:8080", "http://127.0.0.1:8080"}, allowCredentials = "true")
+@CrossOrigin(origins = {"http://localhost:5173", "http://127.0.0.1:3000", "http://localhost:5500", "http://127.0.0.1:5500", "http://localhost:8080", "http://127.0.0.1:8080", "https://backend-tcc-cgbwa9c6gjd5bjfr.brazilsouth-01.azurewebsites.net", "https://front-tcc-git-main-iagob12s-projects.vercel.app", "https://front-tcc-nine.vercel.app", "https://front-o5yzf96tq-iagob12s-projects.vercel.app"}, allowCredentials = "true")
 public class AuthController {
 
     @Autowired
@@ -67,6 +67,21 @@ public class AuthController {
 
     @Autowired
     private RateLimitService rateLimitService;
+
+    // Método helper para criar cookies com configurações corretas
+    private void createAuthCookie(HttpServletResponse response, String token, int maxAge) {
+        Cookie cookie = new Cookie("jwt", token);
+        cookie.setHttpOnly(true);
+        cookie.setSecure(true); // HTTPS obrigatório em produção
+        cookie.setPath("/");
+        cookie.setMaxAge(maxAge);
+        
+        // Adicionar SameSite=None via header para cross-origin
+        response.setHeader("Set-Cookie", String.format(
+            "jwt=%s; Path=/; Max-Age=%d; HttpOnly; Secure; SameSite=None",
+            token != null ? token : "", maxAge
+        ));
+    }
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@Valid @RequestBody UsuarioDTO dto) {
@@ -274,12 +289,7 @@ public class AuthController {
             var refreshToken = refreshTokenService.createRefreshToken(usuario, deviceInfo, ipAddress);
 
             // Criar cookie HTTP-only com o JWT token
-            Cookie cookie = new Cookie("jwt", jwtToken);
-            cookie.setHttpOnly(true);
-            cookie.setSecure(false); // Mudar para true em produção com HTTPS
-            cookie.setPath("/");
-            cookie.setMaxAge(60 * 60 * 24); // 1 dia
-            response.addCookie(cookie);
+            createAuthCookie(response, jwtToken, 60 * 60 * 24); // 1 dia
 
             return ResponseEntity.ok(new LoginResponse(jwtToken, refreshToken.getToken(), usuario.getEmail(), usuario.getRole().name()));
 
@@ -377,12 +387,7 @@ public class AuthController {
             var refreshToken = refreshTokenService.createRefreshToken(usuario, deviceInfo, ipAddress);
 
             // Criar cookie HTTP-only com o JWT token
-            Cookie cookie = new Cookie("jwt", jwtToken);
-            cookie.setHttpOnly(true);
-            cookie.setSecure(false); // Mudar para true em produção com HTTPS
-            cookie.setPath("/");
-            cookie.setMaxAge(60 * 60 * 24); // 1 dia
-            response.addCookie(cookie);
+            createAuthCookie(response, jwtToken, 60 * 60 * 24); // 1 dia
 
             return ResponseEntity.ok(new LoginResponse(jwtToken, refreshToken.getToken(), usuario.getEmail(), usuario.getRole().name()));
 
@@ -558,12 +563,7 @@ public class AuthController {
     public ResponseEntity<?> logout(HttpServletRequest request, HttpServletResponse response) {
         try {
             // Limpar o cookie JWT
-            Cookie cookie = new Cookie("jwt", null);
-            cookie.setHttpOnly(true);
-            cookie.setSecure(false); // Mudar para true em produção com HTTPS
-            cookie.setPath("/");
-            cookie.setMaxAge(0); // Expira imediatamente
-            response.addCookie(cookie);
+            createAuthCookie(response, "", 0); // Expira imediatamente
             
             return ResponseEntity.ok(new SuccessResponse("Logout realizado com sucesso"));
             
@@ -674,12 +674,7 @@ public class AuthController {
             }
             
             // Limpar o cookie JWT
-            Cookie cookie = new Cookie("jwt", null);
-            cookie.setHttpOnly(true);
-            cookie.setSecure(false);
-            cookie.setPath("/");
-            cookie.setMaxAge(0);
-            response.addCookie(cookie);
+            createAuthCookie(response, "", 0);
             
             // Aqui você pode implementar blacklist de todos os tokens se necessário
             // tokenBlacklistService.logoutAllDevices(email);

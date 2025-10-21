@@ -44,7 +44,7 @@ import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping(value = "/auth")
-@CrossOrigin(origins = {"http://localhost:5173", "http://127.0.0.1:3000", "http://localhost:5500", "http://127.0.0.1:5500", "http://localhost:8080", "http://127.0.0.1:8080", "https://backend-tcc-cgbwa9c6gjd5bjfr.brazilsouth-01.azurewebsites.net", "https://front-tcc-git-main-iagob12s-projects.vercel.app", "https://front-tcc-nine.vercel.app", "https://front-o5yzf96tq-iagob12s-projects.vercel.app"}, allowCredentials = "true")
+@CrossOrigin(origins = {"http://localhost:5173", "http://127.0.0.1:3000", "http://localhost:5500", "http://127.0.0.1:5500", "http://localhost:8080", "http://127.0.0.1:8080", "https://ong-tcc-ddabbpc6btgqeeey.brazilsouth-01.azurewebsites.net", "https://front-tcc-git-main-iagob12s-projects.vercel.app", "https://front-tcc-nine.vercel.app", "https://front-o5yzf96tq-iagob12s-projects.vercel.app"}, allowCredentials = "true")
 public class AuthController {
 
     @Autowired
@@ -68,7 +68,7 @@ public class AuthController {
     @Autowired
     private RateLimitService rateLimitService;
 
-    @GetMapping("/check")
+    // Método helper privado para criar cookies de autenticação
     private void createAuthCookie(HttpServletResponse response, String token, int maxAge) {
         Cookie cookie = new Cookie("jwt", token);
         cookie.setHttpOnly(true);

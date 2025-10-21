@@ -26,7 +26,7 @@ import com.ong.backend.services.TokenService;
 
 @RestController
 @RequestMapping("/google-auth")
-@CrossOrigin(origins = {"http://localhost:3000", "http://127.0.0.1:5500", "http://localhost:5500", "http://127.0.0.1:3000"})
+@CrossOrigin(origins = {"http://localhost:3000", "http://127.0.0.1:5500", "http://localhost:5500", "http://127.0.0.1:3000", "http://localhost:5173", "https://front-tcc-nine.vercel.app", "https://front-o5yzf96tq-iagob12s-projects.vercel.app", "https://front-tcc-git-main-iagob12s-projects.vercel.app"}, allowCredentials = "true")
 public class GoogleAuthController {
 
     @Value("${spring.security.oauth2.client.registration.google.client-id}")

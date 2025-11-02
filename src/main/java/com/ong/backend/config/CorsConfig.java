@@ -13,17 +13,17 @@ public class CorsConfig {
         return new WebMvcConfigurer() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/**")  // todas rotas
+                registry.addMapping("/**")  // Todas as rotas
                     .allowedOrigins(
-                        "http://localhost:5173",
-                        "http://127.0.0.1:5500",
+                        "http://localhost:5173", // Sua origem do frontend
+                        "http://127.0.0.1:5500", 
                         "http://localhost:5500",
                         "http://127.0.0.1:3000",
-                        "file://"  // Para arquivos abertos diretamente no navegador
+                        "file://"  // Para arquivos locais
                     )
                     .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                     .allowedHeaders("*")
-                    .allowCredentials(true);
+                    .allowCredentials(true); // Permitir envio de cookies
             }
         };
     }

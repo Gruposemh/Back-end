@@ -3,9 +3,11 @@ package com.ong.backend.controllers;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,7 +27,7 @@ import com.ong.backend.repositories.BlogRepository;
 import com.ong.backend.services.BlogService;
 
 @RestController
-@RequestMapping("blog")
+@RequestMapping("/blog")
 public class BlogController {
     
     @Autowired
@@ -37,6 +39,9 @@ public class BlogController {
     @PostMapping("/criar")
     public ResponseEntity<Blog> registrarBlog(@RequestBody BlogDTO dto) {
         Usuario usuarioLogado = getUsuarioLogado();
+        if (usuarioLogado == null) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null); // Aqui retorna 403 se o usuário não estiver logado
+        }
         dto.setIdUsuario(usuarioLogado.getId());
         return service.cadastrarBlog(dto);
     }
@@ -53,9 +58,14 @@ public class BlogController {
         return service.buscarPorTitulo(titulo);
     }
     
-    @GetMapping("/blogs")
+    @GetMapping("/aprovados")
     public List<Blog> listarBlogsAprovados() {
         return blogRepository.findByStatus(StatusPublicacao.APROVADO);
+    }
+    
+    @GetMapping("/pendentes")
+    public List<Blog> listarBlogsPendentes() {
+    	return blogRepository.findByStatus(StatusPublicacao.PENDENTE);
     }
 
     

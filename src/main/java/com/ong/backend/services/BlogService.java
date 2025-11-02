@@ -105,6 +105,10 @@ public class BlogService {
 	    return blogRepository.findByStatus(StatusPublicacao.APROVADO);
 	}
 	
+	public List<Blog> listarPendentes() {
+		return blogRepository.findByStatus(StatusPublicacao.PENDENTE);
+	}
+	
 	public ResponseEntity<MensagemResponse> negarBlog(Long id) {
 	    Blog blog = blogRepository.findById(id)
 	            .orElseThrow(() -> new NaoEncontradoException("Blog não encontrado"));

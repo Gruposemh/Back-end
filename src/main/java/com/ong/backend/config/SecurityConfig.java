@@ -100,14 +100,15 @@ public class SecurityConfig {
 
                     // Usuário
                     .requestMatchers(HttpMethod.GET, "/usuario/todos").hasRole("ADMIN")
-                    .requestMatchers("/usuario/deletar/**").hasAnyRole("USUARIO", "ADMIN")
-                    .requestMatchers("/usuario/atualizar/**").hasAnyRole("USUARIO", "ADMIN")
+                    .requestMatchers(HttpMethod.DELETE, "/usuario/deletar/**").hasAnyRole("USUARIO", "ADMIN")
+                    .requestMatchers(HttpMethod.PUT, "/usuario/atualizar/**").hasAnyRole("USUARIO", "ADMIN")
 
                     // Blog
                     .requestMatchers(HttpMethod.POST, "/blog/criar").authenticated()
                     .requestMatchers(HttpMethod.GET, "/blog/listar").hasRole("ADMIN")
+                    .requestMatchers(HttpMethod.GET, "/blog/pendentes").hasRole("ADMIN")
                     .requestMatchers(HttpMethod.GET, "/blog/buscar").permitAll()
-                    .requestMatchers(HttpMethod.GET, "/blog/blogs").permitAll()
+                    .requestMatchers(HttpMethod.GET, "/blog/aprovados").permitAll()
                     .requestMatchers(HttpMethod.PUT, "/blog/atualizar/**").authenticated()
                     .requestMatchers(HttpMethod.DELETE, "/blog/deletar/**").authenticated()
 

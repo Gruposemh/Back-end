@@ -68,15 +68,15 @@ public class AuthController {
     @Autowired
     private RateLimitService rateLimitService;
 
-    // Método helper privado para criar cookies de autenticação
+    
     private void createAuthCookie(HttpServletResponse response, String token, int maxAge) {
         Cookie cookie = new Cookie("jwt", token);
-        cookie.setHttpOnly(true);
-        cookie.setSecure(true); // HTTPS obrigatório em produção
-        cookie.setPath("/");
+        cookie.setHttpOnly(true); // Garante que o cookie não seja acessível via JavaScript
+        cookie.setSecure(true);   // Defina como true quando estiver em produção (apenas HTTPS)
+        cookie.setPath("/");      // O cookie será enviado para todas as rotas
         cookie.setMaxAge(maxAge);
         
-        // Adicionar SameSite=None via header para cross-origin
+        // Configuração SameSite=None para permitir cookies entre origens diferentes
         response.setHeader("Set-Cookie", String.format(
             "jwt=%s; Path=/; Max-Age=%d; HttpOnly; Secure; SameSite=None",
             token != null ? token : "", maxAge

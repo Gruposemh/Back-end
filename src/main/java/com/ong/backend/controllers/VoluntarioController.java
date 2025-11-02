@@ -44,7 +44,7 @@ public class VoluntarioController {
 	public List<Voluntario> listarAprovados() {
 		return voluntarioService.listarAprovados();
 	}
-
+	
 	@PutMapping(value = "/aprovar/{id}")
 	public ResponseEntity<MensagemResponse> aprovar(@PathVariable Long id) {
 		return voluntarioService.aprovar(id);

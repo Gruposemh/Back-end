@@ -68,6 +68,12 @@ public class Usuario implements UserDetails{
 	@OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Tarefas> tarefas = new ArrayList<>();
 	
+	@OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<RefreshToken> tokens = new ArrayList<>();
+	
+	@OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<VerificationToken> verificationTokens = new ArrayList<>();
+	
 	public Usuario() {
 		
 	}

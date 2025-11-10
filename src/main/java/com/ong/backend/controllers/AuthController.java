@@ -536,24 +536,25 @@ public class AuthController {
             if (token == null || !tokenService.isTokenValid(token)) {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
             }
-            
+
             String email = tokenService.getEmailFromToken(token);
             var usuarioOpt = usuarioRepository.findByEmail(email);
-            
+
             if (usuarioOpt.isEmpty()) {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
             }
-            
+
             Usuario usuario = usuarioOpt.get();
-            
+
             Map<String, Object> userInfo = Map.of(
+                "id", usuario.getId(),
                 "email", usuario.getEmail(),
                 "role", usuario.getRole().name(),
                 "nome", usuario.getNome()
             );
-            
+
             return ResponseEntity.ok(userInfo);
-            
+
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }

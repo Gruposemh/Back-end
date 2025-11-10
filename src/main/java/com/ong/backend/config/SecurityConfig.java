@@ -107,7 +107,7 @@ public class SecurityConfig {
                     .requestMatchers(HttpMethod.POST, "/blog/criar").authenticated()
                     .requestMatchers(HttpMethod.GET, "/blog/listar").hasRole("ADMIN")
                     .requestMatchers(HttpMethod.GET, "/blog/pendentes").hasRole("ADMIN")
-                    .requestMatchers(HttpMethod.GET, "/blog/buscar").permitAll()
+                    .requestMatchers(HttpMethod.GET, "/blog/buscar/**").permitAll()
                     .requestMatchers(HttpMethod.GET, "/blog/aprovados").permitAll()
                     .requestMatchers(HttpMethod.PUT, "/blog/atualizar/**").authenticated()
                     .requestMatchers(HttpMethod.DELETE, "/blog/deletar/**").authenticated()

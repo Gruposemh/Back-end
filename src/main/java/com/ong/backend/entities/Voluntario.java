@@ -21,7 +21,7 @@ public class Voluntario {
     @OneToOne
     @JoinColumn(name = "id_usuario")
     private Usuario idUsuario;
-    private int cpf;
+    private String cpf;
     private String telefone;
     private String dataNascimento;
     private String endereco;
@@ -32,7 +32,7 @@ public class Voluntario {
 	public Voluntario() {
 	}
 
-	public Voluntario(Long id, Usuario idUsuario, int cpf, String telefone, String dataNascimento, String endereco,
+	public Voluntario(Long id, Usuario idUsuario, String cpf, String telefone, String dataNascimento, String endereco,
 			LocalDateTime dataVoluntario, String descricao, StatusVoluntario status) {
 		this.id = id;
 		this.idUsuario = idUsuario;
@@ -57,10 +57,10 @@ public class Voluntario {
 	public void setIdUsuario(Usuario idUsuario) {
 		this.idUsuario = idUsuario;
 	}
-	public int getCpf() {
+	public String getCpf() {
 		return cpf;
 	}
-	public void setCpf(int cpf) {
+	public void setCpf(String cpf) {
 		this.cpf = cpf;
 	}
 	public String getTelefone() {

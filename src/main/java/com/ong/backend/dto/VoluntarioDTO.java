@@ -8,7 +8,7 @@ public class VoluntarioDTO {
 
 	private Long id;
 	private Long idUsuario;
-    private int cpf;
+    private String cpf;
     private String telefone;
     private String dataNascimento;
     private String endereco;
@@ -18,7 +18,7 @@ public class VoluntarioDTO {
 	public VoluntarioDTO() {
 	}
 
-	public VoluntarioDTO(Long id, Long idUsuario, int cpf, String telefone, String dataNascimento, String endereco,
+	public VoluntarioDTO(Long id, Long idUsuario, String cpf, String telefone, String dataNascimento, String endereco,
 			LocalDateTime dataVoluntario, String descricao) {
 		this.id = id;
 		this.idUsuario = idUsuario;
@@ -53,10 +53,10 @@ public class VoluntarioDTO {
 	public void setIdUsuario(Long idUsuario) {
 		this.idUsuario = idUsuario;
 	}
-	public int getCpf() {
+	public String getCpf() {
 		return cpf;
 	}
-	public void setCpf(int cpf) {
+	public void setCpf(String cpf) {
 		this.cpf = cpf;
 	}
 	public String getTelefone() {

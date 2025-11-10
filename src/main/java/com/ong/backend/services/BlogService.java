@@ -54,10 +54,10 @@ public class BlogService {
 		return blogRepository.findAll();
 	}
 
-	public ResponseEntity<Blog> buscarPorTitulo(String titulo) {
-		Optional<Blog> blog = blogRepository.findByTituloMateria(titulo);
+	public ResponseEntity<Blog> buscarPorId(Long id) {
+		Optional<Blog> blog = blogRepository.findById(id);
 		return blog.map(ResponseEntity::ok)
-				.orElseThrow(() -> new NaoEncontradoException("Blog não encontrado com o título: " + titulo));
+				.orElseThrow(() -> new NaoEncontradoException("Blog não encontrado com o ID: " + id));
 	}
 
 	public ResponseEntity<MensagemResponse> deletarBlog(Long id, Usuario usuarioLogado) {

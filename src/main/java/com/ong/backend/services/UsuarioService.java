@@ -11,7 +11,9 @@ import org.springframework.stereotype.Service;
 
 import com.ong.backend.dto.MensagemResponse;
 import com.ong.backend.dto.UsuarioDTO;
+import com.ong.backend.entities.Curso;
 import com.ong.backend.entities.Usuario;
+import com.ong.backend.exceptions.NaoEncontradoException;
 import com.ong.backend.repositories.UsuarioRepository;
 
 @Service
@@ -45,6 +47,10 @@ public class UsuarioService{
 	}
 	
 	public ResponseEntity<MensagemResponse> deleteUsuario(Long id) {
+		Optional<Usuario> usuarios = usuarioRepository.findById(id);
+        if (usuarios.isEmpty()) {
+            throw new NaoEncontradoException("Nenhum curso encontrado com o ID: " + id);
+        }
 		usuarioRepository.deleteById(id);
 		return ResponseEntity.status(HttpStatus.OK)
 	            .body(new MensagemResponse("Usuário excluido!"));

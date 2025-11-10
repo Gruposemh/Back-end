@@ -46,17 +46,17 @@ public class BlogController {
         return service.cadastrarBlog(dto);
     }
     
+    @GetMapping("/buscar/{id}")
+    public ResponseEntity<Blog> buscarPorTitulo(@PathVariable Long id) {
+    	return service.buscarPorId(id);
+    }
+    
     // Para ADMIN
     @GetMapping("/listar")
     public ResponseEntity<List<Blog>> listarTodos() {
         return ResponseEntity.ok(service.listar());
     }
     
-    // Para USUARIO
-    @GetMapping("/buscar")
-    public ResponseEntity<Blog> buscarPorTitulo(@RequestParam String titulo) {
-        return service.buscarPorTitulo(titulo);
-    }
     
     @GetMapping("/aprovados")
     public List<Blog> listarBlogsAprovados() {

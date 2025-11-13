@@ -41,6 +41,11 @@ public class InscricaoService {
 			throw new RuntimeException("Usuário já inscrito nesse curso.");
 		}
 		
+		int totalInscricoes = inscricaoRepository.countByIdCurso(curso);
+	    if (totalInscricoes >= curso.getVagas()) {
+	        throw new RuntimeException("Não há vagas disponíveis para este curso.");
+	    }
+		
 		Inscricao inscricao = new Inscricao();
 		inscricao.setDataInscricao(LocalDateTime.now());
 		inscricao.setIdCurso(curso);

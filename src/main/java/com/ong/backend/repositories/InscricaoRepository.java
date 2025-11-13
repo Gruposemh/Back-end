@@ -11,4 +11,5 @@ import com.ong.backend.entities.Usuario;
 public interface InscricaoRepository extends JpaRepository <Inscricao, Long>{
 
 	boolean existsByIdUsuarioAndIdCurso(Usuario usuario, Curso curso);
+	int countByIdCurso(Curso curso);
 }

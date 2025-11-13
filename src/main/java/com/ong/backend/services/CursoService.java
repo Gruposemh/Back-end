@@ -23,7 +23,9 @@ public class CursoService {
 		
 		curso.setDescricao(dto.getDescricao());
 		curso.setTitulo(dto.getTitulo());
-		curso.setValor(dto.getValor());
+		curso.setHorario(dto.getHorario());
+		curso.setDias(dto.getDias());
+		curso.setVagas(dto.getVagas());
 		
 		curso = cursoRepository.save(curso);
 		
@@ -55,7 +57,11 @@ public class CursoService {
         }
         
         Curso curso = cursoRepository.findById(id).get();
-        curso.setValor(atualizado.getValor());
+        curso.setTitulo(atualizado.getTitulo());
+        curso.setDescricao(atualizado.getDescricao());
+        curso.setVagas(atualizado.getVagas());
+        curso.setDias(atualizado.getDias());
+        curso.setHorario(atualizado.getHorario());
         curso = cursoRepository.save(curso);
         
         return ResponseEntity.ok(curso);

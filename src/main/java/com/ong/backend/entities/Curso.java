@@ -1,7 +1,7 @@
 package com.ong.backend.entities;
 
+import java.time.LocalTime;
 import java.util.List;
-
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -19,7 +19,9 @@ public class Curso {
 	private Long id;
 	private String titulo;
 	private String descricao;
-	private float valor;
+	private String dias;
+	private LocalTime horario;
+	private int vagas;
 	
 	@OneToMany(mappedBy = "idCurso", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Inscricao> inscricoes;
@@ -27,13 +29,19 @@ public class Curso {
 	public Curso() {
 	}
 	
-	public Curso(Long id, String titulo, String descricao, float valor) {
+	public Curso(Long id, String titulo, String descricao, String dias, LocalTime horario, int vagas,
+			List<Inscricao> inscricoes) {
 		this.id = id;
 		this.titulo = titulo;
 		this.descricao = descricao;
-		this.valor = valor;
+		this.dias = dias;
+		this.horario = horario;
+		this.vagas = vagas;
+		this.inscricoes = inscricoes;
 	}
-	
+
+
+
 	public Long getId() {
 		return id;
 	}
@@ -52,10 +60,34 @@ public class Curso {
 	public void setDescricao(String descricao) {
 		this.descricao = descricao;
 	}
-	public float getValor() {
-		return valor;
+
+	public String getDias() {
+		return dias;
 	}
-	public void setValor(float valor) {
-		this.valor = valor;
+
+	public void setDias(String dias) {
+		this.dias = dias;
+	}
+
+	public LocalTime getHorario() {
+		return horario;
+	}
+
+	public void setHorario(LocalTime horario) {
+		this.horario = horario;
+	}
+
+	public int getVagas() {
+		return vagas;
+	}
+
+	public void setVagas(int vagas) {
+		this.vagas = vagas;
+	}
+	public List<Inscricao> getInscricoes() {
+		return inscricoes;
+	}
+	public void setInscricoes(List<Inscricao> inscricoes) {
+		this.inscricoes = inscricoes;
 	}
 }

@@ -34,6 +34,11 @@ public class VoluntarioController {
 	public List<Voluntario> listarVoluntarios(){
 		return voluntarioService.listar();
 	}
+	
+	@GetMapping(value = "/{id}")
+	public ResponseEntity<Voluntario> buscarPorId(@PathVariable Long id){
+		return voluntarioService.buscarPorId(id);
+	}
 
 	@GetMapping(value = "/listar/pendentes")
 	public List<Voluntario> listarPendentes() {
@@ -51,7 +56,7 @@ public class VoluntarioController {
 	}
 
 	@DeleteMapping(value = "cancelar/{id}")
-	public ResponseEntity<MensagemResponse> cancelar (@PathVariable Long id){
+	public ResponseEntity<?> cancelar (@PathVariable Long id){
 		return voluntarioService.cancelar(id);
 	}
 }

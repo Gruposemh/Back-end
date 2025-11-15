@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.time.Period;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import com.ong.backend.dto.MensagemResponse;
 import com.ong.backend.dto.VoluntarioDTO;
+import com.ong.backend.entities.Blog;
 import com.ong.backend.entities.StatusVoluntario;
 import com.ong.backend.entities.Usuario;
 import com.ong.backend.entities.Voluntario;
@@ -63,13 +65,23 @@ public class VoluntarioService {
 		return voluntarioRepository.findAll();
 	}
 	
-	public ResponseEntity<MensagemResponse> cancelar (@PathVariable Long id){
-		Voluntario voluntario = voluntarioRepository.findById(id).orElseThrow(() -> new NaoEncontradoException("Voluntário não encontrado"));
-		voluntarioRepository.deleteById(id);
-		
-		return ResponseEntity.status(HttpStatus.OK)
-	            .body(new MensagemResponse("Solicitação cancelada!"));
+	public ResponseEntity<Voluntario> buscarPorId(Long id) {
+		Optional<Voluntario> existe = voluntarioRepository.findById(id);
+		return existe.map(ResponseEntity::ok)
+				.orElseThrow(() -> new NaoEncontradoException("Voluntário não encontrado com o Id" + id));
 	}
+	
+	public ResponseEntity<?> cancelar(@PathVariable Long id) {
+	    Optional<Voluntario> existe = voluntarioRepository.findById(id);
+
+	    if (existe.isEmpty()) {
+	        throw new NaoEncontradoException("Voluntário não encontrado com o Id " + id);
+	    }
+
+	    voluntarioRepository.deleteById(id);
+	    return ResponseEntity.ok("Solicitação cancelada!");
+	}
+
 	
 	public List<Voluntario> listarPendentes() {
         return voluntarioRepository.findByStatus(StatusVoluntario.PENDENTE);

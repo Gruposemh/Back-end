@@ -13,10 +13,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
-
 import com.ong.backend.dto.MensagemResponse;
 import com.ong.backend.dto.VoluntarioDTO;
-import com.ong.backend.entities.Blog;
 import com.ong.backend.entities.StatusVoluntario;
 import com.ong.backend.entities.Usuario;
 import com.ong.backend.entities.Voluntario;
@@ -78,7 +76,8 @@ public class VoluntarioService {
 	        throw new NaoEncontradoException("Voluntário não encontrado com o Id " + id);
 	    }
 
-	    voluntarioRepository.deleteById(id);
+	    Voluntario voluntario = new Voluntario();
+	    voluntario.setStatus(StatusVoluntario.CANCELADO);
 	    return ResponseEntity.ok("Solicitação cancelada!");
 	}
 

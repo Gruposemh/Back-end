@@ -40,8 +40,18 @@ public class CursoService {
         return ResponseEntity.ok(cursos);
     }	
 	
-	public List<Curso> listar(){
-		return cursoRepository.findAll();
+	public List<CursoDTO> listar(){
+		List<Curso> cursos = cursoRepository.findAll();
+	    return cursos.stream()
+	        .map(c -> new CursoDTO(
+	            c.getId(),
+	            c.getTitulo(),
+	            c.getDescricao(),
+	            c.getDias(),
+	            c.getHorario(),
+	            c.getVagas()
+	        ))
+	        .toList();
 	}
 	
 	public ResponseEntity<MensagemResponse> excluirCurso(Long id) {

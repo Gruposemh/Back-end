@@ -4,6 +4,7 @@ import java.time.LocalTime;
 import java.util.List;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -23,7 +24,7 @@ public class Curso {
 	private LocalTime horario;
 	private int vagas;
 	
-	@OneToMany(mappedBy = "idCurso", cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(mappedBy = "idCurso", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
 	private List<Inscricao> inscricoes;
 	
 	public Curso() {

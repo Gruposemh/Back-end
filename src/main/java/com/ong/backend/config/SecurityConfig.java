@@ -148,7 +148,6 @@ public class SecurityConfig {
                     // Inscrição
                     .requestMatchers(HttpMethod.POST, "/inscricao/inscrever").authenticated()
                     .requestMatchers(HttpMethod.DELETE, "/inscricao/deletar/**").authenticated()
-                    .requestMatchers(HttpMethod.GET, "/inscricao/listar").hasRole("ADMIN")
 
                     // Participações
                     .requestMatchers(HttpMethod.POST, "/participar").hasAnyRole("ADMIN", "USUARIO")

@@ -79,4 +79,8 @@ public class CursoDTO {
 	public void setVagas(int vagas) {
 		this.vagas = vagas;
 	}
+
+	public void setHorario(LocalTime horario) {
+		this.horario = horario;
+	}
 }

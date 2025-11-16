@@ -52,11 +52,10 @@ public class InscricaoService {
 		inscricao.setIdUsuario(usuario);
 		inscricao = inscricaoRepository.save(inscricao);
 		
+		curso.setVagas(curso.getVagas() - 1);
+		cursoRepository.save(curso);
+		
 		return ResponseEntity.ok(inscricao);
-	}
-	
-	public List<Inscricao> listar(){
-		return inscricaoRepository.findAll();
 	}
 	
 	public ResponseEntity<MensagemResponse> excluirInscricao(Long id) {
@@ -64,7 +63,14 @@ public class InscricaoService {
 	    if (inscricaoOpt.isEmpty()) {
 	        throw new NaoEncontradoException("Inscrição não encontrada.");
 	    }
-	    inscricaoRepository.delete(inscricaoOpt.get());
+
+	    Inscricao inscricao = inscricaoOpt.get();
+	    Curso curso = inscricao.getIdCurso();
+	    curso.setVagas(curso.getVagas() + 1);
+	    cursoRepository.save(curso);
+
+	    inscricaoRepository.delete(inscricao);
+
 	    return ResponseEntity.status(HttpStatus.OK)
 	            .body(new MensagemResponse("Inscrição cancelada!"));
 	}

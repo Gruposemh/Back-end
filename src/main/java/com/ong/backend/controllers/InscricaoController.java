@@ -39,4 +39,9 @@ public class InscricaoController {
 		return inscricaoService.excluirInscricao(id);
 	}
 	
+	@DeleteMapping(value = "/cancelar/{idAtividade}")
+	public ResponseEntity<MensagemResponse> cancelarInscricao(@PathVariable Long idAtividade){
+		return inscricaoService.cancelarInscricaoPorUsuarioEAtividade(idAtividade);
+	}
+	
 }

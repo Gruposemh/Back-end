@@ -55,8 +55,23 @@ public class VoluntarioController {
 		return voluntarioService.aprovar(id);
 	}
 
+	@DeleteMapping(value = "/negar/{id}")
+	public ResponseEntity<MensagemResponse> negar(@PathVariable Long id) {
+		return voluntarioService.negar(id);
+	}
+
 	@DeleteMapping(value = "cancelar/{id}")
 	public ResponseEntity<?> cancelar (@PathVariable Long id){
 		return voluntarioService.cancelar(id);
+	}
+	
+	@PutMapping(value = "/atualizar")
+	public ResponseEntity<Voluntario> atualizarDados(@RequestBody VoluntarioDTO dto) {
+		return voluntarioService.atualizarDadosVoluntario(dto);
+	}
+	
+	@GetMapping(value = "/dados")
+	public ResponseEntity<Voluntario> buscarDados() {
+		return voluntarioService.buscarDadosVoluntario();
 	}
 }

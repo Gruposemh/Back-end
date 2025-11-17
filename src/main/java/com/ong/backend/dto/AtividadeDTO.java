@@ -1,35 +1,38 @@
 package com.ong.backend.dto;
 
 import java.time.LocalTime;
-import com.ong.backend.entities.Curso;
+import com.ong.backend.entities.Atividade;
 
-public class CursoDTO {
+public class AtividadeDTO {
 	private Long id;
-	private String titulo;
+	private String nome;
 	private String descricao;
 	private String dias;
-	private LocalTime horario;;
+	private LocalTime horario;
 	private int vagas;
+	private String imagem;
 	
-	public CursoDTO() {
+	public AtividadeDTO() {
 	}
 	
-	public CursoDTO(Long id, String titulo, String descricao, String dias, LocalTime horario, int vagas) {
+	public AtividadeDTO(Long id, String nome, String descricao, String dias, LocalTime horario, int vagas, String imagem) {
 		this.id = id;
-		this.titulo = titulo;
+		this.nome = nome;
 		this.descricao = descricao;
 		this.dias = dias;
 		this.horario = horario;
 		this.vagas = vagas;
+		this.imagem = imagem;
 	}
 
-	public CursoDTO(Curso entity) {
+	public AtividadeDTO(Atividade entity) {
 		this.id = entity.getId();
-		this.titulo = entity.getTitulo();
+		this.nome = entity.getNome();
 		this.descricao = entity.getDescricao();
 		this.dias = entity.getDias();
 		this.horario = entity.getHorario();
 		this.vagas = entity.getVagas();
+		this.imagem = entity.getImagem();
 	}
 
 	public Long getId() {
@@ -40,12 +43,12 @@ public class CursoDTO {
 		this.id = id;
 	}
 
-	public String getTitulo() {
-		return titulo;
+	public String getNome() {
+		return nome;
 	}
 
-	public void setTitulo(String titulo) {
-		this.titulo = titulo;
+	public void setNome(String nome) {
+		this.nome = nome;
 	}
 
 	public String getDescricao() {
@@ -68,7 +71,7 @@ public class CursoDTO {
 		return horario;
 	}
 
-	public void setData(LocalTime horario) {
+	public void setHorario(LocalTime horario) {
 		this.horario = horario;
 	}
 
@@ -79,4 +82,13 @@ public class CursoDTO {
 	public void setVagas(int vagas) {
 		this.vagas = vagas;
 	}
+
+	public String getImagem() {
+		return imagem;
+	}
+
+	public void setImagem(String imagem) {
+		this.imagem = imagem;
+	}
 }
+

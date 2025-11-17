@@ -10,16 +10,18 @@ public class EventoDTO {
 	private String descricao;
 	private LocalDate data;
 	private String local;
+	private String imagem;
 	
 	public EventoDTO() {
 	}
 
-	public EventoDTO(Long id, String nome, String descricao, LocalDate data, String local) {
+	public EventoDTO(Long id, String nome, String descricao, LocalDate data, String local, String imagem) {
 		this.id = id;
 		this.nome = nome;
 		this.descricao = descricao;
 		this.data = data;
 		this.local = local;
+		this.imagem = imagem;
 	}
 	
 	public EventoDTO(Evento entity) {
@@ -28,6 +30,7 @@ public class EventoDTO {
 		this.descricao = entity.getDescricao();
 		this.data = entity.getData();
 		this.local = entity.getLocal();
+		this.imagem = entity.getImagem();
 	}
 
 	public Long getId() {
@@ -68,5 +71,11 @@ public class EventoDTO {
 
 	public void setLocal(String local) {
 		this.local = local;
+	}
+	public String getImagem() {
+		return imagem;
+	}
+	public void setImagem(String imagem) {
+		this.imagem = imagem;
 	}
 }

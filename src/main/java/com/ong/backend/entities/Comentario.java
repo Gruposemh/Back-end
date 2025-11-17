@@ -2,6 +2,8 @@ package com.ong.backend.entities;
 
 import java.time.LocalDateTime;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -12,6 +14,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "tb_comentario")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "idBlog"})
 public class Comentario {
 	
 	@Id
@@ -19,8 +22,9 @@ public class Comentario {
     private Long id;
 	private String comentario;
     
-    @ManyToOne
+    @ManyToOne(fetch = jakarta.persistence.FetchType.LAZY)
     @JoinColumn(name = "id_usuario")
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "blogs", "comentarios", "tarefas", "participacoesEventos", "voluntario", "doacoes", "notificacoes"})
     private Usuario idUsuario;
     
     @ManyToOne

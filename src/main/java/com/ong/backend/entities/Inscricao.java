@@ -22,18 +22,18 @@ public class Inscricao {
     private Usuario idUsuario;
 
     @ManyToOne
-    @JoinColumn(name = "id_curso")
-    private Curso idCurso;
+    @JoinColumn(name = "id_atividade")
+    private Atividade idAtividade;
 
     private LocalDateTime dataInscricao;
 
     public Inscricao() {
     }
 
-    public Inscricao(Long id, Usuario idUsuario, Curso idCurso, LocalDateTime dataInscricao) {
+    public Inscricao(Long id, Usuario idUsuario, Atividade idAtividade, LocalDateTime dataInscricao) {
         this.id = id;
         this.idUsuario = idUsuario;
-        this.idCurso = idCurso;
+        this.idAtividade = idAtividade;
         this.dataInscricao = dataInscricao;
     }
 	
@@ -49,11 +49,11 @@ public class Inscricao {
 	public void setIdUsuario(Usuario idUsuario) {
 		this.idUsuario = idUsuario;
 	}
-	public Curso getIdCurso() {
-		return idCurso;
+	public Atividade getIdAtividade() {
+		return idAtividade;
 	}
-	public void setIdCurso(Curso idCurso) {
-		this.idCurso = idCurso;
+	public void setIdAtividade(Atividade idAtividade) {
+		this.idAtividade = idAtividade;
 	}
 	public LocalDateTime getDataInscricao() {
 		return dataInscricao;

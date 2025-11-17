@@ -12,41 +12,41 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import com.ong.backend.dto.CursoDTO;
+import com.ong.backend.dto.AtividadeDTO;
 import com.ong.backend.dto.MensagemResponse;
-import com.ong.backend.entities.Curso;
-import com.ong.backend.services.CursoService;
+import com.ong.backend.entities.Atividade;
+import com.ong.backend.services.AtividadeService;
 
 @RestController
-@RequestMapping(value = "/curso")
-public class CursoController {
+@RequestMapping(value = "/atividade")
+public class AtividadeController {
 
 	@Autowired
-	CursoService cursoService;
+	AtividadeService atividadeService;
 	
 	@PostMapping(value = "/cadastrar")
-	public ResponseEntity<Curso> cadastrarCurso(@RequestBody CursoDTO dto){
-		return cursoService.cadastrarCurso(dto);
+	public ResponseEntity<Atividade> cadastrarAtividade(@RequestBody AtividadeDTO dto){
+		return atividadeService.cadastrarAtividade(dto);
 	}
 	
 	@GetMapping(value = "/listar")
-    public ResponseEntity<List<Curso>> listarTodos() {
-        return ResponseEntity.ok(cursoService.listar());
+    public ResponseEntity<List<Atividade>> listarTodos() {
+        return ResponseEntity.ok(atividadeService.listar());
     }
 	
 	@GetMapping("/buscar")
-    public ResponseEntity<List<Curso>> buscarPorTitulo(@RequestParam String titulo) {
-        return cursoService.buscarPorTitulo(titulo);
+    public ResponseEntity<List<Atividade>> buscarPorNome(@RequestParam String nome) {
+        return atividadeService.buscarPorNome(nome);
     }
 	
 	@DeleteMapping("/deletar/{id}")
-    public ResponseEntity<MensagemResponse> excluirCurso(@PathVariable Long id) {
-        return cursoService.excluirCurso(id);
+    public ResponseEntity<MensagemResponse> excluirAtividade(@PathVariable Long id) {
+        return atividadeService.excluirAtividade(id);
     }
 	
 	@PutMapping(value = "/atualizar/{id}")
-    public ResponseEntity<Curso> atualizarCurso(@PathVariable Long id, @RequestBody CursoDTO atualizado) {
-        return cursoService.atualizarCurso(id, atualizado);
+    public ResponseEntity<Atividade> atualizarAtividade(@PathVariable Long id, @RequestBody AtividadeDTO atualizado) {
+        return atividadeService.atualizarAtividade(id, atualizado);
 	}
 }
 

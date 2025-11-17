@@ -6,12 +6,13 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.ong.backend.dto.MensagemResponse;
 import com.ong.backend.dto.UsuarioDTO;
-import com.ong.backend.entities.Curso;
 import com.ong.backend.entities.Usuario;
 import com.ong.backend.exceptions.NaoEncontradoException;
 import com.ong.backend.repositories.UsuarioRepository;
@@ -64,5 +65,35 @@ public class UsuarioService{
 		
 		usuario = usuarioRepository.save(usuario);
 		return ResponseEntity.ok(usuario);
+	}
+	
+	public ResponseEntity<Usuario> editarPerfil(UsuarioDTO dto) {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		Usuario usuario = (Usuario) auth.getPrincipal();
+		
+		// Buscar usuário atualizado do banco
+		Usuario usuarioAtualizado = usuarioRepository.findById(usuario.getId())
+			.orElseThrow(() -> new NaoEncontradoException("Usuário não encontrado"));
+		
+		// Atualizar apenas nome e foto de perfil
+		if (dto.getNome() != null && !dto.getNome().trim().isEmpty()) {
+			usuarioAtualizado.setNome(dto.getNome());
+		}
+		if (dto.getFotoPerfil() != null) {
+			usuarioAtualizado.setFotoPerfil(dto.getFotoPerfil());
+		}
+		
+		usuarioAtualizado = usuarioRepository.save(usuarioAtualizado);
+		return ResponseEntity.ok(usuarioAtualizado);
+	}
+	
+	public ResponseEntity<Usuario> buscarPerfil() {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		Usuario usuario = (Usuario) auth.getPrincipal();
+		
+		Usuario usuarioCompleto = usuarioRepository.findById(usuario.getId())
+			.orElseThrow(() -> new NaoEncontradoException("Usuário não encontrado"));
+		
+		return ResponseEntity.ok(usuarioCompleto);
 	}
 }

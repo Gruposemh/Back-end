@@ -7,23 +7,23 @@ public class InscricaoDTO {
 
 	private Long id;
 	private Long idUsuario;
-	private Long idCurso;
+	private Long idAtividade;
 	private LocalDateTime dataInscricao;
 	
 	public InscricaoDTO() {
 	}
 	
-	public InscricaoDTO(Long id, Long idUsuario, Long idCurso, LocalDateTime dataInscricao) {
+	public InscricaoDTO(Long id, Long idUsuario, Long idAtividade, LocalDateTime dataInscricao) {
 		this.id = id;
 		this.idUsuario = idUsuario;
-		this.idCurso = idCurso;
+		this.idAtividade = idAtividade;
 		this.dataInscricao = dataInscricao;
 	}
 
 	public InscricaoDTO(Inscricao entity) {
 		this.id = entity.getId();
 		this.idUsuario = entity.getIdUsuario().getId();
-		this.idCurso = entity.getIdCurso().getId();
+		this.idAtividade = entity.getIdAtividade().getId();
 		this.dataInscricao = entity.getDataInscricao();
 	}
 
@@ -39,11 +39,11 @@ public class InscricaoDTO {
 	public void setIdUsuario(Long idUsuario) {
 		this.idUsuario = idUsuario;
 	}
-	public Long getIdCurso() {
-		return idCurso;
+	public Long getIdAtividade() {
+		return idAtividade;
 	}
-	public void setIdCurso(Long idCurso) {
-		this.idCurso = idCurso;
+	public void setIdAtividade(Long idAtividade) {
+		this.idAtividade = idAtividade;
 	}
 	public LocalDateTime getDataInscricao() {
 		return dataInscricao;

@@ -102,6 +102,8 @@ public class SecurityConfig {
                     .requestMatchers(HttpMethod.GET, "/usuario/todos").hasRole("ADMIN")
                     .requestMatchers(HttpMethod.DELETE, "/usuario/deletar/**").hasAnyRole("USUARIO", "ADMIN")
                     .requestMatchers(HttpMethod.PUT, "/usuario/atualizar/**").hasAnyRole("USUARIO", "ADMIN")
+                    .requestMatchers(HttpMethod.PUT, "/usuario/perfil").authenticated()
+                    .requestMatchers(HttpMethod.GET, "/usuario/perfil").authenticated()
 
                     // Blog
                     .requestMatchers(HttpMethod.POST, "/blog/criar").authenticated()
@@ -116,12 +118,12 @@ public class SecurityConfig {
                     .requestMatchers(HttpMethod.PUT, "/blog/aprovar/**").hasRole("ADMIN")
                     .requestMatchers(HttpMethod.DELETE, "/blog/negar/**").hasRole("ADMIN")
                     
-                    // Curso
-                    .requestMatchers(HttpMethod.POST, "/curso/cadastrar").hasRole("ADMIN")
-                    .requestMatchers(HttpMethod.PUT, "/curso/atualizar/**").hasRole("ADMIN")
-                    .requestMatchers(HttpMethod.DELETE, "/curso/deletar/**").hasRole("ADMIN")
-                    .requestMatchers(HttpMethod.GET, "/curso/listar").permitAll()
-                    .requestMatchers(HttpMethod.GET, "/curso/buscar").permitAll()
+                    // Atividade
+                    .requestMatchers(HttpMethod.POST, "/atividade/cadastrar").hasRole("ADMIN")
+                    .requestMatchers(HttpMethod.PUT, "/atividade/atualizar/**").hasRole("ADMIN")
+                    .requestMatchers(HttpMethod.DELETE, "/atividade/deletar/**").hasRole("ADMIN")
+                    .requestMatchers(HttpMethod.GET, "/atividade/listar").permitAll()
+                    .requestMatchers(HttpMethod.GET, "/atividade/buscar").permitAll()
 
                     // Comentarios
                     .requestMatchers(HttpMethod.POST, "/comentario/postar").permitAll()
@@ -165,6 +167,8 @@ public class SecurityConfig {
                     .requestMatchers(HttpMethod.GET, "/voluntario/listar/pendentes").hasRole("ADMIN")
                     .requestMatchers(HttpMethod.PUT, "voluntario/aprovar/**").hasRole("ADMIN")
                     .requestMatchers(HttpMethod.DELETE, "voluntario/negar/**").hasRole("ADMIN")
+                    .requestMatchers(HttpMethod.PUT, "/voluntario/atualizar").authenticated()
+                    .requestMatchers(HttpMethod.GET, "/voluntario/dados").authenticated()
 
                     // Notificações
                     .requestMatchers(HttpMethod.POST, "notificacao/criar").hasRole("ADMIN")
@@ -174,6 +178,10 @@ public class SecurityConfig {
                     // Relatório
                     .requestMatchers(HttpMethod.GET, "/relatorio/usuarios").hasRole("ADMIN")
                     .requestMatchers(HttpMethod.GET, "/relatorio/doacoes").hasRole("ADMIN")
+
+                    // Upload de arquivos
+                    .requestMatchers(HttpMethod.POST, "/api/files/upload").authenticated()
+                    .requestMatchers(HttpMethod.GET, "/api/files/**").permitAll()
 
                     // Qualquer outra requisição precisa de autenticação
                     .anyRequest().authenticated()

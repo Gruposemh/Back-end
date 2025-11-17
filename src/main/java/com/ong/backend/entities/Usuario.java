@@ -34,6 +34,7 @@ public class Usuario implements UserDetails{
 	private String senha; // Pode ser null para usuários sociais/passwordless
 	@Enumerated(EnumType.STRING)
     private StatusRole role;
+    private String fotoPerfil; // URL da foto de perfil (opcional)
     
     // Novos campos para autenticação híbrida
     @Enumerated(EnumType.STRING)
@@ -138,6 +139,14 @@ public class Usuario implements UserDetails{
 	}
 	public void setRole(StatusRole role) {
 		this.role = role;
+	}
+	
+	public String getFotoPerfil() {
+		return fotoPerfil;
+	}
+	
+	public void setFotoPerfil(String fotoPerfil) {
+		this.fotoPerfil = fotoPerfil;
 	}
 	
 	public TipoAutenticacao getTipoAutenticacao() {

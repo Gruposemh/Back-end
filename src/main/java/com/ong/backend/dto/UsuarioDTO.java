@@ -9,6 +9,7 @@ public class UsuarioDTO {
 	private String email;
 	private String senha;
 	private StatusRole role;
+	private String fotoPerfil;
 	
 	public UsuarioDTO() {
 	}
@@ -27,6 +28,7 @@ public class UsuarioDTO {
 		this.email = entity.getEmail();
 		this.senha = entity.getSenha();
 		this.role = entity.getRole();
+		this.fotoPerfil = entity.getFotoPerfil();
 	}
 
 	public Long getId() {
@@ -58,5 +60,13 @@ public class UsuarioDTO {
 	}
 	public void setRole(StatusRole role) {
 		this.role = role;
+	}
+	
+	public String getFotoPerfil() {
+		return fotoPerfil;
+	}
+	
+	public void setFotoPerfil(String fotoPerfil) {
+		this.fotoPerfil = fotoPerfil;
 	}
 }

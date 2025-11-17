@@ -6,16 +6,21 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import com.ong.backend.dto.InscricaoDTO;
 import com.ong.backend.dto.MensagemResponse;
-import com.ong.backend.entities.Curso;
+import com.ong.backend.entities.Atividade;
 import com.ong.backend.entities.Inscricao;
+import com.ong.backend.entities.StatusVoluntario;
 import com.ong.backend.entities.Usuario;
+import com.ong.backend.entities.Voluntario;
 import com.ong.backend.exceptions.NaoEncontradoException;
-import com.ong.backend.repositories.CursoRepository;
+import com.ong.backend.repositories.AtividadeRepository;
 import com.ong.backend.repositories.InscricaoRepository;
 import com.ong.backend.repositories.UsuarioRepository;
+import com.ong.backend.repositories.VoluntarioRepository;
 
 @Service
 public class InscricaoService {
@@ -27,28 +32,38 @@ public class InscricaoService {
 	UsuarioRepository usuarioRepository;
 	
 	@Autowired
-	CursoRepository cursoRepository;
+	AtividadeRepository atividadeRepository;
+	
+	@Autowired
+	VoluntarioRepository voluntarioRepository;
 	
 	public ResponseEntity<Inscricao> inscrever(InscricaoDTO dto){
-		Usuario usuario = usuarioRepository.findById(dto.getIdUsuario())
-		        .orElseThrow(() -> new NaoEncontradoException("Usuário não encontrado"));
+		// Obtém o usuário autenticado do contexto de segurança
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		Usuario usuario = (Usuario) auth.getPrincipal();
 		
-		Curso curso = cursoRepository.findById(dto.getIdCurso())
-				.orElseThrow(() -> new NaoEncontradoException("Curso não encontrado"));
-		
-		boolean inscrito = inscricaoRepository.existsByIdUsuarioAndIdCurso(usuario, curso);
-		if (inscrito) {
-			throw new RuntimeException("Usuário já inscrito nesse curso.");
+		// Verifica se o usuário é voluntário aprovado
+		Optional<Voluntario> voluntarioOpt = voluntarioRepository.findByIdUsuario(usuario);
+		if (voluntarioOpt.isEmpty() || voluntarioOpt.get().getStatus() != StatusVoluntario.APROVADO) {
+			throw new RuntimeException("Apenas voluntários aprovados podem se inscrever em atividades.");
 		}
 		
-		int totalInscricoes = inscricaoRepository.countByIdCurso(curso);
-	    if (totalInscricoes >= curso.getVagas()) {
-	        throw new RuntimeException("Não há vagas disponíveis para este curso.");
+		Atividade atividade = atividadeRepository.findById(dto.getIdAtividade())
+				.orElseThrow(() -> new NaoEncontradoException("Atividade não encontrada"));
+		
+		boolean inscrito = inscricaoRepository.existsByIdUsuarioAndIdAtividade(usuario, atividade);
+		if (inscrito) {
+			throw new RuntimeException("Usuário já inscrito nessa atividade.");
+		}
+		
+		int totalInscricoes = inscricaoRepository.countByIdAtividade(atividade);
+	    if (totalInscricoes >= atividade.getVagas()) {
+	        throw new RuntimeException("Não há vagas disponíveis para esta atividade.");
 	    }
 		
 		Inscricao inscricao = new Inscricao();
 		inscricao.setDataInscricao(LocalDateTime.now());
-		inscricao.setIdCurso(curso);
+		inscricao.setIdAtividade(atividade);
 		inscricao.setIdUsuario(usuario);
 		inscricao = inscricaoRepository.save(inscricao);
 		
@@ -67,6 +82,24 @@ public class InscricaoService {
 	    inscricaoRepository.delete(inscricaoOpt.get());
 	    return ResponseEntity.status(HttpStatus.OK)
 	            .body(new MensagemResponse("Inscrição cancelada!"));
+	}
+	
+	public ResponseEntity<MensagemResponse> cancelarInscricaoPorUsuarioEAtividade(Long idAtividade) {
+		// Obtém o usuário autenticado do contexto de segurança
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		Usuario usuario = (Usuario) auth.getPrincipal();
+		
+		Atividade atividade = atividadeRepository.findById(idAtividade)
+				.orElseThrow(() -> new NaoEncontradoException("Atividade não encontrada"));
+		
+		Optional<Inscricao> inscricaoOpt = inscricaoRepository.findByIdUsuarioAndIdAtividade(usuario, atividade);
+		if (inscricaoOpt.isEmpty()) {
+			throw new NaoEncontradoException("Inscrição não encontrada para este usuário e atividade.");
+		}
+		
+		inscricaoRepository.delete(inscricaoOpt.get());
+		return ResponseEntity.status(HttpStatus.OK)
+				.body(new MensagemResponse("Inscrição cancelada com sucesso!"));
 	}
 	
 }

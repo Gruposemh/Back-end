@@ -3,6 +3,8 @@ package com.ong.backend.entities;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -19,6 +21,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "tb_blog")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "comentarios"})
 public class Blog {
 	
 	@Id
@@ -30,8 +33,7 @@ public class Blog {
 	@Column(columnDefinition = "LONGTEXT")
 	private String informacao;
 	
-	@Lob
-	@Column(columnDefinition = "LONGTEXT")
+	@Column(length = 500)
 	private String urlNoticia;
 	
 	private String bairro;
@@ -42,11 +44,13 @@ public class Blog {
 	private StatusPublicacao status = StatusPublicacao.PENDENTE;
 
 	
-	@OneToMany(mappedBy = "idBlog", cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(mappedBy = "idBlog", cascade = CascadeType.ALL, orphanRemoval = true, fetch = jakarta.persistence.FetchType.LAZY)
+	@JsonIgnoreProperties({"idBlog"})
 	private List<Comentario> comentarios;
 	
-	@ManyToOne
+	@ManyToOne(fetch = jakarta.persistence.FetchType.LAZY)
     @JoinColumn(name = "id_usuario")
+	@JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "blogs", "comentarios", "tarefas", "participacoesEventos", "voluntario", "doacoes", "notificacoes"})
 	private Usuario idUsuario;
 	
 	public Blog() {

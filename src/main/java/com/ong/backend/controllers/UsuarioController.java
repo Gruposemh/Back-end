@@ -50,4 +50,14 @@ public class UsuarioController {
     public ResponseEntity<Usuario> atualizar(@PathVariable Long id, @RequestBody UsuarioDTO usuario) {
         return usuarioService.atualizarUsuario(id, usuario);
     }
+    
+    @PutMapping("/perfil")
+    public ResponseEntity<Usuario> editarPerfil(@RequestBody UsuarioDTO dto) {
+        return usuarioService.editarPerfil(dto);
+    }
+    
+    @GetMapping("/perfil")
+    public ResponseEntity<Usuario> buscarPerfil() {
+        return usuarioService.buscarPerfil();
+    }
 }

@@ -31,6 +31,7 @@ public class EventoService {
 		evento.setDescricao(dto.getDescricao());
 		evento.setLocal(dto.getLocal());
 		evento.setData(dto.getData());
+		evento.setImagem(dto.getImagem());
 		
 		evento = eventoRepository.save(evento);
 		
@@ -67,6 +68,7 @@ public class EventoService {
 		evento.setData(atualizado.getData());
 		evento.setLocal(atualizado.getLocal());
 		evento.setNome(atualizado.getNome());
+		evento.setImagem(atualizado.getImagem());
 		
 		evento = eventoRepository.save(evento);
 		return ResponseEntity.ok(evento);

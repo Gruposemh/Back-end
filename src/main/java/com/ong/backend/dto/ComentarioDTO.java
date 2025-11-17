@@ -8,6 +8,7 @@ public class ComentarioDTO {
 	
 	private Long id;
 	private Long idUsuario;
+	private String nomeUsuario;
 	private Long idBlog;
 	private LocalDateTime dataComentario;
 	private String comentario;
@@ -26,6 +27,7 @@ public class ComentarioDTO {
 	public ComentarioDTO(Comentario entity) {
 		this.id = entity.getId();
 		this.idUsuario = entity.getIdUsuario().getId();
+		this.nomeUsuario = entity.getIdUsuario().getNome();
 		this.idBlog = entity.getIdBlog().getId();
 		this.dataComentario = entity.getDataComentario();
 		this.comentario = entity.getComentario();
@@ -69,5 +71,13 @@ public class ComentarioDTO {
 
 	public void setComentario(String comentario) {
 		this.comentario = comentario;
+	}
+
+	public String getNomeUsuario() {
+		return nomeUsuario;
+	}
+
+	public void setNomeUsuario(String nomeUsuario) {
+		this.nomeUsuario = nomeUsuario;
 	}
 }

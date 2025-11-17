@@ -10,18 +10,18 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import com.ong.backend.dto.MensagemResponse;
 import com.ong.backend.dto.VoluntarioDTO;
-import com.ong.backend.entities.Blog;
 import com.ong.backend.entities.StatusVoluntario;
 import com.ong.backend.entities.Usuario;
 import com.ong.backend.entities.Voluntario;
 import com.ong.backend.exceptions.NaoEncontradoException;
-import com.ong.backend.repositories.UsuarioRepository;
 import com.ong.backend.repositories.VoluntarioRepository;
 
 @Service
@@ -30,20 +30,29 @@ public class VoluntarioService {
 	@Autowired
 	VoluntarioRepository voluntarioRepository;
 	
-	@Autowired
-	UsuarioRepository usuarioRepository;
-	
 	public ResponseEntity<Voluntario> tornarVoluntario(@RequestBody VoluntarioDTO dto) {
-	    Usuario usuario = usuarioRepository.findById(dto.getIdUsuario())
-	            .orElseThrow(() -> new NaoEncontradoException("Usuário não encontrado"));
+	    Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+	    Usuario usuario = (Usuario) auth.getPrincipal();
 
-	    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-	    LocalDate nascimento = LocalDate.parse(dto.getDataNascimento(), formatter);
+	    LocalDate nascimento;
+	    try {
+	        // Tenta primeiro o formato ISO (yyyy-MM-dd)
+	        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+	        nascimento = LocalDate.parse(dto.getDataNascimento(), formatter);
+	    } catch (Exception e) {
+	        try {
+	            // Tenta formato brasileiro (dd/MM/yyyy)
+	            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+	            nascimento = LocalDate.parse(dto.getDataNascimento(), formatter);
+	        } catch (Exception e2) {
+	            throw new IllegalArgumentException("Formato de data inválido. Use yyyy-MM-dd ou dd/MM/yyyy");
+	        }
+	    }
 
 	    int idade = Period.between(nascimento, LocalDate.now()).getYears();
 
 	    if (idade < 18) {
-	        throw new IllegalArgumentException("Usuário precisa ter mais de 18 anos para se tornar voluntário.");
+	        throw new IllegalArgumentException("Usuário precisa ter pelo menos 18 anos para se tornar voluntário. Idade calculada: " + idade + " anos.");
 	    }
 
 	    Voluntario voluntario = new Voluntario();
@@ -100,5 +109,48 @@ public class VoluntarioService {
 
         return ResponseEntity.status(HttpStatus.OK)
             .body(new MensagemResponse("Voluntário aprovado com sucesso!"));
+    }
+
+    public ResponseEntity<MensagemResponse> negar(Long id) {
+        if (!voluntarioRepository.existsById(id)) {
+            throw new NaoEncontradoException("Voluntário não encontrado");
+        }
+
+        voluntarioRepository.deleteById(id);
+
+        return ResponseEntity.status(HttpStatus.OK)
+            .body(new MensagemResponse("Solicitação de voluntário rejeitada e removida com sucesso!"));
+    }
+    
+    public ResponseEntity<Voluntario> atualizarDadosVoluntario(VoluntarioDTO dto) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        Usuario usuario = (Usuario) auth.getPrincipal();
+        
+        Voluntario voluntario = voluntarioRepository.findByIdUsuario(usuario)
+            .orElseThrow(() -> new NaoEncontradoException("Voluntário não encontrado"));
+        
+        // Atualizar apenas telefone, endereço e descrição (CPF e data de nascimento não podem ser alterados)
+        if (dto.getTelefone() != null) {
+            voluntario.setTelefone(dto.getTelefone());
+        }
+        if (dto.getEndereco() != null) {
+            voluntario.setEndereco(dto.getEndereco());
+        }
+        if (dto.getDescricao() != null) {
+            voluntario.setDescricao(dto.getDescricao());
+        }
+        
+        voluntario = voluntarioRepository.save(voluntario);
+        return ResponseEntity.ok(voluntario);
+    }
+    
+    public ResponseEntity<Voluntario> buscarDadosVoluntario() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        Usuario usuario = (Usuario) auth.getPrincipal();
+        
+        Voluntario voluntario = voluntarioRepository.findByIdUsuario(usuario)
+            .orElseThrow(() -> new NaoEncontradoException("Voluntário não encontrado"));
+        
+        return ResponseEntity.ok(voluntario);
     }
 }

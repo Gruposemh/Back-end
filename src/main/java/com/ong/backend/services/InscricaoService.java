@@ -74,5 +74,4 @@ public class InscricaoService {
 	    return ResponseEntity.status(HttpStatus.OK)
 	            .body(new MensagemResponse("Inscrição cancelada!"));
 	}
-	
 }

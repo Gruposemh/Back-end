@@ -34,6 +34,11 @@ public class CursoController {
         return ResponseEntity.ok(cursoService.listar());
     }
 	
+	@GetMapping(value = "/inscricoes/{id}")
+	public ResponseEntity<CursoDTO> listarInscricoesCurso(@PathVariable Long id){
+		return ResponseEntity.ok(cursoService.listarInscricoesCurso(id));
+	}
+	
 	@GetMapping("/buscar")
     public ResponseEntity<List<Curso>> buscarPorTitulo(@RequestParam String titulo) {
         return cursoService.buscarPorTitulo(titulo);
@@ -45,7 +50,7 @@ public class CursoController {
     }
 	
 	@PutMapping(value = "/atualizar/{id}")
-    public ResponseEntity<Curso> atualizarCurso(@PathVariable Long id, @RequestBody CursoDTO atualizado) {
+    public ResponseEntity<?> atualizarCurso(@PathVariable Long id, @RequestBody CursoDTO atualizado) {
         return cursoService.atualizarCurso(id, atualizado);
 	}
 }

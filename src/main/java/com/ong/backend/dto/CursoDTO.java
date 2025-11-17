@@ -1,7 +1,10 @@
 package com.ong.backend.dto;
 
 import java.time.LocalTime;
+import java.util.List;
+
 import com.ong.backend.entities.Curso;
+import com.ong.backend.entities.Inscricao;
 
 public class CursoDTO {
 	private Long id;
@@ -10,6 +13,7 @@ public class CursoDTO {
 	private String dias;
 	private LocalTime horario;;
 	private int vagas;
+	private List<InscricaoDTO> inscricoes;
 	
 	public CursoDTO() {
 	}
@@ -21,6 +25,10 @@ public class CursoDTO {
 		this.dias = dias;
 		this.horario = horario;
 		this.vagas = vagas;
+	}
+	
+	public void CursoInscricoes(List<InscricaoDTO> inscricoes) {
+		this.inscricoes = inscricoes;
 	}
 
 	public CursoDTO(Curso entity) {
@@ -82,5 +90,13 @@ public class CursoDTO {
 
 	public void setHorario(LocalTime horario) {
 		this.horario = horario;
+	}
+
+	public List<InscricaoDTO> getInscricoes() {
+		return inscricoes;
+	}
+
+	public void setInscricoes(List<InscricaoDTO> inscricoes) {
+		this.inscricoes = inscricoes;
 	}
 }

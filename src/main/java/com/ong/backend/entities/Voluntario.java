@@ -18,14 +18,15 @@ public class Voluntario {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
-    @OneToOne
-    @JoinColumn(name = "id_usuario")
-    private Usuario idUsuario;
+	@OneToOne
+	@JoinColumn(name = "id_usuario")
+	private Usuario idUsuario;
     private String cpf;
     private String telefone;
     private String dataNascimento;
     private String endereco;
     private LocalDateTime dataVoluntario;
+    private LocalDateTime dataCancelamento;
     private StatusVoluntario status;
     private String descricao;
 	
@@ -93,12 +94,16 @@ public class Voluntario {
 	public void setDescricao(String descricao) {
 		this.descricao = descricao;
 	}
-
 	public StatusVoluntario getStatus() {
 		return status;
 	}
-
 	public void setStatus(StatusVoluntario status) {
 		this.status = status;
+	}
+	public LocalDateTime getDataCancelamento() {
+		return dataCancelamento;
+	}
+	public void setDataCancelamento(LocalDateTime dataCancelamento) {
+		this.dataCancelamento = dataCancelamento;
 	}
 }

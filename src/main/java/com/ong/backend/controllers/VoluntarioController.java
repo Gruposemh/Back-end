@@ -4,59 +4,51 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
+import org.springframework.web.bind.annotation.*;
 import com.ong.backend.dto.MensagemResponse;
 import com.ong.backend.dto.VoluntarioDTO;
 import com.ong.backend.entities.Voluntario;
 import com.ong.backend.services.VoluntarioService;
 
 @RestController
-@RequestMapping(value = "voluntario")
+@RequestMapping("/voluntario")
 public class VoluntarioController {
 
-	@Autowired
-	VoluntarioService voluntarioService;
-	
-	@PostMapping(value = "/tornar")
-	public ResponseEntity<Voluntario> tornarVoluntario(@RequestBody VoluntarioDTO dto){
-		return voluntarioService.tornarVoluntario(dto);
-	}
+    @Autowired
+    VoluntarioService voluntarioService;
 
-	@GetMapping(value = "/listar")
-	public List<Voluntario> listarVoluntarios(){
-		return voluntarioService.listar();
-	}
-	
-	@GetMapping(value = "/{id}")
-	public ResponseEntity<Voluntario> buscarPorId(@PathVariable Long id){
-		return voluntarioService.buscarPorId(id);
-	}
+    @PostMapping("/tornar")
+    public ResponseEntity<Voluntario> tornarVoluntario(@RequestBody VoluntarioDTO dto) {
+        return voluntarioService.tornarVoluntario(dto);
+    }
 
-	@GetMapping(value = "/listar/pendentes")
-	public List<Voluntario> listarPendentes() {
-		return voluntarioService.listarPendentes();
-	}
+    @GetMapping("/listar")
+    public List<Voluntario> listarVoluntarios() {
+        return voluntarioService.listar();
+    }
 
-	@GetMapping(value = "/listar/aprovados")
-	public List<Voluntario> listarAprovados() {
-		return voluntarioService.listarAprovados();
-	}
-	
-	@PutMapping(value = "/aprovar/{id}")
-	public ResponseEntity<MensagemResponse> aprovar(@PathVariable Long id) {
-		return voluntarioService.aprovar(id);
-	}
+    @GetMapping("/{id}")
+    public ResponseEntity<Voluntario> buscarPorId(@PathVariable Long id) {
+        return voluntarioService.buscarPorId(id);
+    }
 
-	@DeleteMapping(value = "cancelar/{id}")
-	public ResponseEntity<?> cancelar (@PathVariable Long id){
-		return voluntarioService.cancelar(id);
-	}
+    @GetMapping("/listar/pendentes")
+    public List<Voluntario> listarPendentes() {
+        return voluntarioService.listarPendentes();
+    }
+
+    @GetMapping("/listar/aprovados")
+    public List<Voluntario> listarAprovados() {
+        return voluntarioService.listarAprovados();
+    }
+
+    @PutMapping("/aprovar/{id}")
+    public ResponseEntity<MensagemResponse> aprovar(@PathVariable Long id) {
+        return voluntarioService.aprovar(id);
+    }
+
+    @PutMapping("/cancelar/{id}")
+    public ResponseEntity<?> cancelar(@PathVariable Long id) {
+        return voluntarioService.cancelar(id);
+    }
 }

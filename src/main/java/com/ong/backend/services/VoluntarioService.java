@@ -6,13 +6,11 @@ import java.time.Period;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import com.ong.backend.dto.MensagemResponse;
 import com.ong.backend.dto.VoluntarioDTO;
 import com.ong.backend.entities.StatusVoluntario;
@@ -24,65 +22,62 @@ import com.ong.backend.repositories.VoluntarioRepository;
 
 @Service
 public class VoluntarioService {
-	
-	@Autowired
-	VoluntarioRepository voluntarioRepository;
-	
-	@Autowired
-	UsuarioRepository usuarioRepository;
-	
-	public ResponseEntity<Voluntario> tornarVoluntario(@RequestBody VoluntarioDTO dto) {
-	    Usuario usuario = usuarioRepository.findById(dto.getIdUsuario())
-	            .orElseThrow(() -> new NaoEncontradoException("Usuário não encontrado"));
 
-	    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-	    LocalDate nascimento = LocalDate.parse(dto.getDataNascimento(), formatter);
+    @Autowired
+    VoluntarioRepository voluntarioRepository;
 
-	    int idade = Period.between(nascimento, LocalDate.now()).getYears();
+    @Autowired
+    UsuarioRepository usuarioRepository;
 
-	    if (idade < 18) {
-	        throw new IllegalArgumentException("Usuário precisa ter mais de 18 anos para se tornar voluntário.");
-	    }
+    public ResponseEntity<Voluntario> tornarVoluntario(VoluntarioDTO dto) {
+        Usuario usuario = usuarioRepository.findById(dto.getIdUsuario())
+                .orElseThrow(() -> new NaoEncontradoException("Usuário não encontrado"));
 
-	    Voluntario voluntario = new Voluntario();
-	    voluntario.setCpf(dto.getCpf());
-	    voluntario.setDataVoluntario(LocalDateTime.now());
-	    voluntario.setIdUsuario(usuario);
-	    voluntario.setDataNascimento(dto.getDataNascimento());
-	    voluntario.setTelefone(dto.getTelefone());
-	    voluntario.setDescricao(dto.getDescricao());
-	    voluntario.setEndereco(dto.getEndereco());
-	    voluntario.setStatus(StatusVoluntario.PENDENTE);
-	    
-	    voluntario = voluntarioRepository.save(voluntario);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate nascimento = LocalDate.parse(dto.getDataNascimento(), formatter);
 
-	    return ResponseEntity.ok(voluntario);
-	}
-	
-	public List<Voluntario> listar(){
-		return voluntarioRepository.findAll();
-	}
-	
-	public ResponseEntity<Voluntario> buscarPorId(Long id) {
-		Optional<Voluntario> existe = voluntarioRepository.findById(id);
-		return existe.map(ResponseEntity::ok)
-				.orElseThrow(() -> new NaoEncontradoException("Voluntário não encontrado com o Id" + id));
-	}
-	
-	public ResponseEntity<?> cancelar(@PathVariable Long id) {
-	    Optional<Voluntario> existe = voluntarioRepository.findById(id);
+        int idade = Period.between(nascimento, LocalDate.now()).getYears();
+        if (idade < 18) {
+            throw new IllegalArgumentException("Usuário precisa ter mais de 18 anos para se tornar voluntário.");
+        }
 
-	    if (existe.isEmpty()) {
-	        throw new NaoEncontradoException("Voluntário não encontrado com o Id " + id);
-	    }
+        Voluntario voluntario = new Voluntario();
+        voluntario.setCpf(dto.getCpf());
+        voluntario.setDataVoluntario(LocalDateTime.now());
+        voluntario.setIdUsuario(usuario);
+        voluntario.setDataNascimento(dto.getDataNascimento());
+        voluntario.setTelefone(dto.getTelefone());
+        voluntario.setDescricao(dto.getDescricao());
+        voluntario.setEndereco(dto.getEndereco());
+        voluntario.setStatus(StatusVoluntario.PENDENTE);
 
-	    Voluntario voluntario = new Voluntario();
-	    voluntario.setStatus(StatusVoluntario.CANCELADO);
-	    return ResponseEntity.ok("Solicitação cancelada!");
-	}
+        voluntario = voluntarioRepository.save(voluntario);
 
-	
-	public List<Voluntario> listarPendentes() {
+        return ResponseEntity.ok(voluntario);
+    }
+
+    public List<Voluntario> listar() {
+        return voluntarioRepository.findAll();
+    }
+
+    public ResponseEntity<Voluntario> buscarPorId(Long id) {
+        Optional<Voluntario> existe = voluntarioRepository.findById(id);
+        return existe.map(ResponseEntity::ok)
+                .orElseThrow(() -> new NaoEncontradoException("Voluntário não encontrado com o Id " + id));
+    }
+
+    public ResponseEntity<?> cancelar(Long id) {
+        Voluntario voluntario = voluntarioRepository.findById(id)
+                .orElseThrow(() -> new NaoEncontradoException("Voluntário não encontrado com o Id " + id));
+
+        voluntario.setStatus(StatusVoluntario.CANCELADO);
+        voluntario.setDataCancelamento(LocalDateTime.now());
+        voluntarioRepository.save(voluntario);
+
+        return ResponseEntity.ok(voluntario);
+    }
+
+    public List<Voluntario> listarPendentes() {
         return voluntarioRepository.findByStatus(StatusVoluntario.PENDENTE);
     }
 
@@ -92,12 +87,22 @@ public class VoluntarioService {
 
     public ResponseEntity<MensagemResponse> aprovar(Long id) {
         Voluntario voluntario = voluntarioRepository.findById(id)
-            .orElseThrow(() -> new NaoEncontradoException("Voluntário não encontrado"));
+                .orElseThrow(() -> new NaoEncontradoException("Voluntário não encontrado"));
 
         voluntario.setStatus(StatusVoluntario.APROVADO);
         voluntarioRepository.save(voluntario);
 
         return ResponseEntity.status(HttpStatus.OK)
-            .body(new MensagemResponse("Voluntário aprovado com sucesso!"));
+                .body(new MensagemResponse("Voluntário aprovado com sucesso!"));
+    }
+
+    @Scheduled(fixedRate = 300000)
+    public void deletarVoluntariosCancelados() {
+        LocalDateTime agora = LocalDateTime.now();
+        List<Voluntario> paraExcluir = voluntarioRepository
+                .findByStatusAndDataCancelamentoBefore(StatusVoluntario.CANCELADO, agora.minusHours(1));
+        if (!paraExcluir.isEmpty()) {
+            voluntarioRepository.deleteAll(paraExcluir);
+        }
     }
 }

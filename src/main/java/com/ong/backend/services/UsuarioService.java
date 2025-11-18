@@ -60,7 +60,10 @@ public class UsuarioService{
 		Usuario usuario = usuarioRepository.findById(id).get();   
 		usuario.setNome(atualizado.getNome());
 		usuario.setEmail(atualizado.getEmail());
-		usuario.setSenha(atualizado.getSenha());
+		
+		if (atualizado.getSenha() != null && !atualizado.getSenha().isBlank()) {
+		    usuario.setSenha(config.encode(atualizado.getSenha()));
+		}
 		
 		usuario = usuarioRepository.save(usuario);
 		return ResponseEntity.ok(usuario);

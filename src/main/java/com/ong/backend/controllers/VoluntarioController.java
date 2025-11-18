@@ -41,6 +41,17 @@ public class VoluntarioController {
     public List<Voluntario> listarAprovados() {
         return voluntarioService.listarAprovados();
     }
+    
+    @GetMapping("/usuario/{idUsuario}")
+    public ResponseEntity<?> buscarPorUsuario(@PathVariable Long idUsuario) {
+        return voluntarioService.buscarPorUsuario(idUsuario);
+    }
+
+    
+    @PutMapping("/editar/{id}")
+    public ResponseEntity<?> atualizarPerfil(@PathVariable Long id, @RequestBody VoluntarioDTO atualizado){
+    	return voluntarioService.editarPerfil(id, atualizado);
+    }
 
     @PutMapping("/aprovar/{id}")
     public ResponseEntity<MensagemResponse> aprovar(@PathVariable Long id) {

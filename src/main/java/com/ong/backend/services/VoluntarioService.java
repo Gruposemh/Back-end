@@ -84,6 +84,30 @@ public class VoluntarioService {
     public List<Voluntario> listarAprovados() {
         return voluntarioRepository.findByStatus(StatusVoluntario.APROVADO);
     }
+    
+    public ResponseEntity<?> buscarPorUsuario(Long idUsuario) {
+        Optional<Voluntario> voluntario = voluntarioRepository.findByIdUsuarioId(idUsuario);
+
+        if (voluntario.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        return ResponseEntity.ok(voluntario.get());
+    }
+    
+    public ResponseEntity<?> editarPerfil(Long id, VoluntarioDTO atualizado){
+    	Voluntario voluntario = voluntarioRepository.findById(id)
+                .orElseThrow(() -> new NaoEncontradoException("Voluntário não encontrado"));
+    	
+    	voluntario.setCpf(atualizado.getCpf());
+    	voluntario.setDataNascimento(atualizado.getDataNascimento());
+    	voluntario.setEndereco(atualizado.getEndereco());
+    	voluntario.setTelefone(atualizado.getTelefone());
+    	
+    	voluntario = voluntarioRepository.save(voluntario);
+    	
+    	return ResponseEntity.ok("Atualização salva!");
+    }
 
     public ResponseEntity<MensagemResponse> aprovar(Long id) {
         Voluntario voluntario = voluntarioRepository.findById(id)

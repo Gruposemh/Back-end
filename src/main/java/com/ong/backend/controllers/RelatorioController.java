@@ -20,28 +20,23 @@ public class RelatorioController {
     @Autowired
     RelatorioService relatorio;
 
-    // Endpoint para relatorio de usuarios
     @GetMapping(value = "/usuarios", produces = MediaType.APPLICATION_PDF_VALUE)
     public ResponseEntity<byte[]> relatorioUsuarios(@RequestParam String caminho) throws JRException, IOException {
-        // Gerar o relatório
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         relatorio.gerarRelatorioUsuariosPDF(outputStream);
 
-        // Enviar o arquivo gerado como resposta
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=relatorio_usuarios.pdf")
                 .contentType(MediaType.APPLICATION_PDF)
                 .body(outputStream.toByteArray());
     }
 
-    // Endpoint para relatorio de doacoes
     @GetMapping(value = "/doacoes", produces = MediaType.APPLICATION_PDF_VALUE)
     public ResponseEntity<byte[]> relatorioDoacoes(@RequestParam String caminho) throws JRException, IOException {
         // Gerar o relatório
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         relatorio.gerarRelatorioDoacaoPDF(outputStream);
 
-        // Enviar o arquivo gerado como resposta
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=relatorio_doacoes.pdf")
                 .contentType(MediaType.APPLICATION_PDF)

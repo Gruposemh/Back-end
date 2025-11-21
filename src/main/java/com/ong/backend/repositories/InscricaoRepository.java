@@ -15,4 +15,6 @@ public interface InscricaoRepository extends JpaRepository <Inscricao, Long>{
 	boolean existsByIdUsuarioAndIdCurso(Usuario usuario, Curso curso);
 	int countByIdCurso(Curso curso);
 	List<Inscricao> findByIdCursoId(Long cursoId);
+	List<Inscricao> findByIdUsuario_Id(Long usuarioId);
+
 }

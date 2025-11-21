@@ -34,6 +34,11 @@ public class CursoController {
         return ResponseEntity.ok(cursoService.listar());
     }
 	
+	@GetMapping("/usuario/{usuarioId}")
+	public ResponseEntity<List<CursoDTO>> listarCursosDoUsuario(@PathVariable Long usuarioId) {
+	    return ResponseEntity.ok(cursoService.listarCursosDoUsuario(usuarioId));
+	}
+	
 	@GetMapping(value = "/inscricoes/{id}")
 	public ResponseEntity<CursoDTO> listarInscricoesCurso(@PathVariable Long id){
 		return ResponseEntity.ok(cursoService.listarInscricoesCurso(id));

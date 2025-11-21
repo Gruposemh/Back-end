@@ -46,7 +46,6 @@ public class InscricaoService {
             throw new RuntimeException("Somente voluntários aprovados podem se inscrever em cursos.");
         }
 
-        // Buscar curso
         Curso curso = cursoRepository.findById(dto.getIdCurso())
                 .orElseThrow(() -> new NaoEncontradoException("Curso não encontrado"));
         

@@ -121,6 +121,7 @@ public class SecurityConfig {
                     .requestMatchers(HttpMethod.PUT, "/curso/atualizar/**").hasRole("ADMIN")
                     .requestMatchers(HttpMethod.DELETE, "/curso/deletar/**").hasRole("ADMIN")
                     .requestMatchers(HttpMethod.GET, "/curso/listar").permitAll()
+                    .requestMatchers(HttpMethod.GET, "/curso/usuario/**").hasAnyRole("USUARIO", "ADMIN")
                     .requestMatchers(HttpMethod.GET, "/curso/inscricoes/**").hasRole("ADMIN")
                     .requestMatchers(HttpMethod.GET, "/curso/buscar").permitAll()
 

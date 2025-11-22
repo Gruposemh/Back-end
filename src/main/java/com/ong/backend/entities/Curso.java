@@ -2,12 +2,15 @@ package com.ong.backend.entities;
 
 import java.time.LocalTime;
 import java.util.List;
+
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Lob;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
@@ -24,13 +27,17 @@ public class Curso {
 	private LocalTime horario;
 	private int vagas;
 	
+	@Lob
+	@Column(columnDefinition = "LONGTEXT")
+	private String imagem;
+	
 	@OneToMany(mappedBy = "idCurso", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
 	private List<Inscricao> inscricoes;
 	
 	public Curso() {
 	}
 	
-	public Curso(Long id, String titulo, String descricao, String dias, LocalTime horario, int vagas,
+	public Curso(Long id, String titulo, String descricao, String dias, LocalTime horario, int vagas, String imagem,
 			List<Inscricao> inscricoes) {
 		this.id = id;
 		this.titulo = titulo;
@@ -38,10 +45,9 @@ public class Curso {
 		this.dias = dias;
 		this.horario = horario;
 		this.vagas = vagas;
+		this.imagem = imagem;
 		this.inscricoes = inscricoes;
 	}
-
-
 
 	public Long getId() {
 		return id;
@@ -90,5 +96,11 @@ public class Curso {
 	}
 	public void setInscricoes(List<Inscricao> inscricoes) {
 		this.inscricoes = inscricoes;
+	}
+	public String getImagem() {
+		return imagem;
+	}
+	public void setImagem(String imagem) {
+		this.imagem = imagem;
 	}
 }

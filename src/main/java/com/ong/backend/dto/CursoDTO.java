@@ -14,17 +14,19 @@ public class CursoDTO {
     private int vagas;
     private List<InscricaoDTO> inscricoes;
     private Long idInscricao;
+    private String imagem;
 
     public CursoDTO() {
     }
 
-    public CursoDTO(Long id, String titulo, String descricao, String dias, LocalTime horario, int vagas) {
+    public CursoDTO(Long id, String titulo, String descricao, String dias, LocalTime horario, int vagas, String imagem) {
         this.id = id;
         this.titulo = titulo;
         this.descricao = descricao;
         this.dias = dias;
         this.horario = horario;
         this.vagas = vagas;
+        this.imagem = imagem;
     }
 
     public CursoDTO(Curso curso, Long idInscricao) {
@@ -44,6 +46,7 @@ public class CursoDTO {
         this.dias = entity.getDias();
         this.horario = entity.getHorario();
         this.vagas = entity.getVagas();
+        this.imagem = entity.getImagem();
     }
 
     public Long getId() { return id; }
@@ -69,4 +72,7 @@ public class CursoDTO {
 
     public Long getIdInscricao() { return idInscricao; }
     public void setIdInscricao(Long idInscricao) { this.idInscricao = idInscricao; }
+
+	public String getImagem() { return imagem; }
+	public void setImagem(String imagem) { this.imagem = imagem; }
 }

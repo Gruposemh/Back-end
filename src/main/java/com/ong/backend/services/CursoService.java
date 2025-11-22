@@ -35,6 +35,7 @@ public class CursoService {
 		curso.setHorario(dto.getHorario());
 		curso.setDias(dto.getDias());
 		curso.setVagas(dto.getVagas());
+		curso.setImagem(dto.getImagem());
 
 		curso = cursoRepository.save(curso);
 
@@ -52,19 +53,27 @@ public class CursoService {
 	public List<CursoDTO> listar() {
 		List<Curso> cursos = cursoRepository.findAll();
 		return cursos.stream().map(c -> new CursoDTO(c.getId(), c.getTitulo(), c.getDescricao(), c.getDias(),
-				c.getHorario(), c.getVagas())).toList();
+				c.getHorario(), c.getVagas(), c.getImagem())).toList();
 	}
 
 	public List<CursoDTO> listarCursosDoUsuario(Long usuarioId) {
 	    List<Inscricao> inscricoes = inscricaoRepository.findByIdUsuario_Id(usuarioId);
-
-	    if (inscricoes.isEmpty()) {
-	        throw new NaoEncontradoException("O usuário não está inscrito em nenhum curso.");
-	    }
-
-	    // Agora retornamos o curso + o id da inscrição
+	    
 	    return inscricoes.stream()
-	            .map(inscricao -> new CursoDTO(inscricao.getIdCurso(), inscricao.getId()))
+	            .map(inscricao -> {
+	                Curso curso = inscricao.getIdCurso();
+	                CursoDTO dto = new CursoDTO(
+	                    curso.getId(),
+	                    curso.getTitulo(),
+	                    curso.getDescricao(),
+	                    curso.getDias(),
+	                    curso.getHorario(),
+	                    curso.getVagas(),
+	                    curso.getImagem()
+	                );
+	                dto.setIdInscricao(inscricao.getId());
+	                return dto;
+	            })
 	            .toList();
 	}
 
@@ -100,6 +109,8 @@ public class CursoService {
 		curso.setVagas(atualizado.getVagas());
 		curso.setDias(atualizado.getDias());
 		curso.setHorario(atualizado.getHorario());
+		curso.setImagem(atualizado.getImagem());
+		
 		curso = cursoRepository.save(curso);
 
 		return ResponseEntity.ok().body("Atividade atualizada");

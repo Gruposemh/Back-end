@@ -1,8 +1,11 @@
 package com.ong.backend.controllers;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -29,6 +32,16 @@ public class InscricaoController {
 	@DeleteMapping(value = "/deletar/{id}")
 	public ResponseEntity<MensagemResponse> excluirInscricao(@PathVariable Long id){
 		return inscricaoService.excluirInscricao(id);
+	}
+	
+	@DeleteMapping(value = "/cancelar/{id}")
+	public ResponseEntity<MensagemResponse> cancelarInscricao(@PathVariable Long id){
+		return inscricaoService.excluirInscricao(id);
+	}
+	
+	@GetMapping(value = "/usuario/{usuarioId}")
+	public ResponseEntity<List<InscricaoDTO>> listarInscricoesPorUsuario(@PathVariable Long usuarioId){
+		return inscricaoService.listarInscricoesPorUsuario(usuarioId);
 	}
 	
 }

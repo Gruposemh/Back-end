@@ -291,7 +291,7 @@ public class AuthController {
             // Criar cookie HTTP-only com o JWT token
             createAuthCookie(response, jwtToken, 60 * 60 * 24); // 1 dia
 
-            return ResponseEntity.ok(new LoginResponse(jwtToken, refreshToken.getToken(), usuario.getEmail(), usuario.getRole().name()));
+            return ResponseEntity.ok(new LoginResponse(jwtToken, refreshToken.getToken(), usuario.getEmail(), usuario.getRole().name(), usuario.getId(), usuario.getNome()));
 
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -389,7 +389,7 @@ public class AuthController {
             // Criar cookie HTTP-only com o JWT token
             createAuthCookie(response, jwtToken, 60 * 60 * 24); // 1 dia
 
-            return ResponseEntity.ok(new LoginResponse(jwtToken, refreshToken.getToken(), usuario.getEmail(), usuario.getRole().name()));
+            return ResponseEntity.ok(new LoginResponse(jwtToken, refreshToken.getToken(), usuario.getEmail(), usuario.getRole().name(), usuario.getId(), usuario.getNome()));
 
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -522,7 +522,7 @@ public class AuthController {
             String ipAddress = request.getRemoteAddr();
             var newRefreshToken = refreshTokenService.createRefreshToken(usuario, deviceInfo, ipAddress);
             
-            return ResponseEntity.ok(new LoginResponse(newToken, newRefreshToken.getToken(), usuario.getEmail(), usuario.getRole().name()));
+            return ResponseEntity.ok(new LoginResponse(newToken, newRefreshToken.getToken(), usuario.getEmail(), usuario.getRole().name(), usuario.getId(), usuario.getNome()));
 
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -694,18 +694,24 @@ public class AuthController {
         private String refreshToken;
         private String email;
         private String role;
+        private Long id;
+        private String nome;
 
-        public LoginResponse(String token, String refreshToken, String email, String role) {
+        public LoginResponse(String token, String refreshToken, String email, String role, Long id, String nome) {
             this.token = token;
             this.refreshToken = refreshToken;
             this.email = email;
             this.role = role;
+            this.id = id;
+            this.nome = nome;
         }
 
         public String getToken() { return token; }
         public String getRefreshToken() { return refreshToken; }
         public String getEmail() { return email; }
         public String getRole() { return role; }
+        public Long getId() { return id; }
+        public String getNome() { return nome; }
     }
 
     public static class SuccessResponse {

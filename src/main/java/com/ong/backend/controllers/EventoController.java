@@ -31,13 +31,13 @@ public class EventoController {
 	}
 	
 	@GetMapping(value = "/listar")
-	public List<Evento> listarEvento(){ 
-		return eventoService.listarEventos();
+	public List<EventoDTO> listarEvento(){ 
+		return eventoService.listarEventosDTO();
 	}
 	
 	@GetMapping(value = "/{id}")
-	public Evento buscarEvento(@PathVariable Long id) {
-		return eventoService.buscarEvento(id);
+	public EventoDTO buscarEvento(@PathVariable Long id) {
+		return eventoService.buscarEventoDTO(id);
 	}
 	
 	@DeleteMapping(value = "/deletar/{id}")

@@ -74,17 +74,35 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         String ipAddress = request.getRemoteAddr();
         var refreshToken = refreshTokenService.createRefreshToken(usuario, deviceInfo, ipAddress);
         
-        // Criar cookie HTTP-only com o JWT token via header Set-Cookie
-        // Necessário usar header para definir SameSite=None (cross-origin HTTPS)
-        int maxAge = 60 * 60 * 24; // 1 dia
-        response.setHeader("Set-Cookie", String.format(
-            "jwt=%s; Path=/; Max-Age=%d; HttpOnly; Secure; SameSite=None",
-            jwtToken, maxAge
-        ));
+        // Verificar se é requisição mobile (via User-Agent ou parâmetro)
+        String userAgent = request.getHeader("User-Agent");
+        String isMobile = request.getParameter("mobile");
+        boolean isMobileRequest = (isMobile != null && isMobile.equals("true")) || 
+                                  (userAgent != null && userAgent.toLowerCase().contains("expo"));
         
-        // Redirecionar para o frontend (sem tokens na URL)
-        String redirectUrl = "https://front-tcc-nine.vercel.app/";
-        
-        response.sendRedirect(redirectUrl);
+        if (isMobileRequest) {
+            // Para mobile: redirecionar com tokens na URL (deep link)
+            // IMPORTANTE: Atualize o IP para o IP da sua máquina
+            String redirectUrl = String.format(
+                "exp://192.168.15.14:8081/--/oauth2/callback?token=%s&refreshToken=%s&email=%s&role=%s&id=%d&nome=%s",
+                jwtToken,
+                refreshToken.getToken(),
+                usuario.getEmail(),
+                usuario.getRole().name(),
+                usuario.getId(),
+                usuario.getNome()
+            );
+            response.sendRedirect(redirectUrl);
+        } else {
+            // Para web: usar cookie HTTP-only
+            int maxAge = 60 * 60 * 24; // 1 dia
+            response.setHeader("Set-Cookie", String.format(
+                "jwt=%s; Path=/; Max-Age=%d; HttpOnly; Secure; SameSite=None",
+                jwtToken, maxAge
+            ));
+            
+            String redirectUrl = "https://front-tcc-nine.vercel.app/";
+            response.sendRedirect(redirectUrl);
+        }
     }
 }

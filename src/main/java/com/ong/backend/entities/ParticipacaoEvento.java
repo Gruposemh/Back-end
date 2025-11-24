@@ -25,15 +25,18 @@ public class ParticipacaoEvento {
     private Evento evento;
 
     private String tipoParticipacao;
+    
+    private Boolean confirmado = false;
 	
 	public ParticipacaoEvento() {
 	}
 
-	public ParticipacaoEvento(Long id, Usuario usuario, Evento evento, String tipoParticipacao) {
+	public ParticipacaoEvento(Long id, Usuario usuario, Evento evento, String tipoParticipacao, Boolean confirmado) {
 		this.id = id;
 		this.usuario = usuario;
 		this.evento = evento;
 		this.tipoParticipacao = tipoParticipacao;
+		this.confirmado = confirmado;
 	}
 	
 	public Long getId() {
@@ -59,5 +62,11 @@ public class ParticipacaoEvento {
 	}
 	public void setTipoParticipacao(String tipoParticipacao) {
 		this.tipoParticipacao = tipoParticipacao;
+	}
+	public Boolean getConfirmado() {
+		return confirmado;
+	}
+	public void setConfirmado(Boolean confirmado) {
+		this.confirmado = confirmado;
 	}
 }

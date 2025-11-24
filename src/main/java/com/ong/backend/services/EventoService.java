@@ -31,6 +31,7 @@ public class EventoService {
 		evento.setDescricao(dto.getDescricao());
 		evento.setLocal(dto.getLocal());
 		evento.setData(dto.getData());
+		evento.setImagemUrl(dto.getImagemUrl());
 		
 		evento = eventoRepository.save(evento);
 		
@@ -67,8 +68,21 @@ public class EventoService {
 		evento.setData(atualizado.getData());
 		evento.setLocal(atualizado.getLocal());
 		evento.setNome(atualizado.getNome());
+		evento.setImagemUrl(atualizado.getImagemUrl());
 		
 		evento = eventoRepository.save(evento);
 		return ResponseEntity.ok(evento);
+	}
+	
+	public List<EventoDTO> listarEventosDTO(){
+		return eventoRepository.findAll().stream()
+				.map(EventoDTO::new)
+				.toList();
+	}
+	
+	public EventoDTO buscarEventoDTO(Long id){
+		Evento evento = eventoRepository.findById(id)
+				.orElseThrow(() -> new NaoEncontradoException("Evento não encontrado"));
+		return new EventoDTO(evento);
 	}
 }

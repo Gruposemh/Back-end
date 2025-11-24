@@ -76,6 +76,32 @@ public class CursoService {
 	            })
 	            .toList();
 	}
+	
+	public List<CursoDTO> listarCursosDisponiveis(Long usuarioId) {
+	    // Buscar todos os cursos
+	    List<Curso> todosCursos = cursoRepository.findAll();
+	    
+	    // Buscar IDs dos cursos em que o usuário já está inscrito
+	    List<Inscricao> inscricoes = inscricaoRepository.findByIdUsuario_Id(usuarioId);
+	    List<Long> cursosInscritosIds = inscricoes.stream()
+	            .filter(inscricao -> inscricao.getIdCurso() != null) // Filtrar inscrições com curso NULL
+	            .map(inscricao -> inscricao.getIdCurso().getId())
+	            .toList();
+	    
+	    // Filtrar cursos disponíveis (não inscritos)
+	    return todosCursos.stream()
+	            .filter(curso -> !cursosInscritosIds.contains(curso.getId()))
+	            .map(curso -> new CursoDTO(
+	                curso.getId(),
+	                curso.getTitulo(),
+	                curso.getDescricao(),
+	                curso.getDias(),
+	                curso.getHorario(),
+	                curso.getVagas(),
+	                curso.getImagem()
+	            ))
+	            .toList();
+	}
 
 
 	public CursoDTO listarInscricoesCurso(Long cursoId) {

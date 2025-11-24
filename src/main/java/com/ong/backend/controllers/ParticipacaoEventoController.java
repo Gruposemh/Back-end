@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -50,5 +51,16 @@ public class ParticipacaoEventoController {
     @DeleteMapping(value = "/deletar/{id}")
     public ResponseEntity<MensagemResponse> cancelarParticipacao(@PathVariable Long id){
         return participacaoEventoService.excluirParticipacao(id);
+    }
+    
+    @PutMapping(value = "/confirmar/{id}")
+    public ResponseEntity<ParticipacaoEventoDTO> confirmarPresenca(@PathVariable Long id) {
+        return participacaoEventoService.confirmarPresenca(id);
+    }
+    
+    @GetMapping(value = "/evento/{eventoId}")
+    public ResponseEntity<List<ParticipacaoEventoDTO>> listarPorEvento(@PathVariable Long eventoId) {
+        List<ParticipacaoEventoDTO> dtos = participacaoEventoService.listarPorEvento(eventoId);
+        return ResponseEntity.ok(dtos);
     }
 }

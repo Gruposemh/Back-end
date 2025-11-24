@@ -32,6 +32,9 @@ public class ParticipacaoEventoService {
 	@Autowired
 	EventoRepository eventoRepository;
 	
+	@Autowired
+	EmailService emailService;
+	
 	public ResponseEntity<ParticipacaoEvento> participar(@RequestBody ParticipacaoEventoDTO dto){
 		Usuario usuario = usuarioRepository.findById(dto.getIdUsuario())
 		        .orElseThrow(() -> new NaoEncontradoException("Usuário não encontrado"));
@@ -49,6 +52,18 @@ public class ParticipacaoEventoService {
 		participarEvento.setTipoParticipacao(dto.getTipoParticipacao());
 		participarEvento.setUsuario(usuario);
 		participarEvento = participacaoEventoRepository.save(participarEvento);
+		
+		// Enviar email de confirmação de participação
+		try {
+			emailService.enviarEmailInscricaoEvento(
+				usuario.getEmail(),
+				usuario.getNome(),
+				evento
+			);
+		} catch (Exception e) {
+			// Log do erro, mas não falha o processo
+			System.err.println("Erro ao enviar email de participação: " + e.getMessage());
+		}
 		
 		return ResponseEntity.ok(participarEvento);
 	}
@@ -76,9 +91,56 @@ public class ParticipacaoEventoService {
 		if(participacaoEvento.isEmpty()) {
 			throw new NaoEncontradoException("Participação não encontrada");
 		}
+		
+		ParticipacaoEvento participacao = participacaoEvento.get();
+		
+		// Enviar email de cancelamento antes de deletar
+		try {
+			emailService.enviarEmailCancelamentoEvento(
+				participacao.getUsuario().getEmail(),
+				participacao.getUsuario().getNome(),
+				participacao.getEvento()
+			);
+		} catch (Exception e) {
+			// Log do erro, mas não falha o processo
+			System.err.println("Erro ao enviar email de cancelamento: " + e.getMessage());
+		}
+		
 		participacaoEventoRepository.deleteById(id);
 		
 		return ResponseEntity.status(HttpStatus.OK)
 	            .body(new MensagemResponse("Participação cancelada"));
+	}
+	
+	public ResponseEntity<ParticipacaoEventoDTO> confirmarPresenca(Long id) {
+		ParticipacaoEvento participacao = participacaoEventoRepository.findById(id)
+				.orElseThrow(() -> new NaoEncontradoException("Participação não encontrada"));
+		
+		participacao.setConfirmado(true);
+		participacao = participacaoEventoRepository.save(participacao);
+		
+		// Enviar email de confirmação
+		try {
+			emailService.enviarEmailInscricaoEvento(
+				participacao.getUsuario().getEmail(),
+				participacao.getUsuario().getNome(),
+				participacao.getEvento()
+			);
+		} catch (Exception e) {
+			// Log do erro, mas não falha o processo
+			System.err.println("Erro ao enviar email de confirmação: " + e.getMessage());
+		}
+		
+		return ResponseEntity.ok(new ParticipacaoEventoDTO(participacao));
+	}
+	
+	public List<ParticipacaoEventoDTO> listarPorEvento(Long eventoId) {
+		Evento evento = eventoRepository.findById(eventoId)
+				.orElseThrow(() -> new NaoEncontradoException("Evento não encontrado"));
+		
+		List<ParticipacaoEvento> participacoes = participacaoEventoRepository.findByEvento(evento);
+		return participacoes.stream()
+				.map(ParticipacaoEventoDTO::new)
+				.collect(Collectors.toList());
 	}
 }

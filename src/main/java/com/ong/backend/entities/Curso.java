@@ -27,6 +27,9 @@ public class Curso {
 	private LocalTime horario;
 	private int vagas;
 	
+	@Column(nullable = true)
+	private Double valor;
+	
 	@Lob
 	@Column(columnDefinition = "LONGTEXT")
 	private String imagem;
@@ -45,6 +48,7 @@ public class Curso {
 		this.dias = dias;
 		this.horario = horario;
 		this.vagas = vagas;
+		this.valor = null;
 		this.imagem = imagem;
 		this.inscricoes = inscricoes;
 	}
@@ -102,5 +106,11 @@ public class Curso {
 	}
 	public void setImagem(String imagem) {
 		this.imagem = imagem;
+	}
+	public Double getValor() {
+		return valor;
+	}
+	public void setValor(Double valor) {
+		this.valor = valor;
 	}
 }

@@ -37,8 +37,13 @@ public class VoluntarioService {
         LocalDate nascimento = LocalDate.parse(dto.getDataNascimento(), formatter);
 
         int idade = Period.between(nascimento, LocalDate.now()).getYears();
+        
+        System.out.println("📅 DEBUG - Data nascimento: " + dto.getDataNascimento());
+        System.out.println("📅 DEBUG - Data hoje: " + LocalDate.now());
+        System.out.println("📅 DEBUG - Idade calculada: " + idade);
+        
         if (idade < 18) {
-            throw new IllegalArgumentException("Usuário precisa ter mais de 18 anos para se tornar voluntário.");
+            throw new IllegalArgumentException("Usuário precisa ter 18 anos ou mais para se tornar voluntário. Idade atual: " + idade);
         }
 
         Voluntario voluntario = new Voluntario();

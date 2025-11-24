@@ -119,4 +119,68 @@ public class OAuth2Controller {
             .header("Location", "/oauth2/authorization/google")
             .body(Map.of("message", "Redirecionando para Google OAuth2"));
     }
+
+    /**
+     * Endpoint específico para mobile - retorna tokens em JSON
+     * Usado após o fluxo OAuth2 ser concluído
+     */
+    @GetMapping("/mobile/success")
+    public ResponseEntity<?> mobileOAuth2Success(HttpServletRequest request) {
+        try {
+            var authentication = org.springframework.security.core.context.SecurityContextHolder.getContext().getAuthentication();
+            
+            if (authentication == null || !(authentication.getPrincipal() instanceof OAuth2User)) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(Map.of("error", "Usuário OAuth2 não encontrado"));
+            }
+            
+            OAuth2User oauth2User = (OAuth2User) authentication.getPrincipal();
+            String email = oauth2User.getAttribute("email");
+            String nome = oauth2User.getAttribute("name");
+
+            if (email == null || nome == null) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(Map.of("error", "Email ou nome não encontrado"));
+            }
+
+            Usuario usuario = usuarioRepository.findByEmail(email).orElse(null);
+            
+            if (usuario == null) {
+                usuario = new Usuario();
+                usuario.setNome(nome);
+                usuario.setEmail(email);
+                usuario.setEmailVerificado(true);
+                usuario.setRole(com.ong.backend.entities.StatusRole.USUARIO);
+                usuario.setTipoAutenticacao(com.ong.backend.entities.TipoAutenticacao.SOCIAL);
+                usuario.setCriadoEm(LocalDateTime.now());
+                usuario.setUltimoLogin(LocalDateTime.now());
+                usuarioRepository.save(usuario);
+            } else {
+                usuario.setUltimoLogin(LocalDateTime.now());
+                if (usuario.getTipoAutenticacao() != com.ong.backend.entities.TipoAutenticacao.SOCIAL) {
+                    usuario.setTipoAutenticacao(com.ong.backend.entities.TipoAutenticacao.SOCIAL);
+                }
+                usuarioRepository.save(usuario);
+            }
+
+            String jwtToken = tokenService.gerarToken(usuario);
+            String deviceInfo = request.getHeader("User-Agent");
+            String ipAddress = request.getRemoteAddr();
+            var refreshToken = refreshTokenService.createRefreshToken(usuario, deviceInfo, ipAddress);
+
+            return ResponseEntity.ok(Map.of(
+                "success", true,
+                "token", jwtToken,
+                "refreshToken", refreshToken.getToken(),
+                "email", usuario.getEmail(),
+                "role", usuario.getRole().name(),
+                "id", usuario.getId(),
+                "nome", usuario.getNome()
+            ));
+
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(Map.of("error", "Erro: " + e.getMessage()));
+        }
+    }
 }

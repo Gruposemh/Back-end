@@ -98,6 +98,9 @@ public class SecurityConfig {
                     // Endpoints de teste (remover em produção)
                     .requestMatchers("/test/**").permitAll()
 
+                    // Upload de arquivos e servir imagens
+                    .requestMatchers("/api/upload/**", "/uploads/**").permitAll()
+
                     // Usuário
                     .requestMatchers(HttpMethod.GET, "/usuario/todos").hasRole("ADMIN")
                     .requestMatchers(HttpMethod.DELETE, "/usuario/deletar/**").hasAnyRole("USUARIO", "ADMIN")
@@ -153,10 +156,11 @@ public class SecurityConfig {
 
                     // Participações
                     .requestMatchers(HttpMethod.POST, "/participar").hasAnyRole("ADMIN", "USUARIO")
+                    .requestMatchers(HttpMethod.PUT, "/participar/confirmar/**").hasAnyRole("ADMIN", "USUARIO")
                     .requestMatchers(HttpMethod.DELETE, "/participar/deletar/**").hasAnyRole("ADMIN", "USUARIO")
                     .requestMatchers(HttpMethod.GET, "/participar/listar").hasRole("ADMIN")
                     .requestMatchers(HttpMethod.GET, "/participar/{id}").hasRole("ADMIN")
-                    .requestMatchers(HttpMethod.GET, "/participar/usuario/**").hasRole("ADMIN")
+                    .requestMatchers(HttpMethod.GET, "/participar/usuario/**").hasAnyRole("ADMIN", "USUARIO")
 
                     //Voluntario
                     .requestMatchers(HttpMethod.POST, "/voluntario/tornar").hasAnyRole("ADMIN", "USUARIO")

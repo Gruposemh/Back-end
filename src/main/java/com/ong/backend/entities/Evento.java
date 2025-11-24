@@ -23,6 +23,7 @@ public class Evento {
 	private String descricao;
 	private LocalDate data;
 	private String local;
+	private String imagemUrl;
 	
 	@OneToMany(mappedBy = "evento", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ParticipacaoEvento> participacoes = new ArrayList<>();
@@ -30,12 +31,13 @@ public class Evento {
 	public Evento() {
 	}
 
-	public Evento(Long id, String nome, String descricao, LocalDate data, String local) {
+	public Evento(Long id, String nome, String descricao, LocalDate data, String local, String imagemUrl) {
 		this.id = id;
 		this.nome = nome;
 		this.descricao = descricao;
 		this.data = data;
 		this.local = local;
+		this.imagemUrl = imagemUrl;
 	}
 	
 	public Long getId() {
@@ -67,5 +69,11 @@ public class Evento {
 	}
 	public void setLocal(String local) {
 		this.local = local;
+	}
+	public String getImagemUrl() {
+		return imagemUrl;
+	}
+	public void setImagemUrl(String imagemUrl) {
+		this.imagemUrl = imagemUrl;
 	}
 }

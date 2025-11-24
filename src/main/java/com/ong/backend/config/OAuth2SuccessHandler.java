@@ -1,6 +1,8 @@
 package com.ong.backend.config;
 
 import java.io.IOException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -77,21 +79,40 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         // Verificar se é requisição mobile (via User-Agent ou parâmetro)
         String userAgent = request.getHeader("User-Agent");
         String isMobile = request.getParameter("mobile");
+        
+        // Log para debug
+        System.out.println("=== OAuth2 Success Handler ===");
+        System.out.println("User-Agent: " + userAgent);
+        System.out.println("Parâmetro mobile: " + isMobile);
+        System.out.println("Request URL: " + request.getRequestURL());
+        System.out.println("Query String: " + request.getQueryString());
+        
         boolean isMobileRequest = (isMobile != null && isMobile.equals("true")) || 
-                                  (userAgent != null && userAgent.toLowerCase().contains("expo"));
+                                  (userAgent != null && (
+                                      userAgent.toLowerCase().contains("expo") ||
+                                      userAgent.toLowerCase().contains("android") ||
+                                      userAgent.toLowerCase().contains("iphone")
+                                  ));
+        
+        System.out.println("É mobile? " + isMobileRequest);
         
         if (isMobileRequest) {
             // Para mobile: redirecionar com tokens na URL (deep link)
-            // IMPORTANTE: Atualize o IP para o IP da sua máquina
+            // Codificar o nome para URL
+            String nomeEncoded = URLEncoder.encode(usuario.getNome(), StandardCharsets.UTF_8);
+            
             String redirectUrl = String.format(
-                "exp://192.168.15.14:8081/--/oauth2/callback?token=%s&refreshToken=%s&email=%s&role=%s&id=%d&nome=%s",
+                "voluntariosprobem://oauth2/callback?token=%s&refreshToken=%s&email=%s&role=%s&id=%d&nome=%s",
                 jwtToken,
                 refreshToken.getToken(),
                 usuario.getEmail(),
                 usuario.getRole().name(),
                 usuario.getId(),
-                usuario.getNome()
+                nomeEncoded
             );
+            
+            System.out.println("🔵 Redirecionando para MOBILE: " + redirectUrl);
+            System.out.println("📱 Nome codificado: " + nomeEncoded);
             response.sendRedirect(redirectUrl);
         } else {
             // Para web: usar cookie HTTP-only
@@ -101,7 +122,9 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
                 jwtToken, maxAge
             ));
             
-            String redirectUrl = "https://front-tcc-nine.vercel.app/";
+            String redirectUrl = "https://front-tcc2.vercel.app/";
+            
+            System.out.println("🌐 Redirecionando para WEB: " + redirectUrl);
             response.sendRedirect(redirectUrl);
         }
     }

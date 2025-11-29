@@ -5,10 +5,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Lob;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
@@ -20,9 +22,16 @@ public class Evento {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private String nome;
+	
+	@Lob
+	@Column(columnDefinition = "TEXT")
 	private String descricao;
+	
 	private LocalDate data;
 	private String local;
+	
+	@Lob
+	@Column(columnDefinition = "TEXT")
 	private String imagemUrl;
 	
 	@OneToMany(mappedBy = "evento", cascade = CascadeType.ALL, orphanRemoval = true)

@@ -29,6 +29,8 @@ public class Voluntario {
     private LocalDateTime dataCancelamento;
     private StatusVoluntario status;
     private String descricao;
+    private String codigoCancelamento;
+    private LocalDateTime codigoCancelamentoExpiracao;
 	
 	public Voluntario() {
 	}
@@ -105,5 +107,17 @@ public class Voluntario {
 	}
 	public void setDataCancelamento(LocalDateTime dataCancelamento) {
 		this.dataCancelamento = dataCancelamento;
+	}
+	public String getCodigoCancelamento() {
+		return codigoCancelamento;
+	}
+	public void setCodigoCancelamento(String codigoCancelamento) {
+		this.codigoCancelamento = codigoCancelamento;
+	}
+	public LocalDateTime getCodigoCancelamentoExpiracao() {
+		return codigoCancelamentoExpiracao;
+	}
+	public void setCodigoCancelamentoExpiracao(LocalDateTime codigoCancelamentoExpiracao) {
+		this.codigoCancelamentoExpiracao = codigoCancelamentoExpiracao;
 	}
 }

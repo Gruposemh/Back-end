@@ -16,6 +16,7 @@ public interface InscricaoRepository extends JpaRepository <Inscricao, Long>{
 	int countByIdCurso(Curso curso);
 	List<Inscricao> findByIdCursoId(Long cursoId);
 	List<Inscricao> findByIdUsuario_Id(Long usuarioId);
+	List<Inscricao> findByIdUsuarioId(Long usuarioId);
 	List<Inscricao> findByIdUsuario(Usuario usuario);
 
 }

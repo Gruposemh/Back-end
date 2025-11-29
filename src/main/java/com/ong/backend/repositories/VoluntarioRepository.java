@@ -14,5 +14,6 @@ public interface VoluntarioRepository extends JpaRepository<Voluntario, Long> {
     List<Voluntario> findByStatusAndDataCancelamentoBefore(StatusVoluntario status, LocalDateTime data);
     boolean existsByIdUsuario_IdAndStatus(Long id, StatusVoluntario status);
     Optional<Voluntario> findByIdUsuarioId(Long idUsuario);
+    Optional<Voluntario> findByCpf(String cpf);
 }
 

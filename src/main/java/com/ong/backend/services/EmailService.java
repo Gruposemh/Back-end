@@ -1040,4 +1040,487 @@ public class EmailService {
             atividade.getHorario() != null ? atividade.getHorario().toString() : "A definir"
         );
     }
+
+    // ==================== EMAILS DE VOLUNTARIADO ====================
+    
+    public void enviarEmailPedidoVoluntario(String destinatario, String nome) {
+        if (!emailEnabled) {
+            logger.warn("Email desabilitado. Email de pedido de voluntário não enviado para: {}", destinatario);
+            return;
+        }
+
+        if (mockMode) {
+            logger.info("=== MODO MOCK - EMAIL DE PEDIDO DE VOLUNTÁRIO ===");
+            logger.info("Para: {}", destinatario);
+            logger.info("Nome: {}", nome);
+            logger.info("================================================");
+            return;
+        }
+
+        try {
+            logger.info("Enviando email de pedido de voluntário para: {}", destinatario);
+            
+            MimeMessage message = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+            
+            helper.setFrom(fromEmail);
+            helper.setTo(destinatario);
+            helper.setSubject("Pedido de Voluntariado Recebido - Voluntários Pro Bem");
+            helper.setText(construirEmailPedidoVoluntario(nome), true);
+            
+            mailSender.send(message);
+            logger.info("Email de pedido de voluntário enviado com sucesso para: {}", destinatario);
+            
+        } catch (Exception e) {
+            logger.error("Erro ao enviar email de pedido de voluntário para {}: {}", destinatario, e.getMessage(), e);
+        }
+    }
+    
+    public void enviarEmailVoluntarioAprovado(String destinatario, String nome) {
+        if (!emailEnabled) {
+            logger.warn("Email desabilitado. Email de aprovação de voluntário não enviado para: {}", destinatario);
+            return;
+        }
+
+        if (mockMode) {
+            logger.info("=== MODO MOCK - EMAIL DE APROVAÇÃO DE VOLUNTÁRIO ===");
+            logger.info("Para: {}", destinatario);
+            logger.info("Nome: {}", nome);
+            logger.info("===================================================");
+            return;
+        }
+
+        try {
+            logger.info("Enviando email de aprovação de voluntário para: {}", destinatario);
+            
+            MimeMessage message = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+            
+            helper.setFrom(fromEmail);
+            helper.setTo(destinatario);
+            helper.setSubject("🎉 Você foi aprovado como Voluntário! - Voluntários Pro Bem");
+            helper.setText(construirEmailVoluntarioAprovado(nome), true);
+            
+            mailSender.send(message);
+            logger.info("Email de aprovação de voluntário enviado com sucesso para: {}", destinatario);
+            
+        } catch (Exception e) {
+            logger.error("Erro ao enviar email de aprovação de voluntário para {}: {}", destinatario, e.getMessage(), e);
+        }
+    }
+    
+    public void enviarEmailCodigoCancelamento(String destinatario, String nome, String codigo) {
+        if (!emailEnabled) {
+            logger.warn("Email desabilitado. Email de código de cancelamento não enviado para: {}", destinatario);
+            return;
+        }
+
+        if (mockMode) {
+            logger.info("=== MODO MOCK - EMAIL DE CÓDIGO DE CANCELAMENTO ===");
+            logger.info("Para: {}", destinatario);
+            logger.info("Nome: {}", nome);
+            logger.info("Código: {}", codigo);
+            logger.info("===================================================");
+            return;
+        }
+
+        try {
+            logger.info("Enviando email de código de cancelamento para: {}", destinatario);
+            
+            MimeMessage message = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+            
+            helper.setFrom(fromEmail);
+            helper.setTo(destinatario);
+            helper.setSubject("Código de Cancelamento de Voluntariado - Voluntários Pro Bem");
+            helper.setText(construirEmailCodigoCancelamento(nome, codigo), true);
+            
+            mailSender.send(message);
+            logger.info("Email de código de cancelamento enviado com sucesso para: {}", destinatario);
+            
+        } catch (Exception e) {
+            logger.error("Erro ao enviar email de código de cancelamento para {}: {}", destinatario, e.getMessage(), e);
+        }
+    }
+    
+    public void enviarEmailCancelamentoConfirmado(String destinatario, String nome) {
+        if (!emailEnabled) {
+            logger.warn("Email desabilitado. Email de cancelamento confirmado não enviado para: {}", destinatario);
+            return;
+        }
+
+        if (mockMode) {
+            logger.info("=== MODO MOCK - EMAIL DE CANCELAMENTO CONFIRMADO ===");
+            logger.info("Para: {}", destinatario);
+            logger.info("Nome: {}", nome);
+            logger.info("====================================================");
+            return;
+        }
+
+        try {
+            logger.info("Enviando email de cancelamento confirmado para: {}", destinatario);
+            
+            MimeMessage message = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+            
+            helper.setFrom(fromEmail);
+            helper.setTo(destinatario);
+            helper.setSubject("Cancelamento de Voluntariado Confirmado - Voluntários Pro Bem");
+            helper.setText(construirEmailCancelamentoConfirmado(nome), true);
+            
+            mailSender.send(message);
+            logger.info("Email de cancelamento confirmado enviado com sucesso para: {}", destinatario);
+            
+        } catch (Exception e) {
+            logger.error("Erro ao enviar email de cancelamento confirmado para {}: {}", destinatario, e.getMessage(), e);
+        }
+    }
+    
+    public void enviarEmailRemovidoPorAdmin(String destinatario, String nome) {
+        if (!emailEnabled) {
+            logger.warn("Email desabilitado. Email de remoção por admin não enviado para: {}", destinatario);
+            return;
+        }
+
+        if (mockMode) {
+            logger.info("=== MODO MOCK - EMAIL DE REMOÇÃO POR ADMIN ===");
+            logger.info("Para: {}", destinatario);
+            logger.info("Nome: {}", nome);
+            logger.info("===============================================");
+            return;
+        }
+
+        try {
+            logger.info("Enviando email de remoção por admin para: {}", destinatario);
+            
+            MimeMessage message = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+            
+            helper.setFrom(fromEmail);
+            helper.setTo(destinatario);
+            helper.setSubject("Remoção de Voluntariado - Voluntários Pro Bem");
+            helper.setText(construirEmailRemovidoPorAdmin(nome), true);
+            
+            mailSender.send(message);
+            logger.info("Email de remoção por admin enviado com sucesso para: {}", destinatario);
+            
+        } catch (Exception e) {
+            logger.error("Erro ao enviar email de remoção por admin para {}: {}", destinatario, e.getMessage(), e);
+        }
+    }
+    
+    // ==================== TEMPLATES HTML DE VOLUNTARIADO ====================
+    
+    private String construirEmailPedidoVoluntario(String nome) {
+        return String.format("""
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            </head>
+            <body style="margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f4f4;">
+                <table width="100%%" cellpadding="0" cellspacing="0" style="background-color: #f4f4f4; padding: 20px 0;">
+                    <tr>
+                        <td align="center">
+                            <table width="600" cellpadding="0" cellspacing="0" style="background-color: #ffffff; border-radius: 10px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+                                <tr>
+                                    <td style="background: linear-gradient(135deg, #B20000 0%%, #8B0000 100%%); padding: 40px 30px; text-align: center;">
+                                        <h1 style="color: #ffffff; margin: 0; font-size: 28px; font-weight: bold;">📝 Pedido Recebido!</h1>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 40px 30px;">
+                                        <p style="color: #333; font-size: 16px; line-height: 1.6; margin: 0 0 20px 0;">
+                                            Olá <strong>%s</strong>,
+                                        </p>
+                                        <p style="color: #333; font-size: 16px; line-height: 1.6; margin: 0 0 30px 0;">
+                                            Recebemos seu pedido para se tornar voluntário da <strong>Voluntários Pro Bem</strong>! 🎉
+                                        </p>
+                                        <table width="100%%" cellpadding="0" cellspacing="0" style="background-color: #FFF3CD; border-radius: 8px; margin-bottom: 30px;">
+                                            <tr>
+                                                <td style="padding: 20px;">
+                                                    <p style="color: #856404; font-size: 14px; line-height: 1.6; margin: 0;">
+                                                        <strong>⏳ Em análise:</strong> Nossa equipe está analisando seu pedido. 
+                                                        Você receberá um email assim que for aprovado!
+                                                    </p>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                        <p style="color: #333; font-size: 16px; line-height: 1.6; margin: 0;">
+                                            Obrigado por querer fazer parte da nossa família! ❤️
+                                        </p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="background-color: #f8f9fa; padding: 30px; text-align: center; border-top: 1px solid #e9ecef;">
+                                        <p style="color: #6c757d; font-size: 14px; margin: 0 0 10px 0;">
+                                            <strong>Voluntários Pro Bem</strong>
+                                        </p>
+                                        <p style="color: #6c757d; font-size: 12px; margin: 0;">
+                                            Fazendo o bem, fazendo a diferença.
+                                        </p>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+            </body>
+            </html>
+            """, nome);
+    }
+    
+    private String construirEmailVoluntarioAprovado(String nome) {
+        return String.format("""
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            </head>
+            <body style="margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f4f4;">
+                <table width="100%%" cellpadding="0" cellspacing="0" style="background-color: #f4f4f4; padding: 20px 0;">
+                    <tr>
+                        <td align="center">
+                            <table width="600" cellpadding="0" cellspacing="0" style="background-color: #ffffff; border-radius: 10px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+                                <tr>
+                                    <td style="background: linear-gradient(135deg, #28a745 0%%, #20c997 100%%); padding: 40px 30px; text-align: center;">
+                                        <h1 style="color: #ffffff; margin: 0; font-size: 28px; font-weight: bold;">🎉 Parabéns!</h1>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 40px 30px;">
+                                        <p style="color: #333; font-size: 16px; line-height: 1.6; margin: 0 0 20px 0;">
+                                            Olá <strong>%s</strong>,
+                                        </p>
+                                        <p style="color: #333; font-size: 16px; line-height: 1.6; margin: 0 0 30px 0;">
+                                            Você foi <strong>aprovado como voluntário</strong> da Voluntários Pro Bem! 🎊
+                                        </p>
+                                        <table width="100%%" cellpadding="0" cellspacing="0" style="background-color: #d4edda; border-radius: 8px; margin-bottom: 30px;">
+                                            <tr>
+                                                <td style="padding: 20px;">
+                                                    <p style="color: #155724; font-size: 14px; line-height: 1.6; margin: 0;">
+                                                        <strong>✅ Bem-vindo à equipe!</strong> Agora você pode participar de eventos exclusivos, 
+                                                        gerenciar atividades e fazer ainda mais diferença na comunidade!
+                                                    </p>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                        <p style="color: #333; font-size: 16px; line-height: 1.6; margin: 0;">
+                                            Estamos muito felizes em ter você conosco! Juntos faremos a diferença! ❤️
+                                        </p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="background-color: #f8f9fa; padding: 30px; text-align: center; border-top: 1px solid #e9ecef;">
+                                        <p style="color: #6c757d; font-size: 14px; margin: 0 0 10px 0;">
+                                            <strong>Voluntários Pro Bem</strong>
+                                        </p>
+                                        <p style="color: #6c757d; font-size: 12px; margin: 0;">
+                                            Fazendo o bem, fazendo a diferença.
+                                        </p>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+            </body>
+            </html>
+            """, nome);
+    }
+    
+    private String construirEmailCodigoCancelamento(String nome, String codigo) {
+        return String.format("""
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            </head>
+            <body style="margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f4f4;">
+                <table width="100%%" cellpadding="0" cellspacing="0" style="background-color: #f4f4f4; padding: 20px 0;">
+                    <tr>
+                        <td align="center">
+                            <table width="600" cellpadding="0" cellspacing="0" style="background-color: #ffffff; border-radius: 10px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+                                <tr>
+                                    <td style="background: linear-gradient(135deg, #ffc107 0%%, #ff9800 100%%); padding: 40px 30px; text-align: center;">
+                                        <h1 style="color: #ffffff; margin: 0; font-size: 28px; font-weight: bold;">⚠️ Código de Cancelamento</h1>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 40px 30px;">
+                                        <p style="color: #333; font-size: 16px; line-height: 1.6; margin: 0 0 20px 0;">
+                                            Olá <strong>%s</strong>,
+                                        </p>
+                                        <p style="color: #333; font-size: 16px; line-height: 1.6; margin: 0 0 30px 0;">
+                                            Você solicitou o cancelamento do seu voluntariado. Use o código abaixo para confirmar:
+                                        </p>
+                                        <table width="100%%" cellpadding="0" cellspacing="0" style="margin-bottom: 30px;">
+                                            <tr>
+                                                <td align="center">
+                                                    <table cellpadding="0" cellspacing="0" style="background: linear-gradient(135deg, #f8f9fa 0%%, #e9ecef 100%%); border: 2px dashed #ffc107; border-radius: 10px; padding: 25px;">
+                                                        <tr>
+                                                            <td align="center">
+                                                                <p style="color: #6c757d; font-size: 14px; margin: 0 0 10px 0; text-transform: uppercase; letter-spacing: 1px;">Código de Confirmação</p>
+                                                                <p style="color: #ffc107; font-size: 36px; font-weight: bold; margin: 0; letter-spacing: 8px; font-family: 'Courier New', monospace;">%s</p>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                        <table width="100%%" cellpadding="0" cellspacing="0" style="background-color: #fff3cd; border-radius: 8px; margin-bottom: 30px;">
+                                            <tr>
+                                                <td style="padding: 20px;">
+                                                    <p style="color: #856404; font-size: 14px; line-height: 1.6; margin: 0;">
+                                                        <strong>⏰ Atenção:</strong> Este código é válido por <strong>15 minutos</strong>. 
+                                                        Se você não solicitou este cancelamento, ignore este email.
+                                                    </p>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                        <p style="color: #333; font-size: 16px; line-height: 1.6; margin: 0;">
+                                            Sentiremos sua falta! Você sempre será bem-vindo de volta. 💙
+                                        </p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="background-color: #f8f9fa; padding: 30px; text-align: center; border-top: 1px solid #e9ecef;">
+                                        <p style="color: #6c757d; font-size: 14px; margin: 0 0 10px 0;">
+                                            <strong>Voluntários Pro Bem</strong>
+                                        </p>
+                                        <p style="color: #6c757d; font-size: 12px; margin: 0;">
+                                            Fazendo o bem, fazendo a diferença.
+                                        </p>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+            </body>
+            </html>
+            """, nome, codigo);
+    }
+    
+    private String construirEmailCancelamentoConfirmado(String nome) {
+        return String.format("""
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            </head>
+            <body style="margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f4f4;">
+                <table width="100%%" cellpadding="0" cellspacing="0" style="background-color: #f4f4f4; padding: 20px 0;">
+                    <tr>
+                        <td align="center">
+                            <table width="600" cellpadding="0" cellspacing="0" style="background-color: #ffffff; border-radius: 10px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+                                <tr>
+                                    <td style="background: linear-gradient(135deg, #6c757d 0%%, #495057 100%%); padding: 40px 30px; text-align: center;">
+                                        <h1 style="color: #ffffff; margin: 0; font-size: 28px; font-weight: bold;">✓ Cancelamento Confirmado</h1>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 40px 30px;">
+                                        <p style="color: #333; font-size: 16px; line-height: 1.6; margin: 0 0 20px 0;">
+                                            Olá <strong>%s</strong>,
+                                        </p>
+                                        <p style="color: #333; font-size: 16px; line-height: 1.6; margin: 0 0 30px 0;">
+                                            Seu voluntariado foi cancelado conforme solicitado.
+                                        </p>
+                                        <table width="100%%" cellpadding="0" cellspacing="0" style="background-color: #f8f9fa; border-radius: 8px; margin-bottom: 30px;">
+                                            <tr>
+                                                <td style="padding: 20px;">
+                                                    <p style="color: #6c757d; font-size: 14px; line-height: 1.6; margin: 0;">
+                                                        Agradecemos imensamente por todo o tempo e dedicação que você nos deu. 
+                                                        Você fez a diferença na vida de muitas pessoas! 🙏
+                                                    </p>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                        <p style="color: #333; font-size: 16px; line-height: 1.6; margin: 0;">
+                                            Você sempre será bem-vindo de volta quando quiser! As portas estão sempre abertas. 💙
+                                        </p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="background-color: #f8f9fa; padding: 30px; text-align: center; border-top: 1px solid #e9ecef;">
+                                        <p style="color: #6c757d; font-size: 14px; margin: 0 0 10px 0;">
+                                            <strong>Voluntários Pro Bem</strong>
+                                        </p>
+                                        <p style="color: #6c757d; font-size: 12px; margin: 0;">
+                                            Fazendo o bem, fazendo a diferença.
+                                        </p>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+            </body>
+            </html>
+            """, nome);
+    }
+    
+    private String construirEmailRemovidoPorAdmin(String nome) {
+        return String.format("""
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            </head>
+            <body style="margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f4f4;">
+                <table width="100%%" cellpadding="0" cellspacing="0" style="background-color: #f4f4f4; padding: 20px 0;">
+                    <tr>
+                        <td align="center">
+                            <table width="600" cellpadding="0" cellspacing="0" style="background-color: #ffffff; border-radius: 10px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+                                <tr>
+                                    <td style="background: linear-gradient(135deg, #dc3545 0%%, #c82333 100%%); padding: 40px 30px; text-align: center;">
+                                        <h1 style="color: #ffffff; margin: 0; font-size: 28px; font-weight: bold;">⚠️ Remoção de Voluntariado</h1>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 40px 30px;">
+                                        <p style="color: #333; font-size: 16px; line-height: 1.6; margin: 0 0 20px 0;">
+                                            Olá <strong>%s</strong>,
+                                        </p>
+                                        <p style="color: #333; font-size: 16px; line-height: 1.6; margin: 0 0 30px 0;">
+                                            Informamos que seu status de voluntário foi removido pela administração da ONG.
+                                        </p>
+                                        <table width="100%%" cellpadding="0" cellspacing="0" style="background-color: #f8d7da; border-radius: 8px; margin-bottom: 30px;">
+                                            <tr>
+                                                <td style="padding: 20px;">
+                                                    <p style="color: #721c24; font-size: 14px; line-height: 1.6; margin: 0;">
+                                                        Se você tiver dúvidas sobre esta decisão, entre em contato conosco para mais informações.
+                                                    </p>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                        <p style="color: #333; font-size: 16px; line-height: 1.6; margin: 0;">
+                                            Agradecemos por todo o tempo que você dedicou à nossa causa. 🙏
+                                        </p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="background-color: #f8f9fa; padding: 30px; text-align: center; border-top: 1px solid #e9ecef;">
+                                        <p style="color: #6c757d; font-size: 14px; margin: 0 0 10px 0;">
+                                            <strong>Voluntários Pro Bem</strong>
+                                        </p>
+                                        <p style="color: #6c757d; font-size: 12px; margin: 0;">
+                                            Fazendo o bem, fazendo a diferença.
+                                        </p>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+            </body>
+            </html>
+            """, nome);
+    }
 }

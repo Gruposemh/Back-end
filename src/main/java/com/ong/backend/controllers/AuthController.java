@@ -121,6 +121,18 @@ public class AuthController {
     @PostMapping("/register-modern")
     public ResponseEntity<AuthResponseDTO> registerModern(@Valid @RequestBody RegisterRequestDTO request) {
         try {
+            // Validar formato de email
+            if (!request.getEmail().matches("^[A-Za-z0-9+_.-]+@(.+)$")) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(AuthResponseDTO.error("Formato de email inválido."));
+            }
+            
+            // Validar tamanho do nome
+            if (request.getNome() == null || request.getNome().trim().length() < 3) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(AuthResponseDTO.error("Nome deve ter pelo menos 3 caracteres."));
+            }
+            
             // Verificar se email já existe
             Optional<Usuario> usuarioExistente = usuarioRepository.findByEmail(request.getEmail());
             if (usuarioExistente.isPresent()) {
@@ -291,7 +303,7 @@ public class AuthController {
             // Criar cookie HTTP-only com o JWT token
             createAuthCookie(response, jwtToken, 60 * 60 * 24); // 1 dia
 
-            return ResponseEntity.ok(new LoginResponse(jwtToken, refreshToken.getToken(), usuario.getEmail(), usuario.getRole().name(), usuario.getId(), usuario.getNome()));
+            return ResponseEntity.ok(new LoginResponse(jwtToken, refreshToken.getToken(), usuario.getEmail(), usuario.getRole().name(), usuario.getId(), usuario.getNome(), usuario.getImagemPerfil()));
 
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -389,7 +401,7 @@ public class AuthController {
             // Criar cookie HTTP-only com o JWT token
             createAuthCookie(response, jwtToken, 60 * 60 * 24); // 1 dia
 
-            return ResponseEntity.ok(new LoginResponse(jwtToken, refreshToken.getToken(), usuario.getEmail(), usuario.getRole().name(), usuario.getId(), usuario.getNome()));
+            return ResponseEntity.ok(new LoginResponse(jwtToken, refreshToken.getToken(), usuario.getEmail(), usuario.getRole().name(), usuario.getId(), usuario.getNome(), usuario.getImagemPerfil()));
 
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -522,7 +534,7 @@ public class AuthController {
             String ipAddress = request.getRemoteAddr();
             var newRefreshToken = refreshTokenService.createRefreshToken(usuario, deviceInfo, ipAddress);
             
-            return ResponseEntity.ok(new LoginResponse(newToken, newRefreshToken.getToken(), usuario.getEmail(), usuario.getRole().name(), usuario.getId(), usuario.getNome()));
+            return ResponseEntity.ok(new LoginResponse(newToken, newRefreshToken.getToken(), usuario.getEmail(), usuario.getRole().name(), usuario.getId(), usuario.getNome(), usuario.getImagemPerfil()));
 
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -545,13 +557,15 @@ public class AuthController {
             }
 
             Usuario usuario = usuarioOpt.get();
+            
+            System.out.println("🔍 /auth/check - Usuário: " + usuario.getNome() + ", ImagemPerfil: " + usuario.getImagemPerfil());
 
-            Map<String, Object> userInfo = Map.of(
-                "id", usuario.getId(),
-                "email", usuario.getEmail(),
-                "role", usuario.getRole().name(),
-                "nome", usuario.getNome()
-            );
+            Map<String, Object> userInfo = new java.util.HashMap<>();
+            userInfo.put("id", usuario.getId());
+            userInfo.put("email", usuario.getEmail());
+            userInfo.put("role", usuario.getRole().name());
+            userInfo.put("nome", usuario.getNome());
+            userInfo.put("imagemPerfil", usuario.getImagemPerfil());
 
             return ResponseEntity.ok(userInfo);
 
@@ -696,14 +710,16 @@ public class AuthController {
         private String role;
         private Long id;
         private String nome;
+        private String imagemPerfil;
 
-        public LoginResponse(String token, String refreshToken, String email, String role, Long id, String nome) {
+        public LoginResponse(String token, String refreshToken, String email, String role, Long id, String nome, String imagemPerfil) {
             this.token = token;
             this.refreshToken = refreshToken;
             this.email = email;
             this.role = role;
             this.id = id;
             this.nome = nome;
+            this.imagemPerfil = imagemPerfil;
         }
 
         public String getToken() { return token; }
@@ -712,6 +728,7 @@ public class AuthController {
         public String getRole() { return role; }
         public Long getId() { return id; }
         public String getNome() { return nome; }
+        public String getImagemPerfil() { return imagemPerfil; }
     }
 
     public static class SuccessResponse {

@@ -9,6 +9,8 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -17,7 +19,7 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.ManyToMany;
+import jakarta.persistence.Lob;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
@@ -50,29 +52,41 @@ public class Usuario implements UserDetails{
     private LocalDateTime passwordResetTokenExpiryDate = null;
     private LocalDateTime criadoEm;
     private LocalDateTime ultimoLogin;
+    
+    @Lob
+    @Column(columnDefinition = "TEXT")
+    private String imagemPerfil; // URL da imagem de perfil
 	
 	@OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
+	@JsonIgnore
 	private List<Doacao> doacoes;
 	
 	@OneToMany(mappedBy = "idUsuario", cascade = CascadeType.ALL, orphanRemoval = true)
+	@JsonIgnore
 	private List<Blog> blogs;
 	
 	@OneToMany(mappedBy = "idUsuario", cascade = CascadeType.ALL, orphanRemoval = true)
+	@JsonIgnore
 	private List<Inscricao> inscricoes;
 	
 	@OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
+	@JsonIgnore
     private List<ParticipacaoEvento> participacoes = new ArrayList<>();
 	
 	@OneToOne(mappedBy = "idUsuario", cascade = CascadeType.ALL, orphanRemoval = true)
+	@JsonIgnore
 	private Voluntario voluntario;
 	
 	@OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
+	@JsonIgnore
 	private List<Tarefas> tarefas = new ArrayList<>();
 	
 	@OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
+	@JsonIgnore
 	private List<RefreshToken> tokens = new ArrayList<>();
 	
 	@OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
+	@JsonIgnore
 	private List<VerificationToken> verificationTokens = new ArrayList<>();
 	
 	public Usuario() {
@@ -213,6 +227,14 @@ public class Usuario implements UserDetails{
 	
 	public void setPasswordResetTokenExpiryDate(LocalDateTime passwordResetTokenExpiryDate) {
 		this.passwordResetTokenExpiryDate = passwordResetTokenExpiryDate;
+	}
+	
+	public String getImagemPerfil() {
+		return imagemPerfil;
+	}
+	
+	public void setImagemPerfil(String imagemPerfil) {
+		this.imagemPerfil = imagemPerfil;
 	}
 
 	@Override

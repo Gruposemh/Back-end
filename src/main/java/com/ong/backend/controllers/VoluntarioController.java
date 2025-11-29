@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import com.ong.backend.dto.CancelarVoluntarioDTO;
 import com.ong.backend.dto.MensagemResponse;
 import com.ong.backend.dto.VoluntarioDTO;
 import com.ong.backend.entities.Voluntario;
@@ -61,5 +62,20 @@ public class VoluntarioController {
     @PutMapping("/cancelar/{id}")
     public ResponseEntity<?> cancelar(@PathVariable Long id) {
         return voluntarioService.cancelar(id);
+    }
+    
+    @PostMapping("/solicitar-cancelamento")
+    public ResponseEntity<?> solicitarCancelamento() {
+        return voluntarioService.solicitarCancelamento();
+    }
+    
+    @PostMapping("/confirmar-cancelamento")
+    public ResponseEntity<?> confirmarCancelamento(@RequestBody CancelarVoluntarioDTO dto) {
+        return voluntarioService.confirmarCancelamento(dto.getCodigo());
+    }
+    
+    @PutMapping("/admin/remover-voluntario/{id}")
+    public ResponseEntity<?> removerVoluntario(@PathVariable Long id) {
+        return voluntarioService.removerVoluntarioPorAdmin(id);
     }
 }

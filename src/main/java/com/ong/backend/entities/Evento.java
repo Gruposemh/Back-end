@@ -1,6 +1,7 @@
 package com.ong.backend.entities;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,6 +30,7 @@ public class Evento {
 	
 	private LocalDate data;
 	private String local;
+	private LocalTime hora;
 	
 	@Lob
 	@Column(columnDefinition = "TEXT")
@@ -40,15 +42,17 @@ public class Evento {
 	public Evento() {
 	}
 
-	public Evento(Long id, String nome, String descricao, LocalDate data, String local, String imagemUrl) {
+	public Evento(Long id, String nome, String descricao, LocalDate data, String local, LocalTime hora,
+			String imagemUrl) {
 		this.id = id;
 		this.nome = nome;
 		this.descricao = descricao;
 		this.data = data;
 		this.local = local;
+		this.hora = hora;
 		this.imagemUrl = imagemUrl;
 	}
-	
+
 	public Long getId() {
 		return id;
 	}
@@ -84,5 +88,11 @@ public class Evento {
 	}
 	public void setImagemUrl(String imagemUrl) {
 		this.imagemUrl = imagemUrl;
+	}
+	public LocalTime getHora() {
+		return hora;
+	}
+	public void setHora(LocalTime hora) {
+		this.hora = hora;
 	}
 }

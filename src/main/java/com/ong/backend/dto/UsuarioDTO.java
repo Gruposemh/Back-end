@@ -9,24 +9,27 @@ public class UsuarioDTO {
 	private String email;
 	private String senha;
 	private StatusRole role;
+	private String imagemPerfil;
 	
 	public UsuarioDTO() {
 	}
 
-	public UsuarioDTO(Long id, String nome, String email, String senha, StatusRole role) {
+	public UsuarioDTO(Long id, String nome, String email, String senha, StatusRole role, String imagemPerfil) {
 		this.id = id;
 		this.nome = nome;
 		this.email = email;
 		this.senha = senha;
 		this.role = role;
+		this.imagemPerfil = imagemPerfil;
 	}
-	
+
 	public UsuarioDTO(Usuario entity) {
 		this.id = entity.getId();
 		this.nome = entity.getNome();
 		this.email = entity.getEmail();
 		this.senha = entity.getSenha();
 		this.role = entity.getRole();
+		this.imagemPerfil = entity.getImagemPerfil();
 	}
 
 	public Long getId() {
@@ -58,5 +61,11 @@ public class UsuarioDTO {
 	}
 	public void setRole(StatusRole role) {
 		this.role = role;
+	}
+	public String getImagemPerfil() {
+		return imagemPerfil;
+	}
+	public void setImagemPerfil(String imagemPerfil) {
+		this.imagemPerfil = imagemPerfil;
 	}
 }

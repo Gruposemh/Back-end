@@ -1,6 +1,8 @@
 package com.ong.backend.dto;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
+
 import com.ong.backend.entities.Evento;
 
 public class EventoDTO {
@@ -11,19 +13,22 @@ public class EventoDTO {
 	private LocalDate data;
 	private String local;
 	private String imagemUrl;
+	private LocalTime hora;
 	
 	public EventoDTO() {
 	}
 
-	public EventoDTO(Long id, String nome, String descricao, LocalDate data, String local, String imagemUrl) {
+	public EventoDTO(Long id, String nome, String descricao, LocalDate data, String local, String imagemUrl,
+			LocalTime hora) {
 		this.id = id;
 		this.nome = nome;
 		this.descricao = descricao;
 		this.data = data;
 		this.local = local;
 		this.imagemUrl = imagemUrl;
+		this.hora = hora;
 	}
-	
+
 	public EventoDTO(Evento entity) {
 		this.id = entity.getId();
 		this.nome = entity.getNome();
@@ -31,6 +36,7 @@ public class EventoDTO {
 		this.data = entity.getData();
 		this.local = entity.getLocal();
 		this.imagemUrl = entity.getImagemUrl();
+		this.hora = entity.getHora();
 	}
 
 	public Long getId() {
@@ -79,5 +85,13 @@ public class EventoDTO {
 
 	public void setImagemUrl(String imagemUrl) {
 		this.imagemUrl = imagemUrl;
+	}
+
+	public LocalTime getHora() {
+		return hora;
+	}
+
+	public void setHora(LocalTime hora) {
+		this.hora = hora;
 	}
 }

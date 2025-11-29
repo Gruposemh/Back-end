@@ -74,6 +74,7 @@ public class UsuarioService{
 		
 		usuario.setNome(atualizado.getNome());
 		usuario.setEmail(atualizado.getEmail());
+		usuario.setImagemPerfil(atualizado.getImagemPerfil());	
 		
 		if (atualizado.getSenha() != null && !atualizado.getSenha().isBlank()) {
 		    usuario.setSenha(config.encode(atualizado.getSenha()));

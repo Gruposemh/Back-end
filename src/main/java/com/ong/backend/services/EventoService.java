@@ -32,6 +32,7 @@ public class EventoService {
 		evento.setLocal(dto.getLocal());
 		evento.setData(dto.getData());
 		evento.setImagemUrl(dto.getImagemUrl());
+		evento.setHora(dto.getHora());
 		
 		evento = eventoRepository.save(evento);
 		
@@ -60,15 +61,13 @@ public class EventoService {
 	public ResponseEntity<Evento> atualizarEvento(Long id, EventoDTO atualizado){
 		Evento evento = eventoRepository.findById(id)
 				.orElseThrow(() -> new NaoEncontradoException("Evento não encontrado"));
-		if (eventoRepository.findByNome(atualizado.getNome()).isPresent()) {
-	        throw new DuplicadoException("Já existe um evento com esse nome.");
-	    }
 		
 		evento.setDescricao(atualizado.getDescricao());
 		evento.setData(atualizado.getData());
 		evento.setLocal(atualizado.getLocal());
 		evento.setNome(atualizado.getNome());
 		evento.setImagemUrl(atualizado.getImagemUrl());
+		evento.setHora(atualizado.getHora());
 		
 		evento = eventoRepository.save(evento);
 		return ResponseEntity.ok(evento);

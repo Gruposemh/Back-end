@@ -59,13 +59,21 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
             usuario.setUltimoLogin(LocalDateTime.now());
             
             usuarioRepository.save(usuario);
+            System.out.println("✅ Novo usuário criado via OAuth2: " + email + " - Role: USUARIO");
         } else {
-            // Atualizar último login e tipo de autenticação
+            // Usuário já existe - manter role original e atualizar último login
             usuario.setUltimoLogin(LocalDateTime.now());
-            if (usuario.getTipoAutenticacao() != TipoAutenticacao.SOCIAL) {
+            // Não alterar o role - manter o que já existe (pode ser ADMIN)
+            // Garantir que email está verificado
+            if (!usuario.isEmailVerificado()) {
+                usuario.setEmailVerificado(true);
+            }
+            // Atualizar tipo de autenticação se necessário
+            if (usuario.getTipoAutenticacao() == null) {
                 usuario.setTipoAutenticacao(TipoAutenticacao.SOCIAL);
             }
             usuarioRepository.save(usuario);
+            System.out.println("✅ Usuário existente logado via OAuth2: " + email + " - Role: " + usuario.getRole());
         }
         
         // Gerar tokens
@@ -98,7 +106,6 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         
         if (isMobileRequest) {
             // Para mobile: redirecionar com tokens na URL (deep link)
-            // Codificar o nome para URL
             String nomeEncoded = URLEncoder.encode(usuario.getNome(), StandardCharsets.UTF_8);
             
             String redirectUrl = String.format(
@@ -112,19 +119,30 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
             );
             
             System.out.println("🔵 Redirecionando para MOBILE: " + redirectUrl);
-            System.out.println("📱 Nome codificado: " + nomeEncoded);
             response.sendRedirect(redirectUrl);
         } else {
-            // Para web: usar cookie HTTP-only
+            // Para web: usar TANTO cookie QUANTO localStorage (solução híbrida)
+            String nomeEncoded = URLEncoder.encode(usuario.getNome(), StandardCharsets.UTF_8);
+            
+            // Tentar definir cookie (pode não funcionar entre domínios)
             int maxAge = 60 * 60 * 24; // 1 dia
             response.setHeader("Set-Cookie", String.format(
                 "jwt=%s; Path=/; Max-Age=%d; HttpOnly; Secure; SameSite=None",
                 jwtToken, maxAge
             ));
             
-            String redirectUrl = "https://front-tcc2.vercel.app/";
+            // Redirecionar com tokens na URL como fallback
+            String redirectUrl = String.format(
+                "https://front-tcc2.vercel.app/oauth2/callback?token=%s&refreshToken=%s&email=%s&role=%s&id=%d&nome=%s",
+                jwtToken,
+                refreshToken.getToken(),
+                usuario.getEmail(),
+                usuario.getRole().name(),
+                usuario.getId(),
+                nomeEncoded
+            );
             
-            System.out.println("🌐 Redirecionando para WEB: " + redirectUrl);
+            System.out.println("🌐 Redirecionando para WEB com cookie E tokens na URL: " + redirectUrl);
             response.sendRedirect(redirectUrl);
         }
     }

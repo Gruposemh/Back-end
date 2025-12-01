@@ -14,7 +14,15 @@ public class CorsConfig {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")
-                    .allowedOriginPatterns("*")  // Permitir todas as origens para desenvolvimento mobile
+                    .allowedOriginPatterns(
+                        "http://localhost:*",
+                        "http://127.0.0.1:*",
+                        "https://*.vercel.app",
+                        "https://*.netlify.app",
+                        "https://*.azurewebsites.net",
+                        "exp://*",
+                        "voluntariosprobem://*"
+                    )
                     .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH")
                     .allowedHeaders("*")
                     .exposedHeaders("Authorization")

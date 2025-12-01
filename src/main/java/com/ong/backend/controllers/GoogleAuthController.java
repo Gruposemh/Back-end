@@ -130,9 +130,11 @@ public class GoogleAuthController {
             return ResponseEntity.ok(Map.of(
                 "success", true,
                 "token", jwtToken,
+                "id", usuario.getId(),
                 "email", usuario.getEmail(),
                 "nome", usuario.getNome(),
                 "role", usuario.getRole().name(),
+                "imagemPerfil", usuario.getImagemPerfil() != null ? usuario.getImagemPerfil() : "",
                 "message", "Login Google realizado com sucesso!"
             ));
 

@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -58,6 +57,9 @@ public class AuthController {
 
     @Autowired
     private UsuarioRepository usuarioRepository;
+    
+    @Autowired
+    private com.ong.backend.repositories.VoluntarioRepository voluntarioRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -542,37 +544,7 @@ public class AuthController {
         }
     }
 
-    @GetMapping("/check")
-    public ResponseEntity<?> check(@CookieValue(value = "jwt", required = false) String token) {
-        try {
-            if (token == null || !tokenService.isTokenValid(token)) {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-            }
 
-            String email = tokenService.getEmailFromToken(token);
-            var usuarioOpt = usuarioRepository.findByEmail(email);
-
-            if (usuarioOpt.isEmpty()) {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-            }
-
-            Usuario usuario = usuarioOpt.get();
-            
-            System.out.println("🔍 /auth/check - Usuário: " + usuario.getNome() + ", ImagemPerfil: " + usuario.getImagemPerfil());
-
-            Map<String, Object> userInfo = new java.util.HashMap<>();
-            userInfo.put("id", usuario.getId());
-            userInfo.put("email", usuario.getEmail());
-            userInfo.put("role", usuario.getRole().name());
-            userInfo.put("nome", usuario.getNome());
-            userInfo.put("imagemPerfil", usuario.getImagemPerfil());
-
-            return ResponseEntity.ok(userInfo);
-
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
-    }
 
     @PostMapping("/logout")
     public ResponseEntity<?> logout(HttpServletRequest request, HttpServletResponse response) {
@@ -626,6 +598,52 @@ public class AuthController {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(new ErrorResponse("Erro interno do servidor"));
+        }
+    }
+
+    @GetMapping("/check")
+    public ResponseEntity<?> checkAuth(HttpServletRequest request) {
+        try {
+            // Pegar o usuário autenticado do contexto de segurança
+            org.springframework.security.core.Authentication auth = 
+                org.springframework.security.core.context.SecurityContextHolder.getContext().getAuthentication();
+            
+            if (auth != null && auth.getPrincipal() instanceof Usuario) {
+                Usuario usuario = (Usuario) auth.getPrincipal();
+                
+                // Verificar se é voluntário aprovado
+                boolean isVoluntario = false;
+                try {
+                    Optional<com.ong.backend.entities.Voluntario> voluntarioOpt = 
+                        voluntarioRepository.findByIdUsuarioId(usuario.getId());
+                    
+                    if (voluntarioOpt.isPresent()) {
+                        com.ong.backend.entities.Voluntario voluntario = voluntarioOpt.get();
+                        isVoluntario = voluntario.getStatus() == com.ong.backend.entities.StatusVoluntario.APROVADO;
+                    }
+                } catch (Exception e) {
+                    System.err.println("⚠️ Erro ao verificar voluntário: " + e.getMessage());
+                }
+                
+                // Retornar dados do usuário
+                return ResponseEntity.ok(Map.of(
+                    "id", usuario.getId(),
+                    "nome", usuario.getNome(),
+                    "email", usuario.getEmail(),
+                    "role", usuario.getRole().name(),
+                    "isVoluntario", isVoluntario,
+                    "imagemPerfil", usuario.getImagemPerfil() != null ? usuario.getImagemPerfil() : ""
+                ));
+            }
+            
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                .body(new ErrorResponse("Não autenticado"));
+                
+        } catch (Exception e) {
+            System.err.println("❌ Erro no /auth/check: " + e.getMessage());
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(new ErrorResponse("Erro ao verificar autenticação"));
         }
     }
 

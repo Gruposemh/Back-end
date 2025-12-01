@@ -1523,4 +1523,295 @@ public class EmailService {
             </html>
             """, nome);
     }
+
+    // ==================== MÉTODOS DE NEWSLETTER ====================
+
+    public void enviarEmailBoasVindasNewsletter(String destinatario, String nome) {
+        if (!emailEnabled) {
+            logger.warn("Email desabilitado. Email de boas-vindas newsletter não enviado para: {}", destinatario);
+            return;
+        }
+
+        if (mockMode) {
+            logger.info("=== MODO MOCK - EMAIL BOAS-VINDAS NEWSLETTER ===");
+            logger.info("Para: {}", destinatario);
+            logger.info("Nome: {}", nome);
+            logger.info("===============================================");
+            return;
+        }
+
+        try {
+            logger.info("Enviando email de boas-vindas newsletter para: {}", destinatario);
+            
+            MimeMessage message = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+            
+            helper.setFrom(fromEmail);
+            helper.setTo(destinatario);
+            helper.setSubject("🎉 Bem-vindo à Newsletter - Voluntários Pro Bem");
+            helper.setText(construirEmailBoasVindasNewsletter(nome), true);
+            
+            mailSender.send(message);
+            logger.info("Email de boas-vindas newsletter enviado com sucesso para: {}", destinatario);
+            
+        } catch (Exception e) {
+            logger.error("Erro ao enviar email de boas-vindas newsletter para {}: {}", destinatario, e.getMessage(), e);
+        }
+    }
+
+    public void enviarNotificacaoEvento(String destinatario, String nome, String tituloEvento, String dataEvento, String localEvento) {
+        if (!emailEnabled) {
+            logger.warn("Email desabilitado. Notificação de evento não enviada para: {}", destinatario);
+            return;
+        }
+
+        if (mockMode) {
+            logger.info("=== MODO MOCK - NOTIFICAÇÃO DE EVENTO ===");
+            logger.info("Para: {}", destinatario);
+            logger.info("Evento: {}", tituloEvento);
+            logger.info("========================================");
+            return;
+        }
+
+        try {
+            logger.info("Enviando notificação de evento para: {}", destinatario);
+            
+            MimeMessage message = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+            
+            helper.setFrom(fromEmail);
+            helper.setTo(destinatario);
+            helper.setSubject("🎉 Novo Evento: " + tituloEvento);
+            helper.setText(construirEmailNotificacaoEvento(nome, tituloEvento, dataEvento, localEvento), true);
+            
+            mailSender.send(message);
+            logger.info("Notificação de evento enviada com sucesso para: {}", destinatario);
+            
+        } catch (Exception e) {
+            logger.error("Erro ao enviar notificação de evento para {}: {}", destinatario, e.getMessage(), e);
+        }
+    }
+
+    public void enviarNotificacaoAtividade(String destinatario, String nome, String tituloAtividade, String descricao) {
+        if (!emailEnabled) {
+            logger.warn("Email desabilitado. Notificação de atividade não enviada para: {}", destinatario);
+            return;
+        }
+
+        if (mockMode) {
+            logger.info("=== MODO MOCK - NOTIFICAÇÃO DE ATIVIDADE ===");
+            logger.info("Para: {}", destinatario);
+            logger.info("Atividade: {}", tituloAtividade);
+            logger.info("===========================================");
+            return;
+        }
+
+        try {
+            logger.info("Enviando notificação de atividade para: {}", destinatario);
+            
+            MimeMessage message = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+            
+            helper.setFrom(fromEmail);
+            helper.setTo(destinatario);
+            helper.setSubject("📚 Nova Atividade: " + tituloAtividade);
+            helper.setText(construirEmailNotificacaoAtividade(nome, tituloAtividade, descricao), true);
+            
+            mailSender.send(message);
+            logger.info("Notificação de atividade enviada com sucesso para: {}", destinatario);
+            
+        } catch (Exception e) {
+            logger.error("Erro ao enviar notificação de atividade para {}: {}", destinatario, e.getMessage(), e);
+        }
+    }
+
+    private String construirEmailBoasVindasNewsletter(String nome) {
+        String saudacao = (nome != null && !nome.trim().isEmpty()) ? nome : "amigo(a)";
+        
+        return String.format("""
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            </head>
+            <body style="margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f4f4;">
+                <table width="100%%" cellpadding="0" cellspacing="0" style="background-color: #f4f4f4; padding: 20px 0;">
+                    <tr>
+                        <td align="center">
+                            <table width="600" cellpadding="0" cellspacing="0" style="background-color: #ffffff; border-radius: 10px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+                                <tr>
+                                    <td style="background: linear-gradient(135deg, #B20000 0%%, #8B0000 100%%); padding: 40px 30px; text-align: center;">
+                                        <h1 style="color: #ffffff; margin: 0; font-size: 28px; font-weight: bold;">🎉 Bem-vindo!</h1>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 40px 30px;">
+                                        <p style="color: #333; font-size: 16px; line-height: 1.6; margin: 0 0 20px 0;">
+                                            Olá <strong>%s</strong>,
+                                        </p>
+                                        <p style="color: #333; font-size: 16px; line-height: 1.6; margin: 0 0 20px 0;">
+                                            Obrigado por se inscrever na nossa newsletter! A partir de agora, você receberá notificações sobre:
+                                        </p>
+                                        <ul style="color: #333; font-size: 16px; line-height: 1.8; margin: 0 0 30px 20px;">
+                                            <li>🎉 Novos eventos da ONG</li>
+                                            <li>📚 Novas atividades e cursos</li>
+                                            <li>❤️ Oportunidades de voluntariado</li>
+                                        </ul>
+                                        <p style="color: #333; font-size: 16px; line-height: 1.6; margin: 0;">
+                                            Juntos fazemos a diferença!
+                                        </p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="background-color: #f8f9fa; padding: 30px; text-align: center; border-top: 1px solid #e9ecef;">
+                                        <p style="color: #6c757d; font-size: 14px; margin: 0 0 10px 0;">
+                                            <strong>Voluntários Pro Bem</strong>
+                                        </p>
+                                        <p style="color: #6c757d; font-size: 12px; margin: 0;">
+                                            Fazendo o bem, fazendo a diferença.
+                                        </p>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+            </body>
+            </html>
+            """, saudacao);
+    }
+
+    private String construirEmailNotificacaoEvento(String nome, String tituloEvento, String dataEvento, String localEvento) {
+        String saudacao = (nome != null && !nome.trim().isEmpty()) ? nome : "amigo(a)";
+        
+        return String.format("""
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            </head>
+            <body style="margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f4f4;">
+                <table width="100%%" cellpadding="0" cellspacing="0" style="background-color: #f4f4f4; padding: 20px 0;">
+                    <tr>
+                        <td align="center">
+                            <table width="600" cellpadding="0" cellspacing="0" style="background-color: #ffffff; border-radius: 10px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+                                <tr>
+                                    <td style="background: linear-gradient(135deg, #B20000 0%%, #8B0000 100%%); padding: 40px 30px; text-align: center;">
+                                        <h1 style="color: #ffffff; margin: 0; font-size: 28px; font-weight: bold;">🎉 Novo Evento!</h1>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 40px 30px;">
+                                        <p style="color: #333; font-size: 16px; line-height: 1.6; margin: 0 0 20px 0;">
+                                            Olá <strong>%s</strong>,
+                                        </p>
+                                        <p style="color: #333; font-size: 16px; line-height: 1.6; margin: 0 0 30px 0;">
+                                            Temos um novo evento e queremos contar com você!
+                                        </p>
+                                        <table width="100%%" cellpadding="0" cellspacing="0" style="background-color: #f8f9fa; border-left: 4px solid #B20000; border-radius: 8px; margin-bottom: 30px;">
+                                            <tr>
+                                                <td style="padding: 25px;">
+                                                    <h2 style="color: #B20000; margin: 0 0 15px 0; font-size: 22px;">%s</h2>
+                                                    <table width="100%%" cellpadding="0" cellspacing="0">
+                                                        <tr>
+                                                            <td style="padding: 8px 0;">
+                                                                <span style="color: #B20000; font-weight: bold;">📅 Data:</span>
+                                                                <span style="color: #333; margin-left: 10px;">%s</span>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="padding: 8px 0;">
+                                                                <span style="color: #B20000; font-weight: bold;">📍 Local:</span>
+                                                                <span style="color: #333; margin-left: 10px;">%s</span>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                        <p style="color: #333; font-size: 16px; line-height: 1.6; margin: 0;">
+                                            Acesse nosso site para mais informações e confirmar sua presença!
+                                        </p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="background-color: #f8f9fa; padding: 30px; text-align: center; border-top: 1px solid #e9ecef;">
+                                        <p style="color: #6c757d; font-size: 14px; margin: 0 0 10px 0;">
+                                            <strong>Voluntários Pro Bem</strong>
+                                        </p>
+                                        <p style="color: #6c757d; font-size: 12px; margin: 0;">
+                                            Fazendo o bem, fazendo a diferença.
+                                        </p>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+            </body>
+            </html>
+            """, saudacao, tituloEvento, dataEvento, localEvento);
+    }
+
+    private String construirEmailNotificacaoAtividade(String nome, String tituloAtividade, String descricao) {
+        String saudacao = (nome != null && !nome.trim().isEmpty()) ? nome : "amigo(a)";
+        
+        return String.format("""
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            </head>
+            <body style="margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f4f4;">
+                <table width="100%%" cellpadding="0" cellspacing="0" style="background-color: #f4f4f4; padding: 20px 0;">
+                    <tr>
+                        <td align="center">
+                            <table width="600" cellpadding="0" cellspacing="0" style="background-color: #ffffff; border-radius: 10px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+                                <tr>
+                                    <td style="background: linear-gradient(135deg, #B20000 0%%, #8B0000 100%%); padding: 40px 30px; text-align: center;">
+                                        <h1 style="color: #ffffff; margin: 0; font-size: 28px; font-weight: bold;">📚 Nova Atividade!</h1>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 40px 30px;">
+                                        <p style="color: #333; font-size: 16px; line-height: 1.6; margin: 0 0 20px 0;">
+                                            Olá <strong>%s</strong>,
+                                        </p>
+                                        <p style="color: #333; font-size: 16px; line-height: 1.6; margin: 0 0 30px 0;">
+                                            Temos uma nova atividade disponível para você!
+                                        </p>
+                                        <table width="100%%" cellpadding="0" cellspacing="0" style="background-color: #f8f9fa; border-left: 4px solid #B20000; border-radius: 8px; margin-bottom: 30px;">
+                                            <tr>
+                                                <td style="padding: 25px;">
+                                                    <h2 style="color: #B20000; margin: 0 0 15px 0; font-size: 22px;">%s</h2>
+                                                    <p style="color: #555; font-size: 15px; line-height: 1.6; margin: 0;">%s</p>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                        <p style="color: #333; font-size: 16px; line-height: 1.6; margin: 0;">
+                                            Acesse nosso site para se inscrever e participar!
+                                        </p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="background-color: #f8f9fa; padding: 30px; text-align: center; border-top: 1px solid #e9ecef;">
+                                        <p style="color: #6c757d; font-size: 14px; margin: 0 0 10px 0;">
+                                            <strong>Voluntários Pro Bem</strong>
+                                        </p>
+                                        <p style="color: #6c757d; font-size: 12px; margin: 0;">
+                                            Fazendo o bem, fazendo a diferença.
+                                        </p>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+            </body>
+            </html>
+            """, saudacao, tituloAtividade, descricao);
+    }
 }

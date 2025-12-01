@@ -25,7 +25,7 @@ public class Evento {
 	private String nome;
 	
 	@Lob
-	@Column(columnDefinition = "TEXT")
+	@Column(columnDefinition = "LONGTEXT")
 	private String descricao;
 	
 	private LocalDate data;
@@ -33,7 +33,7 @@ public class Evento {
 	private LocalTime hora;
 	
 	@Lob
-	@Column(columnDefinition = "TEXT")
+	@Column(columnDefinition = "LONGTEXT")
 	private String imagemUrl;
 	
 	@OneToMany(mappedBy = "evento", cascade = CascadeType.ALL, orphanRemoval = true)

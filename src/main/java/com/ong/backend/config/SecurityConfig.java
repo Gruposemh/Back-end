@@ -95,11 +95,14 @@ public class SecurityConfig {
                     .requestMatchers("/auth/logout-all-devices", 
                             "/auth/token-status", "/auth/login-history").authenticated()
 
-                    // Endpoints de teste (remover em produção)
-                    .requestMatchers("/test/**").permitAll()
+                    // Endpoints de teste e debug (remover em produção)
+                    .requestMatchers("/test/**", "/debug/**").permitAll()
 
                     // Upload de arquivos e servir imagens
                     .requestMatchers("/api/upload/**", "/uploads/**").permitAll()
+                    
+                    // Favicon
+                    .requestMatchers("/favicon.ico").permitAll()
 
                     // Usuário
                     .requestMatchers(HttpMethod.GET, "/usuario/todos").hasRole("ADMIN")
@@ -190,7 +193,38 @@ public class SecurityConfig {
                         .userService(customOAuth2UserService)
                     )
                     .successHandler(oauth2SuccessHandler)
-                    .failureUrl("http://localhost:8080/oauth2/failure")
+                    .failureHandler((request, response, exception) -> {
+                        System.err.println("❌ OAuth2 Login Failed: " + exception.getMessage());
+                        exception.printStackTrace();
+                        
+                        String errorHtml = String.format("""
+                            <!DOCTYPE html>
+                            <html>
+                            <head>
+                                <meta charset="UTF-8">
+                                <title>Erro no Login</title>
+                                <style>
+                                    body { font-family: Arial; text-align: center; padding: 50px; }
+                                    h1 { color: #B20000; }
+                                    .error { background: #ffebee; padding: 20px; border-radius: 8px; margin: 20px auto; max-width: 600px; }
+                                    button { background: #B20000; color: white; border: none; padding: 12px 24px; border-radius: 8px; cursor: pointer; font-size: 16px; }
+                                </style>
+                            </head>
+                            <body>
+                                <h1>❌ Erro no Login com Google</h1>
+                                <div class="error">
+                                    <p><strong>Erro:</strong> %s</p>
+                                    <p>Por favor, tente novamente ou entre em contato com o suporte.</p>
+                                </div>
+                                <button onclick="window.location.href='https://front-tcc2.vercel.app/login'">Voltar para Login</button>
+                            </body>
+                            </html>
+                            """, exception.getMessage());
+                        
+                        response.setContentType("text/html; charset=UTF-8");
+                        response.setStatus(401);
+                        response.getWriter().write(errorHtml);
+                    })
                     .permitAll()
             )
             .userDetailsService(autenticacaoService)

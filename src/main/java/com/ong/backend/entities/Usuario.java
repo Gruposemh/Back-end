@@ -54,7 +54,7 @@ public class Usuario implements UserDetails{
     private LocalDateTime ultimoLogin;
     
     @Lob
-    @Column(columnDefinition = "TEXT")
+    @Column(columnDefinition = "LONGTEXT")
     private String imagemPerfil; // URL da imagem de perfil
 	
 	@OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)

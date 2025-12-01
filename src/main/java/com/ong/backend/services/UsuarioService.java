@@ -86,12 +86,13 @@ public class UsuarioService{
 	
 	public ResponseEntity<?> editarPerfil(Long idUsuario, EditarPerfilDTO dto) {
 		System.out.println("🔍 EditarPerfil - Iniciando para usuário ID: " + idUsuario);
-		System.out.println("📝 Dados recebidos - Nome: " + dto.getNome() + ", ImagemPerfil: " + dto.getImagemPerfil());
+		System.out.println("📝 Dados recebidos - Nome: " + dto.getNome() + ", ImagemPerfil: " + (dto.getImagemPerfil() != null ? dto.getImagemPerfil().substring(0, Math.min(50, dto.getImagemPerfil().length())) + "..." : "null"));
+		System.out.println("📞 Telefone: " + dto.getTelefone() + ", Endereço: " + dto.getEndereco());
 		
 		Usuario usuario = usuarioRepository.findById(idUsuario)
 				.orElseThrow(() -> new NaoEncontradoException("Usuário não encontrado"));
 		
-		System.out.println("👤 Usuário encontrado: " + usuario.getNome() + ", ImagemPerfil atual: " + usuario.getImagemPerfil());
+		System.out.println("👤 Usuário encontrado: " + usuario.getNome() + ", ImagemPerfil atual: " + (usuario.getImagemPerfil() != null ? usuario.getImagemPerfil().substring(0, Math.min(50, usuario.getImagemPerfil().length())) + "..." : "null"));
 		
 		// Atualizar campos básicos (todos os usuários)
 		if (dto.getNome() != null && !dto.getNome().isBlank()) {
@@ -99,30 +100,35 @@ public class UsuarioService{
 			System.out.println("✅ Nome atualizado para: " + dto.getNome());
 		}
 		
-		if (dto.getImagemPerfil() != null) {
+		if (dto.getImagemPerfil() != null && !dto.getImagemPerfil().isBlank()) {
 			usuario.setImagemPerfil(dto.getImagemPerfil());
-			System.out.println("✅ ImagemPerfil atualizada para: " + dto.getImagemPerfil());
+			System.out.println("✅ ImagemPerfil atualizada");
 		}
 		
 		// Atualizar campos de voluntário (se for voluntário)
 		Optional<Voluntario> voluntarioOpt = voluntarioRepository.findByIdUsuarioId(idUsuario);
 		if (voluntarioOpt.isPresent()) {
 			Voluntario voluntario = voluntarioOpt.get();
+			System.out.println("🎯 Voluntário encontrado - Status: " + voluntario.getStatus());
 			
 			if (dto.getTelefone() != null && !dto.getTelefone().isBlank()) {
 				voluntario.setTelefone(dto.getTelefone());
+				System.out.println("✅ Telefone atualizado para: " + dto.getTelefone());
 			}
 			
 			if (dto.getEndereco() != null && !dto.getEndereco().isBlank()) {
 				voluntario.setEndereco(dto.getEndereco());
+				System.out.println("✅ Endereço atualizado para: " + dto.getEndereco());
 			}
 			
 			voluntarioRepository.save(voluntario);
-			System.out.println("✅ Dados de voluntário atualizados");
+			System.out.println("✅ Dados de voluntário salvos no banco");
+		} else {
+			System.out.println("ℹ️ Usuário não é voluntário ou não foi encontrado registro de voluntário");
 		}
 		
 		usuario = usuarioRepository.save(usuario);
-		System.out.println("💾 Usuário salvo no banco. ImagemPerfil final: " + usuario.getImagemPerfil());
+		System.out.println("💾 Usuário salvo no banco com sucesso");
 		
 		return ResponseEntity.ok(new MensagemResponse("Perfil atualizado com sucesso!"));
 	}

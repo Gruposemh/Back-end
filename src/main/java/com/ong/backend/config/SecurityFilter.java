@@ -116,6 +116,15 @@ public class SecurityFilter extends OncePerRequestFilter {
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
         String path = request.getRequestURI();
         
+        // Rotas que precisam de autenticação
+        if (path.equals("/auth/check") || 
+            path.equals("/auth/logout") ||
+            path.equals("/auth/logout-all-devices") ||
+            path.equals("/auth/token-status") ||
+            path.equals("/auth/login-history")) {
+            return false; // Deve filtrar (processar token)
+        }
+        
         // Não filtrar rotas públicas
         return path.startsWith("/auth/") || 
                path.startsWith("/oauth2/") || 

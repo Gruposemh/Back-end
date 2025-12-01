@@ -1,5 +1,6 @@
 package com.ong.backend.services;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -8,7 +9,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.util.UUID;
 
 @Service
@@ -19,6 +19,9 @@ public class FileStorageService {
 
     @Value("${server.url:http://localhost:8080}")
     private String serverUrl;
+
+    @Autowired
+    private ImageCompressionService imageCompressionService;
 
     public String storeFile(MultipartFile file) throws IOException {
         // Validar arquivo
@@ -32,10 +35,20 @@ public class FileStorageService {
             throw new IOException("Apenas imagens são permitidas");
         }
 
-        // Validar tamanho (máximo 5MB)
-        if (file.getSize() > 5 * 1024 * 1024) {
-            throw new IOException("Arquivo muito grande. Máximo 5MB");
+        // Validar tamanho (máximo 10MB antes da compressão)
+        if (file.getSize() > 10 * 1024 * 1024) {
+            throw new IOException("Arquivo muito grande. Máximo 10MB");
         }
+
+        // Comprimir a imagem
+        byte[] compressedImage = imageCompressionService.compressImage(file);
+        
+        // Log da compressão
+        long originalSize = file.getSize();
+        long compressedSize = compressedImage.length;
+        double compressionRatio = imageCompressionService.getCompressionRatio(originalSize, compressedSize);
+        System.out.println(String.format("Imagem comprimida: %d KB -> %d KB (%.1f%% de redução)", 
+            originalSize / 1024, compressedSize / 1024, compressionRatio));
 
         // Gerar nome único
         String originalFilename = file.getOriginalFilename();
@@ -51,9 +64,9 @@ public class FileStorageService {
             Files.createDirectories(uploadPath);
         }
 
-        // Salvar arquivo
+        // Salvar arquivo comprimido
         Path filePath = uploadPath.resolve(filename);
-        Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
+        Files.write(filePath, compressedImage);
 
         // Retornar URL do arquivo
         return serverUrl + "/uploads/" + filename;

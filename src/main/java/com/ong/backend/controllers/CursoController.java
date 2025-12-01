@@ -16,6 +16,7 @@ import com.ong.backend.dto.CursoDTO;
 import com.ong.backend.dto.MensagemResponse;
 import com.ong.backend.entities.Curso;
 import com.ong.backend.services.CursoService;
+import com.ong.backend.services.NewsletterService;
 
 @RestController
 @RequestMapping(value = "/curso")
@@ -24,9 +25,31 @@ public class CursoController {
 	@Autowired
 	CursoService cursoService;
 	
+	@Autowired
+	NewsletterService newsletterService;
+	
 	@PostMapping(value = "/cadastrar")
 	public ResponseEntity<Curso> cadastrarCurso(@RequestBody CursoDTO dto){
-		return cursoService.cadastrarCurso(dto);
+		ResponseEntity<Curso> response = cursoService.cadastrarCurso(dto);
+		
+		// Se a atividade foi criada com sucesso, notificar inscritos da newsletter
+		if (response.getStatusCode().is2xxSuccessful() && response.getBody() != null) {
+			try {
+				Curso curso = response.getBody();
+				
+				newsletterService.notificarNovaAtividade(
+					curso.getTitulo(),
+					curso.getDescricao() != null ? curso.getDescricao() : "Nova atividade disponível!"
+				);
+				
+				System.out.println("✅ Notificações de nova atividade enviadas para newsletter");
+			} catch (Exception e) {
+				System.err.println("❌ Erro ao enviar notificações de newsletter: " + e.getMessage());
+				// Não falhar a criação da atividade se o email falhar
+			}
+		}
+		
+		return response;
 	}
 	
 	@GetMapping(value = "/listar")
